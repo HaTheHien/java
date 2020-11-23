@@ -1,3 +1,4 @@
+package Bill;
 public class Bill {
 
 	private ArrayList<BillUnit> allProduct;

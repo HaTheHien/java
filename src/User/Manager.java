@@ -1,3 +1,4 @@
+package User;
 public class Manager extends Staff implements ManagementControl {
 
 	public void changeLogInfo() {

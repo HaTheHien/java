@@ -1,3 +1,4 @@
+package User;
 public interface AdminControl {
 
 	void changePassword_Admin();

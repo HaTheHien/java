@@ -1,3 +1,4 @@
+package Other;
 public class Membership {
 
 	private String name;

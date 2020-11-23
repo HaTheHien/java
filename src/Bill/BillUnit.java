@@ -1,3 +1,4 @@
+package Bill;
 public class BillUnit {
 
 	private ProductInfo productInfo;

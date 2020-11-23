@@ -1,3 +1,4 @@
+package Product;
 public class Product extends ProductType {
 	private ProductInfo info;
 	private ProductStockInfoq stockInfo;

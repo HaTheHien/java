@@ -1,3 +1,4 @@
+package Product;
 public class ProductInfo {
 
 	private String brand;

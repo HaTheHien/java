@@ -1,3 +1,4 @@
+package Other;
 public class Date {
 
 	private Integer day;

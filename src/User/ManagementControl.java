@@ -1,3 +1,4 @@
+package User;
 public interface ManagementControl {
 
 	void addProduct();

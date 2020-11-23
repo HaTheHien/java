@@ -1,3 +1,4 @@
+package Product;
 public class ProductStockInfoq {
 
 	private Date lastestEXP;
