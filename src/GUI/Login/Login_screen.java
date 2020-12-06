@@ -177,7 +177,7 @@ public class Login_screen {
             public void mouseClicked(MouseEvent e) 
             {
                 //TODO: add action here
-                username_Field.setText("cax");
+                username_Field.setText("nothing here");
             }
         });
     }
