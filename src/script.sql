@@ -7,6 +7,7 @@ use QuanLyCuaHang
 create table Product
 (
 	Id nvarchar(30),
+	TypeID nvarchar(30),
 	constraint PK_Id1 primary key(Id),
 )
 create table ProductInfo
@@ -14,15 +15,14 @@ create table ProductInfo
 	Id nvarchar(30), -- id la ma vach
 	Brand nvarchar(30),
 	ProductName nvarchar(100),
-	Price float,
-	constraint PK_Id2 primary key(Id),
+	Price int,
+	UrlImage nvarchar(100),
 )
 create table ProductStock
 (
 	Id nvarchar(30), -- id la ma vach
 	LastestEXP datetime,
 	Numstock int,
-	constraint PK_Id3 primary key(Id),
 )
 create table Account
 (
@@ -30,6 +30,8 @@ create table Account
 	FullName nvarchar(30),
 	DoB datetime,
 	Addr nvarchar(200),
+	Pass nvarchar(200),
+	Type nvarchar(30),
 	constraint PK_IdAccount primary key(Id),
 )
 create table Bill
@@ -49,7 +51,13 @@ create table BillUnit
 )
 create table Promo
 (
-	ProductID nvarchar(30),
+	PromoString nvarchar(100),
+)
+create table TypeProduct
+(
+	TypeID nvarchar(30),
+	Name nvarchar(100),
+	constraint PK_typeProduct primary key(typeID),
 )
 create table Membership
 (
@@ -91,3 +99,32 @@ ALTER TABLE Bill
 ADD CONSTRAINT FK_Bill_Mem
 FOREIGN KEY (MembershipID)
 REFERENCES Membership(MemId)
+
+ALTER TABLE Product
+ADD CONSTRAINT FK_Product_TypeProduct
+FOREIGN KEY (TypeID)
+REFERENCES TypeProduct(TypeID)
+
+INSERT INTO TypeProduct(TypeID,Name)
+VALUES ('1',N'Nhu yếu phẩm')
+INSERT INTO Product(TypeID,Id)
+VALUES ('1','1'),
+		('1','2')
+INSERT INTO ProductInfo(Id,Brand,Price,ProductName,UrlImage)
+VALUES ('1',N'aquafina',10000,N'Nước uống',null),
+		('2',N'Tường An',10000,N'Dầu ăn',null)
+INSERT INTO ProductStock(Id,Numstock,LastestEXP)
+VALUES ('1',100,'2015-10-10'),
+		('2',200,'2016-10-5')
+INSERT INTO Account(Id,FullName,DoB,Addr,Type)
+VALUES ('1',N'Nguyễn Thị Liên','2000-12-20',N'Phường 1 Thành Phố HCM','Admin'),
+		('2',N'Nguyễn Văn Tám','2001-06-10',N'Phường 2 Thành Phố HCM','Management')
+INSERT INTO Bill(BillID,BuyDate,MembershipID,SellerID)
+VALUES ('1','2010-10-10',null,'1'),
+		('2','2010-10-11',null,'2')
+INSERT INTO BillUnit(ProductID,Amount,BillID)
+VALUES ('1',2,'1'),
+		('2',3,'2')
+INSERT INTO Membership(MemId,FullName,Addr,PhoneNum,Point)
+VALUES ('1',N'Nguyễn Thị Hai',N'Phường 1 Thành Phố HCM','12345',100),
+		('2',N'Nguyễn Văn Bảy',N'Phường 2 Thành Phố HCM','23456',20)
