@@ -18,6 +18,24 @@ USE `quanlycuahang`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `account`
+--
+
+DROP TABLE IF EXISTS `account`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `account` (
+  `Id` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `FullName` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `DoB` datetime DEFAULT NULL,
+  `Addr` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `Pass` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `Type` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `account`
 --
 
@@ -26,6 +44,26 @@ LOCK TABLES `account` WRITE;
 INSERT INTO `account` VALUES ('1','Nguyễn Thị Liên','2000-12-20 00:00:00','Phường 1 Thành Phố HCM',NULL,'Admin'),('2','Nguyễn Văn Tám','2001-06-10 00:00:00','Phường 2 Thành Phố HCM',NULL,'Management');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `bill`
+--
+
+DROP TABLE IF EXISTS `bill`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `bill` (
+  `SellerID` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `BuyDate` datetime DEFAULT NULL,
+  `MembershipID` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `BillID` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`BillID`),
+  KEY `FK_Bill_Account` (`SellerID`),
+  KEY `FK_Bill_Mem` (`MembershipID`),
+  CONSTRAINT `FK_Bill_Account` FOREIGN KEY (`SellerID`) REFERENCES `account` (`Id`),
+  CONSTRAINT `FK_Bill_Mem` FOREIGN KEY (`MembershipID`) REFERENCES `membership` (`MemId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `bill`
@@ -38,6 +76,24 @@ INSERT INTO `bill` VALUES ('1','2010-10-10 00:00:00',NULL,'1'),('2','2010-10-11 
 UNLOCK TABLES;
 
 --
+-- Table structure for table `billunit`
+--
+
+DROP TABLE IF EXISTS `billunit`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `billunit` (
+  `BillID` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `ProductID` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `Amount` int DEFAULT NULL,
+  PRIMARY KEY (`BillID`,`ProductID`),
+  KEY `FK_BillUnit_Product` (`ProductID`),
+  CONSTRAINT `FK_BillUnit_Bill` FOREIGN KEY (`BillID`) REFERENCES `bill` (`BillID`),
+  CONSTRAINT `FK_BillUnit_Product` FOREIGN KEY (`ProductID`) REFERENCES `product` (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `billunit`
 --
 
@@ -46,6 +102,23 @@ LOCK TABLES `billunit` WRITE;
 INSERT INTO `billunit` VALUES ('1','1',2),('2','2',3);
 /*!40000 ALTER TABLE `billunit` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `membership`
+--
+
+DROP TABLE IF EXISTS `membership`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `membership` (
+  `FullName` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `Addr` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `PhoneNum` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `Point` int DEFAULT NULL,
+  `MemId` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`MemId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `membership`
@@ -58,6 +131,22 @@ INSERT INTO `membership` VALUES ('Nguyễn Thị Hai','Phường 1 Thành Phố 
 UNLOCK TABLES;
 
 --
+-- Table structure for table `product`
+--
+
+DROP TABLE IF EXISTS `product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `product` (
+  `Id` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `TypeID` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `FK_Product_TypeProduct` (`TypeID`),
+  CONSTRAINT `FK_Product_TypeProduct` FOREIGN KEY (`TypeID`) REFERENCES `typeproduct` (`TypeID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `product`
 --
 
@@ -66,6 +155,24 @@ LOCK TABLES `product` WRITE;
 INSERT INTO `product` VALUES ('1','1'),('2','1');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `productinfo`
+--
+
+DROP TABLE IF EXISTS `productinfo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `productinfo` (
+  `Id` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `Brand` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `ProductName` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `Price` int DEFAULT NULL,
+  `UrlImage` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  KEY `FK_ProInfo_Pro` (`Id`),
+  CONSTRAINT `FK_ProInfo_Pro` FOREIGN KEY (`Id`) REFERENCES `product` (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `productinfo`
@@ -78,6 +185,22 @@ INSERT INTO `productinfo` VALUES ('1','aquafina','Nước uống',10000,NULL),('
 UNLOCK TABLES;
 
 --
+-- Table structure for table `productstock`
+--
+
+DROP TABLE IF EXISTS `productstock`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `productstock` (
+  `Id` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `LastestEXP` datetime DEFAULT NULL,
+  `Numstock` int DEFAULT NULL,
+  KEY `FK_ProStock_Pro` (`Id`),
+  CONSTRAINT `FK_ProStock_Pro` FOREIGN KEY (`Id`) REFERENCES `product` (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `productstock`
 --
 
@@ -88,6 +211,18 @@ INSERT INTO `productstock` VALUES ('1','2015-10-10 00:00:00',100),('2','2016-10-
 UNLOCK TABLES;
 
 --
+-- Table structure for table `promo`
+--
+
+DROP TABLE IF EXISTS `promo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `promo` (
+  `PromoString` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `promo`
 --
 
@@ -95,6 +230,20 @@ LOCK TABLES `promo` WRITE;
 /*!40000 ALTER TABLE `promo` DISABLE KEYS */;
 /*!40000 ALTER TABLE `promo` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `typeproduct`
+--
+
+DROP TABLE IF EXISTS `typeproduct`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `typeproduct` (
+  `TypeID` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `Name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  PRIMARY KEY (`TypeID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `typeproduct`
@@ -115,4 +264,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-17 12:54:54
+-- Dump completed on 2020-12-17 13:06:01
