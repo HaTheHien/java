@@ -1,4 +1,8 @@
+package GUI.Login;
+
 import java.awt.event.*;
+import java.sql.*;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 
@@ -6,6 +10,7 @@ import java.awt.*;
 
 public class Login_screen {
 
+    Connection conn = null;
     int size_x = 750;
     int size_y = 600;
     JFrame mainFrame = new JFrame();
@@ -143,8 +148,9 @@ public class Login_screen {
 
     }
 
-    Login_screen() {
+    Login_screen(Connection conn) {
 
+        this.conn = conn;
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainFrame.setPreferredSize(new Dimension(size_x, size_y));
         mainFrame.setResizable(true);
@@ -180,10 +186,6 @@ public class Login_screen {
                 username_Field.setText("nothing here");
             }
         });
-    }
-
-    public static void main(String[] args) {
-        new Login_screen();
     }
 }
 
