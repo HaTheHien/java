@@ -1,7 +1,6 @@
-﻿
-create database QuanLyCuaHang;
+﻿create database quanlycuahang;
 
-use QuanLyCuaHang;
+use quanlycuahang;
 
 -- tạo bảng
 create table Product
@@ -134,4 +133,28 @@ VALUES ('1',2,'1'),
         
 INSERT INTO Membership(MemId,FullName,Addr,PhoneNum,Point)
 VALUES ('1',N'Nguyễn Thị Hai',N'Phường 1 Thành Phố HCM','12345',100),
-		('2',N'Nguyễn Văn Bảy',N'Phường 2 Thành Phố HCM','23456',20)
+		('2',N'Nguyễn Văn Bảy',N'Phường 2 Thành Phố HCM','23456',20);
+
+CREATE FUNCTION turnOver()
+RETURNS double DETERMINISTIC
+return (Select sum(billunit.Amount * productInfo.Price) from billunit left join productInfo on billunit.ProductID=productinfo.Id);
+
+CREATE FUNCTION sumOrder()
+RETURNS int DETERMINISTIC
+return (Select count(*) from bill);
+
+CREATE FUNCTION numProductOutStock()
+RETURNS int DETERMINISTIC
+return (Select count(*) from productstock where productstock.Numstock = 0);
+
+CREATE FUNCTION numProductExpired()
+RETURNS int DETERMINISTIC
+return (Select count(*) from productstock where (productstock.LastestEXP - NOW()) /60/60/24  <= 3);
+
+CREATE FUNCTION numTypeProduct()
+RETURNS int DETERMINISTIC
+return (Select  count(*) from typeproduct);
+
+CREATE FUNCTION numItemProduct()
+RETURNS int DETERMINISTIC
+return (Select  count(*) from product)
