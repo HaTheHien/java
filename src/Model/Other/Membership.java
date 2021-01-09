@@ -1,4 +1,7 @@
 package Model.Other;
+
+import jdk.internal.icu.impl.Trie.DataManipulate;
+
 public class Membership {
 
 	private String name;
@@ -6,6 +9,34 @@ public class Membership {
 	private String phoneNum;
 	private Integer point;
 	private String idMem;
+	
+	//constructor
+	public Membership(String name, String address, String phone, Integer point, String idMem)
+	{
+		this.name=name;
+		this.address=address;
+		this.phoneNum= phone;
+		this.point=point;
+		this.idMem=idMem;
+	}
+	public Membership(Membership b)
+	{
+		this.name=b.getName();
+		this.address=b.getAddress();
+		this.phoneNum= b.getPhoneNum();
+		this.point=b.getPoint();
+		this.idMem=b.getIdMem();
+	}
+
+
+	public Integer getPoint()
+	{
+		return this.point;
+	}
+	public void setPoint(Integer point)
+	{
+		this.point=point;
+	}
 
 	public String getName() {
 		return this.name;

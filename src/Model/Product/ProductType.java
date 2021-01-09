@@ -7,6 +7,30 @@ public class ProductType {
 	private String typeName;
 	private String typeID;
 	private ArrayList<Product> productList;
+
+	//constructor
+
+	public ProductType(String typeName, String typeID, ArrayList<Product> list)
+	{
+		this.typeID=typeName;
+		this.typeID=typeID;
+		this.productList=list;
+	}
+
+	public ProductType(ProductType b)
+	{
+		this.typeID=b.getTypeName();
+		this.typeID=b.getTypeID();
+		this.productList=b.getProductList();
+	}
+
+
+
+	public void setProductList(ArrayList<Product> list)
+	{
+		this.productList=list;
+	}
+
 	public ArrayList<Product> getProductList()
 	{
 		return this.productList;
