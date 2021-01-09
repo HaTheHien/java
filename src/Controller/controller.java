@@ -1,7 +1,7 @@
 package Controller;
 
 import java.sql.*;
-public class controler
+public class controller
 {
     String login(Connection conn,String user,String password)throws Exception
     {

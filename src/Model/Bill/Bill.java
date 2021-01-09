@@ -7,11 +7,40 @@ import Model.Bill.BillUnit;
 
 public class Bill {
 
-	private ArrayList<BillUnit> allProduct;
+	private ArrayList<BillUnit> allProductBill;
 	private Date buyDate;
 	private String time;
 	private String membershipID;
 	private String billID;
+
+
+	//constructor
+	public Bill(ArrayList<BillUnit> allBill, Date buyDate,String time, String memID,String billID)
+	{
+		this.allProductBill=allBill;
+		this.buyDate=buyDate;
+		this.time=time;
+		this.membershipID=memID;
+		this.billID=billID;
+	}
+	public Bill(Bill b)
+	{
+		this.allProductBill=b.getAllProductBill();
+		this.buyDate=b.getBuyDate();
+		this.time=b.getTime();
+		this.membershipID=b.getMembershipID();
+		this.billID=b.getBillID();
+	}
+
+	public ArrayList<BillUnit> getAllProductBill()
+	{
+		return this.allProductBill;
+	}
+	public void setAllProductBill(ArrayList<BillUnit> allBill)
+	{
+		allProductBill=allBill;
+	}
+
 
 	public Date getBuyDate() {
 		return this.buyDate;
@@ -36,6 +65,8 @@ public class Bill {
 	public void setTime(String time) {
 		this.time = time;
 	}
+
+
 
 	public String getMembershipID() {
 		return this.membershipID;
