@@ -1,4 +1,4 @@
-package User;
+package Model.User;
 public interface AdminControl {
 
 	void changePassword_Admin();

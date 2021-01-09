@@ -1,4 +1,4 @@
-package Product;
+package Model.Product;
 public class Product extends ProductType {
 	private ProductInfo info;
 	private ProductStockInfoq stockInfo;

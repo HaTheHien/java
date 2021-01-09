@@ -1,4 +1,5 @@
-package Product;
+package Model.Product;
+
 import java.util.ArrayList;
 
 public class ProductType {

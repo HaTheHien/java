@@ -1,4 +1,10 @@
-package Bill;
+package Model.Bill;
+
+import java.sql.Date;
+import java.util.ArrayList;
+
+import Model.Bill.BillUnit;
+
 public class Bill {
 
 	private ArrayList<BillUnit> allProduct;

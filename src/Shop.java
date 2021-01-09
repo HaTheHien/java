@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+
+import Model.Other.Promotion;
+
 public class Shop {
 
 	private Warehouse warehouse;

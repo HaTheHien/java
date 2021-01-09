@@ -1,4 +1,4 @@
-package Other;
+package Model.Other;
 public class Membership {
 
 	private String name;

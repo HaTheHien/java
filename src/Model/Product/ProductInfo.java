@@ -1,4 +1,4 @@
-package Product;
+package Model.Product;
 public class ProductInfo {
 
 	private String brand;

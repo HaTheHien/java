@@ -1,4 +1,5 @@
-package User;
+package Model.User;
+
 public interface ManagementControl {
 
 	void addProduct();
