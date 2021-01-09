@@ -218,7 +218,12 @@ DROP TABLE IF EXISTS `promo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `promo` (
-  `PromoString` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL
+  `barcode` int NOT NULL,
+  `product_id` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `discount` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  PRIMARY KEY (`barcode`),
+  KEY `FK_Promo_Product` (`product_id`),
+  CONSTRAINT `FK_Promo_Product` FOREIGN KEY (`product_id`) REFERENCES `product` (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -254,6 +259,10 @@ LOCK TABLES `typeproduct` WRITE;
 INSERT INTO `typeproduct` VALUES ('1','Nhu yếu phẩm');
 /*!40000 ALTER TABLE `typeproduct` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping events for database 'quanlycuahang'
+--
 
 --
 -- Dumping routines for database 'quanlycuahang'
@@ -376,4 +385,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-17 14:01:22
+-- Dump completed on 2021-01-09 16:27:26
