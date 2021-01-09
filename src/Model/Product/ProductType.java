@@ -7,6 +7,10 @@ public class ProductType {
 	private String typeName;
 	private String typeID;
 	private ArrayList<Product> productList;
+	public ArrayList<Product> getProductList()
+	{
+		return this.productList;
+	}
 
 	public String getTypeName() {
 		return this.typeName;
