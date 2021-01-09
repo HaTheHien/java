@@ -1,5 +1,4 @@
 ﻿create database quanlycuahang;
-
 use quanlycuahang;
 
 -- tạo bảng
@@ -50,7 +49,9 @@ create table BillUnit
 );
 create table Promo
 (
-	PromoString nvarchar(100)
+	ID Integer,
+	Content nvarchar(100),
+    constraint PK_Promo_ID primary key(ID)
 );
 create table TypeProduct
 (
@@ -135,6 +136,10 @@ INSERT INTO Membership(MemId,FullName,Addr,PhoneNum,Point)
 VALUES ('1',N'Nguyễn Thị Hai',N'Phường 1 Thành Phố HCM','12345',100),
 		('2',N'Nguyễn Văn Bảy',N'Phường 2 Thành Phố HCM','23456',20);
 
+INSERT INTO Promo
+VALUES	(1, N'Giảm 20% thứ 2 đầu tuần'),
+		(2, N'Giảm 50% cuối ngày');
+
 CREATE FUNCTION turnOver()
 RETURNS double DETERMINISTIC
 return (Select sum(billunit.Amount * productInfo.Price) from billunit left join productInfo on billunit.ProductID=productinfo.Id);
@@ -157,70 +162,61 @@ return (Select  count(*) from typeproduct);
 
 CREATE FUNCTION numItemProduct()
 RETURNS int DETERMINISTIC
-return (Select  count(*) from product)
+return (Select  count(*) from product);
 
-// khuc moi
-DELIMITER $$
-CREATE PROCEDURE getMembership(id int)
-BEGIN
-  select * from membership where MemId = id;
-END
+DROP PROCEDURE SearchProductByName
+DELIMITER  $$
+CREATE PROCEDURE SearchProductByName(
+								INPUT NVARCHAR(100))
+Begin
+	SELECT * FROM quanlycuahang.productinfo WHERE ProductName LIKE INPUT;
+End;
+Call SearchProductByName(N'Nước uống');
 
-DELIMITER $$
-CREATE PROCEDURE getAllMembership()
-BEGIN
-  select * from membership;
-END
-
-DELIMITER $$
-CREATE PROCEDURE updateMembership(id int,new_point int)
-BEGIN
-   update membership set membership.Point = new_point where MemId = id;
-END
+DELIMITER  $$
+CREATE PROCEDURE SearchProductByID(
+								INPUT Integer)
+Begin
+	SELECT * FROM quanlycuahang.productinfo WHERE ID = INPUT;
+End;
 
 DELIMITER $$
-CREATE PROCEDURE createMembership(fullname nvarchar(30), address nvarchar(200), phone varchar(20))
-BEGIN
-	insert into membership(FullName,Addr,PhoneNum,Point) values(fullname, address, phone, 0 );
-END
+CREATE PROCEDURE GetAllProducts()
+Begin
+	SELECT * FROM quanlycuahang.productinfo;
+End;
+Call GetAllProducts();
 
 DELIMITER $$
-CREATE PROCEDURE takeAccount(id int)
-BEGIN
-    select * from account where Id = id;
-END
+CREATE PROCEDURE GetAllPromos()
+Begin
+	SELECT * FROM quanlycuahang.promo;
+End;
+Call GetAllPromos();
 
 DELIMITER $$
-CREATE PROCEDURE getAllAccount()
-BEGIN
-  select Id,FullName,DoB,Addr,Type from account;
-END
+CREATE PROCEDURE InsertPromo(ID Integer, Content NVARCHAR(100))
+Begin
+	INSERT INTO promo
+    VALUES (ID, Content);
+End;
+Call InsertPromo(3, 'Đồng giá 10k ngày 11/11');
 
 DELIMITER $$
-CREATE PROCEDURE removeAccount(id int)
-BEGIN
-  DELETE FROM account where Id = id;
-END
+CREATE PROCEDURE RemovePromo(ID Integer)
+Begin
+	DELETE FROM promo
+    WHERE promo.ID = ID;
+End;
+Call RemovePromo(3);
 
 DELIMITER $$
-CREATE PROCEDURE createAccount(fullname nvarchar(30),dob datetime,addr nvarchar(200),pass nvarchar(200),type nvarchar(30))
-BEGIN
-  INSERT INTO `quanlycuahang`.`account`
-	(`FullName`,
-	`DoB`,
-	`Addr`,
-	`Pass`,
-	`Type`)
-	VALUES(
-	fullname,
-	dob,
-	addr,
-	pass,
-	type);
-END
+CREATE PROCEDURE GetBillInfo(ID Integer)
+Begin
+	SELECT bill.BillID, bill.SellerID, bill.BuyDate, bill.MembershipID, Amount, ID, Brand, ProductName, Price, UrlImage
+    FROM (bill left JOIN billunit ON bill.billid = billunit.billid) right join productinfo on billunit.ProductID=productinfo.Id
+    WHERE bill.BillID = ID;
+End;
+Call GetBillInfo(2);
 
-DELIMITER $$
-CREATE PROCEDURE getAllBill(id int)
-BEGIN
-	select * from bill left join billunit on bill.BillID = billunit.BillId left join productinfo on ProductID = productinfo.Id where bill.BillId = id;
-END
+
