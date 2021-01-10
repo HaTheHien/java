@@ -1,4 +1,5 @@
-﻿create database quanlycuahang;
+﻿DROP DATABASE IF EXISTS quanlycuahang;
+create database quanlycuahang;
 use quanlycuahang;
 
 -- tạo bảng
@@ -16,6 +17,7 @@ create table ProductInfo
 	Price int,
 	UrlImage nvarchar(100)
 );
+
 create table ProductStock
 (
 	Id nvarchar(30), -- id la ma vach
@@ -160,10 +162,8 @@ VALUES ('1',N'Nguyễn Thị Hai',N'Phường 1 Thành Phố HCM','12345',100),
 		('2',N'Nguyễn Văn Bảy',N'Phường 2 Thành Phố HCM','23456',20);
 
 INSERT INTO Promo
-VALUES	(1, 1000, 1),
-		(2, 2000, 2);
-
-CREATE FUNCTION turnOver()
+VALUES	(1, 10, 1),
+		(2, 20, 2);CREATE FUNCTION turnOver()
 RETURNS double DETERMINISTIC
 return (Select sum(billunit.Amount * productInfo.Price) from billunit left join productInfo on billunit.ProductID=productinfo.Id);
 
@@ -190,28 +190,42 @@ return (Select  count(*) from product);
 DELIMITER  $$
 CREATE PROCEDURE SearchProductByName(INPUT NVARCHAR(100))
 Begin
-	declare temp nvarchar(200);
+	declare temp nvarchar(100);
     set temp= concat('%',INPUT,'%');
     
 	SELECT * FROM quanlycuahang.productinfo WHERE ProductName LIKE temp;
 End$$
 DELIMITER;
+call SearchProductByName(N'Dầu');
 
 DELIMITER  $$
 CREATE PROCEDURE SearchProductByID(
-								INPUT Integer)
+								INPUT NVARCHAR(100))
 Begin
 	SELECT * FROM quanlycuahang.productinfo WHERE ID = INPUT;
 End$$
-DELIMITER;
 
+drop procedure getallproductsdetails;
 DELIMITER $$
-CREATE PROCEDURE GetAllProducts()
+CREATE PROCEDURE GetAllProductsDetails()
 Begin
-	SELECT * FROM quanlycuahang.productinfo;
+	SELECT quanlycuahang.productinfo.ID AS `ID`,
+            quanlycuahang.productinfo.Brand AS `brand`, 
+            quanlycuahang.productinfo.ProductName AS `productName`,
+            quanlycuahang.productinfo.Price AS `price`,
+            quanlycuahang.productinfo.UrlImage AS `urlImage`,
+			quanlycuahang.typeproduct.TypeID AS `typeID`,
+			quanlycuahang.typeproduct.Name AS `typeName`,
+            quanlycuahang.productstock.Numstock AS `numStock`,
+            quanlycuahang.productstock.LastestEXP AS `lastestEXP`,
+            quanlycuahang.promo.ID AS `idPromo`,
+            quanlycuahang.promo.discount AS `discount`
+	FROM quanlycuahang.productinfo
+		left join quanlycuahang.productstock on quanlycuahang.productinfo.Id = quanlycuahang.productstock.Id
+		left join quanlycuahang.promo on quanlycuahang.productinfo.ID = quanlycuahang.promo.productID
+        left join quanlycuahang.product on quanlycuahang.productinfo.Id = quanlycuahang.product.Id
+        left join quanlycuahang.typeproduct on quanlycuahang.typeproduct.typeID = quanlycuahang.product.TypeID;
 End$$
-DELIMITER;
-
 
 DELIMITER $$
 CREATE PROCEDURE GetAllPromos()
@@ -221,12 +235,17 @@ End$$
 DELIMITER;
 
 DELIMITER $$
-CREATE PROCEDURE InsertPromo(ID Integer, Content NVARCHAR(100))
+CREATE PROCEDURE InsertPromo(ID Integer, discount int, idProduct int)
 Begin
-	INSERT INTO promo
-    VALUES (ID, Content);
+	DECLARE ID_Promo Int;
+    SET ID_Promo = ID;
+    
+    SELECT MAX(ID) + 1 INTO ID_Promo
+    FROM promo
+    WHERE EXISTS(SELECT * FROM promo where promo.id = id);
+    
+	Insert into promo values(ID_Promo, discount, idProduct);
 End$$
-DELIMITER;
 
 DELIMITER $$
 CREATE PROCEDURE RemovePromo(ID Integer)
@@ -234,7 +253,14 @@ Begin
 	DELETE FROM promo
     WHERE promo.ID = ID;
 End$$
-DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE UpdatePromo(idProduct nvarchar(100), discount Integer)
+Begin
+	update promo
+    set promo.discount = discount
+    where promo.productID = idProduct;
+End$$
 
 DELIMITER $$
 CREATE PROCEDURE GetBillInfo(ID Integer)
@@ -360,4 +386,56 @@ END$$
 DELIMITER;
 
 DELIMITER $$
+CREATE PROCEDURE addStock(idProduct NVARCHAR(100), count int)
+BEGIN
+    DECLARE EXP DATE;
+    DECLARE NOW DATE;
+    
+    SET NOW = NOW();
+    select lastestEXP into EXP from productstock where id=idProduct;
+    
+	SET SQL_SAFE_UPDATES = 0;
+	UPDATE productstock 
+    SET numstock = numstock + count 
+    WHERE id = idProduct;
+	
+    WHILE EXP <= NOW DO
+ 	  SET EXP = date_add(EXP, INTERVAL 1 MONTH);
+    END WHILE;
+    
+    UPDATE productstock 
+    SET lastestEXP = EXP 
+    WHERE id = idProduct;
+END$$
 
+DELIMITER $$
+CREATE PROCEDURE updateStock(idProduct NVARCHAR(100), 
+						count int,
+                        exp date)
+BEGIN
+	SET SQL_SAFE_UPDATES = 0;
+	UPDATE productstock
+    SET numstock = count, lastestExp = exp
+    WHERE id = idProduct;
+END$$
+
+DELIMITER $$
+CREATE PROCEDURE updateProduct(idProduct NVARCHAR(100), 
+						new_prodName NVARCHAR(100),
+                        new_brand NVARCHAR(100),
+                        new_price int,
+                        new_stock int,
+                        new_exp DATE,
+                        new_discount int,
+                        new_url nvarchar(100))
+BEGIN
+    UPDATE productinfo
+    SET productName = new_prodName,
+		brand = new_brand,
+        price = new_price,
+        urlImage = new_url
+	WHERE id = idProduct;
+    Call updateStock(idProduct, new_stock, new_exp);
+    Call updatePromo(idProduct, new_discount);
+END$$
+CALL `quanlycuahang`.`GetAllProducts`();
