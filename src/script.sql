@@ -106,24 +106,46 @@ ADD CONSTRAINT FK_Product_TypeProduct
 FOREIGN KEY (TypeID)
 REFERENCES TypeProduct(TypeID);
 
+ALTER TABLE promo
+ADD CONSTRAINT FK_promo_product
+FOREIGN KEY (ProductID)
+REFERENCES product(Id);
+
 INSERT INTO TypeProduct(TypeID,Name)
-VALUES ('1',N'Nhu yếu phẩm');
+VALUES ('1',N'Nhu yếu phẩm'),
+	   ('2',N'Thức ăn nhanh'),
+       ('3',N'Thiết bị điện tử');
 
 INSERT INTO Product(TypeID,Id)
 VALUES ('1','1'),
-		('1','2');
+		('1','2'),
+		('1','3'),
+		('1','4'),
+		('2','5'),
+        ('2','6');
         
 INSERT INTO ProductInfo(Id,Brand,Price,ProductName,UrlImage)
 VALUES ('1',N'aquafina',10000,N'Nước uống',null),
-		('2',N'Tường An',10000,N'Dầu ăn',null);
+		('2',N'Tường An',10000,N'Dầu ăn',null),
+		('3',N'Hảo hảo',10000,N'Mì',null),
+        ('4',N'Indomi',10000,N'Mì',null),
+        ('5',N'thịt bò',30000,N'Cơm',null),
+        ('6',N'vinamilk',30000,N'Sữa',null);
         
 INSERT INTO ProductStock(Id,Numstock,LastestEXP)
 VALUES ('1',100,'2015-10-10'),
-		('2',200,'2016-10-5');
+		('2',200,'2016-10-5'),
+        ('3',200,'2016-10-5'),
+        ('4',3,'2020-12-1'),
+        ('5',200,'2021-1-18'),
+        ('6',200,'2021-1-15');
         
-INSERT INTO Account(Id,FullName,DoB,Addr,Type)
-VALUES ('1',N'Nguyễn Thị Liên','2000-12-20',N'Phường 1 Thành Phố HCM','Admin'),
-		('2',N'Nguyễn Văn Tám','2001-06-10',N'Phường 2 Thành Phố HCM','Management');
+INSERT INTO Account(Id,FullName,DoB,Addr,Type,Pass)
+VALUES ('1',N'Nguyễn Thị Liên','2000-12-20',N'Phường 1 Thành Phố HCM','Admin','123'),
+		('2',N'Nguyễn Văn Tám','2001-03-10',N'Phường 2 Thành Phố HCM','Management','123'),
+        ('3',N'Nguyễn Văn Năm','1990-08-10',N'Phường 2 Thành Phố HCM','Staff','123'),
+        ('4',N'Ngô Thị Bưởi','1981-06-16',N'Phường 2 Thành Phố HCM','Staff','123'),
+        ('5',N'Lê Văn Bảy','2001-08-10',N'Phường 2 Thành Phố HCM','Staff','123');
         
 INSERT INTO Bill(BillID,BuyDate,MembershipID,SellerID)
 VALUES ('1','2010-10-10',null,'1'),
@@ -139,7 +161,7 @@ VALUES ('1',N'Nguyễn Thị Hai',N'Phường 1 Thành Phố HCM','12345',100),
 
 INSERT INTO Promo
 VALUES	(1, 1000, 1),
-	(2, 2000, 2);
+		(2, 2000, 2);
 
 CREATE FUNCTION turnOver()
 RETURNS double DETERMINISTIC
@@ -155,7 +177,7 @@ return (Select count(*) from productstock where productstock.Numstock = 0);
 
 CREATE FUNCTION numProductExpired()
 RETURNS int DETERMINISTIC
-return (Select count(*) from productstock where (productstock.LastestEXP - NOW()) /60/60/24  <= 3);
+return (Select count(*) from productstock where (productstock.LastestEXP - NOW()) /60/60/24  <= 0);
 
 CREATE FUNCTION numTypeProduct()
 RETURNS int DETERMINISTIC
@@ -306,4 +328,36 @@ BEGIN
 END$$
 DELIMITER;
 
+DELIMITER $$
+CREATE PROCEDURE createBill(sellerID varchar(30),membershipID varchar(30))
+BEGIN
+	set @id = (select count(*) from bill) + 1;
+    INSERT INTO `quanlycuahang`.`bill`(`SellerID`,
+									`BuyDate`,
+									`MembershipID`,
+									`BillID`)
+									VALUES(
+									sellerID,
+									CurDate(),
+									membershipID,
+									@id);
+	select @id;
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE createBillUnit(billID varchar(30), productID varchar(30),amount INTEGER)
+BEGIN
+	INSERT INTO `quanlycuahang`.`billunit`
+						(`BillID`,
+						`ProductID`,
+						`Amount`)
+						VALUES(
+						billID,
+						productID,
+						amount);
+END$$
+DELIMITER;
+
+DELIMITER $$
 

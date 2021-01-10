@@ -490,7 +490,7 @@ public class controller
                 {
                     java.sql.Timestamp datetime =  rs.getTimestamp("BuyDate");
                     java.util.Date dbSqlTimeConverted = new java.util.Date(datetime.getTime());
-                    temp = new Bill(list, rs.getDate("BuyDate"), dbSqlTimeConverted.toString(),rs.getString("MembershipID"), rs.getString("BillID"));
+                    temp = new Bill(list, rs.getDate("BuyDate"),rs.getString("MembershipID"), rs.getString("BillID"),rs.getString("SellerID"));
                 }
                 BillUnit bUnit = new BillUnit(new ProductInfo(rs.getString("Brand"),rs.getString("ProductName"), rs.getString("ID"),rs.getInt("Price")),rs.getInt("Amount"));
                 list.add(bUnit);
@@ -673,7 +673,7 @@ public class controller
     public static int getAboutOutStockProductNum(Connection conn) {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String sql = "Select count(*) from productstock where (productstock.LastestEXP - NOW()) /60/60/24  <= 3 and (productstock.LastestEXP - NOW()) /60/60/24  > 0";
+		String sql = "Select count(*) from productstock where datediff(productstock.LastestEXP,NOW()) <= 10 and datediff(productstock.LastestEXP,NOW()) > 0";
 		int numproduct = 0;
 		try {
 			stmt = conn.prepareStatement(sql);
@@ -696,5 +696,47 @@ public class controller
 			}
 		}
 		return numproduct;
+    }
+    public static boolean createBill(Connection conn,Bill bill) 
+    {
+        PreparedStatement stmt=null;
+        ResultSet rs = null;
+        String id = null;
+        boolean result = false;
+        try{
+            stmt = conn.prepareCall("{CALL createBill(?,?)}");
+            stmt.setString(1, bill.getSellerID());
+            stmt.setString(2, bill.getMembershipID());
+            rs = stmt.executeQuery();
+            if (rs.next())
+                id = rs.getString(1);
+            ArrayList<BillUnit> billProduct = bill.getAllProductBill();
+            for (int i = 0;i<billProduct.size();i++)
+            {
+                stmt = conn.prepareCall("{CALL createBillUnit(?,?,?)}");
+                stmt.setString(1, id);
+                stmt.setString(2, billProduct.get(i).getProductInfo().getCodeBar());
+                stmt.setInt(3, billProduct.get(i).getAmount());
+                stmt.executeQuery();
+            }
+            result = true;
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+        }finally{
+            try {
+                if (stmt != null)
+                {
+                    stmt.close();
+                }
+                if (rs != null)
+                {
+                    rs.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 }

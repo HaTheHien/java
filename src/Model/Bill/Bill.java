@@ -9,29 +9,33 @@ public class Bill {
 
 	private ArrayList<BillUnit> allProductBill;
 	private Date buyDate;
-	private String time;
 	private String membershipID;
 	private String billID;
+	private String sellerID;
 
 
 	//constructor
-	public Bill(ArrayList<BillUnit> allBill, Date buyDate,String time, String memID,String billID)
+	public Bill(ArrayList<BillUnit> allBill, Date buyDate, String memID,String billID,String seller)
 	{
 		this.allProductBill=allBill;
 		this.buyDate=buyDate;
-		this.time=time;
 		this.membershipID=memID;
 		this.billID=billID;
+		this.sellerID = seller;
 	}
 	public Bill(Bill b)
 	{
 		this.allProductBill=b.getAllProductBill();
 		this.buyDate=b.getBuyDate();
-		this.time=b.getTime();
 		this.membershipID=b.getMembershipID();
 		this.billID=b.getBillID();
+		this.sellerID = b.getSellerID();
 	}
 
+	public String getSellerID()
+	{
+		return this.sellerID;
+	}
 	public ArrayList<BillUnit> getAllProductBill()
 	{
 		return this.allProductBill;
@@ -53,20 +57,6 @@ public class Bill {
 	public void setBuyDate(Date buyDate) {
 		this.buyDate = buyDate;
 	}
-
-	public String getTime() {
-		return this.time;
-	}
-
-	/**
-	 * 
-	 * @param time
-	 */
-	public void setTime(String time) {
-		this.time = time;
-	}
-
-
 
 	public String getMembershipID() {
 		return this.membershipID;
