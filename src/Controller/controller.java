@@ -706,7 +706,10 @@ public class controller
         try{
             stmt = conn.prepareCall("{CALL createBill(?,?)}");
             stmt.setString(1, bill.getSellerID());
-            stmt.setString(2, bill.getMembershipID());
+            if (bill.getMembershipID() == null || bill.getMembershipID().isEmpty())
+                stmt.setNull(2,Types.INTEGER);
+            else
+                stmt.setString(2, bill.getMembershipID());
             rs = stmt.executeQuery();
             if (rs.next())
                 id = rs.getString(1);
