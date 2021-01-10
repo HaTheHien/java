@@ -13,11 +13,12 @@ public class ProductPanel_controller implements KeyListener {
     public ProductPanel_controller(ProductPanel productPanel) {
         this.productPanel = productPanel;
         ArrayList<Product> allProducts = Warehouse.getAllProduct();
-        for (Product p : allProducts) {
-            productPanel.tableModel.addRow(new String[] { p.getProductInfo().getCodeBar(),
-                    p.getProductInfo().getProductName(), p.getProducType().getTypeName(),
-                    p.getProductInfo().getPrice().toString(), p.getProductStockInfo().getNumStock().toString() });
-        }
+        if (allProducts != null)
+            for (Product p : allProducts) {
+                productPanel.tableModel.addRow(new String[] { p.getProductInfo().getCodeBar(),
+                        p.getProductInfo().getProductName(), p.getProducType().getTypeName(),
+                        p.getProductInfo().getPrice().toString(), p.getProductStockInfo().getNumStock().toString() });
+            }
     }
 
     @Override
