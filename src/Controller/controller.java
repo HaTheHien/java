@@ -22,14 +22,13 @@ public class controller
             stmt.setString(1, user);
             stmt.setString(2, password);
             rs = stmt.executeQuery();
-            if (rs.wasNull())
+            if (rs.next())
             {
-                result =  "";
+                result = rs.getString("Id");
             }
             else
             {
-                rs.next();
-                result = rs.getString("Id");
+                result =  "";
             }
         }catch (SQLException e)
         {

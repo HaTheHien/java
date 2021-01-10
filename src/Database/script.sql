@@ -41,7 +41,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES ('1','Nguyễn Thị Liên','2000-12-20 00:00:00','Phường 1 Thành Phố HCM',NULL,'Admin'),('2','Nguyễn Văn Tám','2001-06-10 00:00:00','Phường 2 Thành Phố HCM',NULL,'Management');
+INSERT INTO `account` VALUES ('1','Nguyễn Thị Liên','2000-12-20 00:00:00','Phường 1 Thành Phố HCM','123','Admin'),('2','Nguyễn Văn Tám','2001-03-10 00:00:00','Phường 2 Thành Phố HCM','123','Management'),('3','Nguyễn Văn Năm','1990-08-10 00:00:00','Phường 2 Thành Phố HCM','123','Staff'),('4','Ngô Thị Bưởi','1981-06-16 00:00:00','Phường 2 Thành Phố HCM','123','Staff'),('5','Lê Văn Bảy','2001-08-10 00:00:00','Phường 2 Thành Phố HCM','123','Staff');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -152,7 +152,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES ('1','1'),('2','1');
+INSERT INTO `product` VALUES ('1','1'),('2','1'),('3','1'),('4','1'),('5','2'),('6','2');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -180,7 +180,7 @@ CREATE TABLE `productinfo` (
 
 LOCK TABLES `productinfo` WRITE;
 /*!40000 ALTER TABLE `productinfo` DISABLE KEYS */;
-INSERT INTO `productinfo` VALUES ('1','aquafina','Nước uống',10000,NULL),('2','Tường An','Dầu ăn',10000,NULL);
+INSERT INTO `productinfo` VALUES ('1','aquafina','Nước uống',10000,NULL),('2','Tường An','Dầu ăn',10000,NULL),('3','Hảo hảo','Mì',10000,NULL),('4','Indomi','Mì',10000,NULL),('5','thịt bò','Cơm',30000,NULL),('6','vinamilk','Sữa',30000,NULL);
 /*!40000 ALTER TABLE `productinfo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -206,7 +206,7 @@ CREATE TABLE `productstock` (
 
 LOCK TABLES `productstock` WRITE;
 /*!40000 ALTER TABLE `productstock` DISABLE KEYS */;
-INSERT INTO `productstock` VALUES ('1','2015-10-10 00:00:00',100),('2','2016-10-05 00:00:00',200);
+INSERT INTO `productstock` VALUES ('1','2015-10-10 00:00:00',100),('2','2016-10-05 00:00:00',200),('3','2016-10-05 00:00:00',200),('4','2020-12-01 00:00:00',3),('5','2021-01-18 00:00:00',200),('6','2021-01-15 00:00:00',200);
 /*!40000 ALTER TABLE `productstock` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -221,7 +221,9 @@ CREATE TABLE `promo` (
   `ID` int NOT NULL,
   `discount` int DEFAULT NULL,
   `productID` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  PRIMARY KEY (`ID`)
+  PRIMARY KEY (`ID`),
+  KEY `FK_promo_product` (`productID`),
+  CONSTRAINT `FK_promo_product` FOREIGN KEY (`productID`) REFERENCES `product` (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -255,7 +257,7 @@ CREATE TABLE `typeproduct` (
 
 LOCK TABLES `typeproduct` WRITE;
 /*!40000 ALTER TABLE `typeproduct` DISABLE KEYS */;
-INSERT INTO `typeproduct` VALUES ('1','Nhu yếu phẩm');
+INSERT INTO `typeproduct` VALUES ('1','Nhu yếu phẩm'),('2','Thức ăn nhanh'),('3','Thiết bị điện tử');
 /*!40000 ALTER TABLE `typeproduct` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -296,7 +298,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` FUNCTION `numProductExpired`() RETURNS int
     DETERMINISTIC
-return (Select count(*) from productstock where (productstock.LastestEXP - NOW()) /60/60/24  <= 3) ;;
+return (Select count(*) from productstock where (productstock.LastestEXP - NOW()) /60/60/24  <= 0) ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -729,4 +731,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-01-10 16:23:52
+-- Dump completed on 2021-01-10 17:35:03
