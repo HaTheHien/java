@@ -6,6 +6,16 @@ public class ProductInfo {
 	private String codeBar;
 	private Integer price;
 
+	public ProductInfo(String brand_,String name_,String codeBar_,Integer price_)
+	{
+		brand = brand_;
+		productName = name_;
+		codeBar = codeBar_;
+		price = price_;
+	}
+	public ProductInfo(){
+		
+	}
 	public String getBrand() {
 		return this.brand;
 	}

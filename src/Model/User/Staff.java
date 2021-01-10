@@ -8,7 +8,7 @@ public class Staff {
     private String address;
     private String type;
 
-    public static Staff getStaff(ResultSet rs) {
+    public Staff getStaff(ResultSet rs) {
         Staff s = null;
         try{
             if (rs.next()){

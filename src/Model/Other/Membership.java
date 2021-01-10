@@ -1,6 +1,5 @@
 package Model.Other;
-
-import jdk.internal.icu.impl.Trie.DataManipulate;
+import java.sql.*;
 
 public class Membership {
 
@@ -26,6 +25,10 @@ public class Membership {
 		this.phoneNum= b.getPhoneNum();
 		this.point=b.getPoint();
 		this.idMem=b.getIdMem();
+	}
+	public Membership()
+	{
+
 	}
 
 
