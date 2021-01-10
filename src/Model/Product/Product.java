@@ -1,5 +1,5 @@
 package Model.Product;
-public class Product extends ProductType {
+public class Product {
 	private ProductInfo info;
 	private ProductStockInfoq stockInfo;
 
@@ -10,6 +10,7 @@ public class Product extends ProductType {
 
 	public Product(ProductInfo inf, ProductStockInfoq stock)
 	{
+		super();
 		this.info=inf;
 		this.stockInfo=stock;
 	}

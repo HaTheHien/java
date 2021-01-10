@@ -3,8 +3,11 @@ package Model;
 import java.sql.*;
 import java.util.Properties;
 public abstract class Model {
-    static Connection conn = null;
+    public static Connection conn = null;
     public Model() {
+        setupModel();
+    }
+    public static void setupModel(){
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/quanlycuahang"; 

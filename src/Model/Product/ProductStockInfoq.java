@@ -8,6 +8,8 @@ public class ProductStockInfoq {
 	private Integer numStock;
 
 	//constructor
+	public ProductStockInfoq() {
+	}
 	public ProductStockInfoq(Date lastest, Integer num)
 	{
 		this.lastestEXP=lastest;
@@ -18,6 +20,7 @@ public class ProductStockInfoq {
 		this.lastestEXP=b.getLastestEXP();
 		this.numStock=b.getNumStock();
 	}
+
 
 
 	public  Date getLastestEXP()
