@@ -216,7 +216,23 @@ DELIMITER  $$
 CREATE PROCEDURE SearchProductByID(
 								INPUT NVARCHAR(100))
 Begin
-	SELECT * FROM quanlycuahang.productinfo WHERE ID = INPUT;
+	SELECT quanlycuahang.productinfo.ID AS `ID`,
+            quanlycuahang.productinfo.Brand AS `brand`, 
+            quanlycuahang.productinfo.ProductName AS `productName`,
+            quanlycuahang.productinfo.Price AS `price`,
+            quanlycuahang.productinfo.UrlImage AS `urlImage`,
+			quanlycuahang.typeproduct.TypeID AS `typeID`,
+			quanlycuahang.typeproduct.Name AS `typeName`,
+            quanlycuahang.productstock.Numstock AS `numStock`,
+            quanlycuahang.productstock.LastestEXP AS `lastestEXP`,
+            quanlycuahang.promo.ID AS `idPromo`,
+            quanlycuahang.promo.discount AS `discount`
+	FROM quanlycuahang.productinfo
+		left join quanlycuahang.productstock on quanlycuahang.productinfo.Id = quanlycuahang.productstock.Id
+		left join quanlycuahang.promo on quanlycuahang.productinfo.ID = quanlycuahang.promo.productID
+        left join quanlycuahang.product on quanlycuahang.productinfo.Id = quanlycuahang.product.Id
+        left join quanlycuahang.typeproduct on quanlycuahang.typeproduct.typeID = quanlycuahang.product.TypeID
+	WHERE quanlycuahang.productinfo.ID = INPUT;
 End$$
 
 DELIMITER $$

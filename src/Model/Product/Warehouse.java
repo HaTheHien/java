@@ -104,6 +104,53 @@ public class Warehouse {
 		return allProducts;
 	}
 
+	public static ArrayList<Product> getAllProductByID(String idProduct) {
+		ArrayList<Product> allProducts = new ArrayList<Product>();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "CALL `quanlycuahang`.`SearchProductByID`(?);";
+		try {
+			stmt = Model.conn.prepareStatement(sql);
+			stmt.setString(1, idProduct);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				Product p = new Product(new ProductInfo(), new ProductStockInfoq(),new ProductType(), new Promotion());
+				p.getProductInfo().setCodeBar(rs.getString("id"));
+				p.getProductInfo().setBrand(rs.getString("brand"));
+				p.getProductInfo().setProductName(rs.getString("productName"));
+				p.getProductInfo().setPrice(rs.getInt("price"));
+				p.setUrlImgString(rs.getString("urlImage"));
+
+				if (rs.getString("typeName") != null)
+					p.getProducType().setTypeName(rs.getString("typeName"));
+				p.getProducType().setTypeID(rs.getString("typeID"));
+			
+
+				p.getProductStockInfo().setLastestEXP(rs.getDate("lastestEXP"));
+				p.getProductStockInfo().setNumStock(rs.getInt("numStock"));
+
+				p.getPromotion().setPromoID(rs.getInt("idPromo"));
+				p.getPromotion().setPromoDiscount(rs.getInt("discount"));
+
+				allProducts.add(p);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				if (rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return allProducts;
+	}
+
 	public static int getNumProduct() {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
