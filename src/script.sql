@@ -193,10 +193,24 @@ Begin
 	declare temp nvarchar(100);
     set temp= concat('%',INPUT,'%');
     
-	SELECT * FROM quanlycuahang.productinfo WHERE ProductName LIKE temp;
+	SELECT quanlycuahang.productinfo.ID AS `ID`,
+            quanlycuahang.productinfo.Brand AS `brand`, 
+            quanlycuahang.productinfo.ProductName AS `productName`,
+            quanlycuahang.productinfo.Price AS `price`,
+            quanlycuahang.productinfo.UrlImage AS `urlImage`,
+			quanlycuahang.typeproduct.TypeID AS `typeID`,
+			quanlycuahang.typeproduct.Name AS `typeName`,
+            quanlycuahang.productstock.Numstock AS `numStock`,
+            quanlycuahang.productstock.LastestEXP AS `lastestEXP`,
+            quanlycuahang.promo.ID AS `idPromo`,
+            quanlycuahang.promo.discount AS `discount`
+	FROM quanlycuahang.productinfo
+		left join quanlycuahang.productstock on quanlycuahang.productinfo.Id = quanlycuahang.productstock.Id
+		left join quanlycuahang.promo on quanlycuahang.productinfo.ID = quanlycuahang.promo.productID
+        left join quanlycuahang.product on quanlycuahang.productinfo.Id = quanlycuahang.product.Id
+        left join quanlycuahang.typeproduct on quanlycuahang.typeproduct.typeID = quanlycuahang.product.TypeID
+	WHERE ProductName LIKE temp;
 End$$
-DELIMITER;
-call SearchProductByName(N'Dầu');
 
 DELIMITER  $$
 CREATE PROCEDURE SearchProductByID(
@@ -205,7 +219,6 @@ Begin
 	SELECT * FROM quanlycuahang.productinfo WHERE ID = INPUT;
 End$$
 
-drop procedure getallproductsdetails;
 DELIMITER $$
 CREATE PROCEDURE GetAllProductsDetails()
 Begin
@@ -438,4 +451,3 @@ BEGIN
     Call updateStock(idProduct, new_stock, new_exp);
     Call updatePromo(idProduct, new_discount);
 END$$
-CALL `quanlycuahang`.`GetAllProducts`();

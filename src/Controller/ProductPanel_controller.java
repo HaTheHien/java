@@ -32,10 +32,11 @@ public class ProductPanel_controller implements KeyListener {
         if (e.getKeyCode() == 10) {
             this.productPanel.tableModel.setRowCount(0);
             ArrayList<Product> allProducts = Warehouse.getAllProductByName(this.productPanel.searchField.getText());
-            for (Product p : allProducts) {
-                productPanel.tableModel.addRow(new String[] { p.getProductInfo().getCodeBar(),
-                        p.getProductInfo().getProductName(), p.getProducType().getTypeName(),
-                        p.getProductInfo().getPrice().toString(), p.getProductStockInfo().getNumStock().toString() });
+            if (allProducts != null)
+                for (Product p : allProducts) {
+                    productPanel.tableModel.addRow(new String[] { p.getProductInfo().getCodeBar(),
+                            p.getProductInfo().getProductName(), p.getProducType().getTypeName(),
+                            p.getProductInfo().getPrice().toString(), p.getProductStockInfo().getNumStock().toString() });
             }
         }
     }
