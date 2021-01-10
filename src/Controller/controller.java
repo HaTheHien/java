@@ -11,7 +11,7 @@ import Model.User.Staff;
 import Model.Bill.*;
 public class controller
 {
-    String login(Connection conn,String user,String password)
+    public static String login(Connection conn,String user,String password)
     {
         PreparedStatement stmt=null;
         ResultSet rs = null;
@@ -50,7 +50,7 @@ public class controller
         }
         return result;
     }
-    double turnOver(Connection conn) 
+    public static double turnOver(Connection conn) 
     {
         CallableStatement cstmt = null;
         double turnOver_ = 0;
@@ -74,7 +74,7 @@ public class controller
         }
         return turnOver_;
     }
-    int sumOrder(Connection conn) 
+    public static int sumOrder(Connection conn) 
     {
         CallableStatement cstmt = null;
         int sum_ = 0;
@@ -98,7 +98,7 @@ public class controller
         }
         return sum_;
     }
-    int numberProduct(Connection conn) 
+    public static int numberProduct(Connection conn) 
     {
         CallableStatement cstmt = null;
         int sum_ = 0;
@@ -122,7 +122,7 @@ public class controller
         }
         return sum_;
     }
-    int numProductOutStock(Connection conn) 
+    public static int numProductOutStock(Connection conn) 
     {
         CallableStatement cstmt = null;
         int sum_ = 0;
@@ -146,7 +146,7 @@ public class controller
         }
         return sum_;
     }
-    int numProductExpired(Connection conn) 
+    public static int numProductExpired(Connection conn) 
     {
         CallableStatement cstmt = null;
         int sum_ = 0;
@@ -170,7 +170,7 @@ public class controller
         }
         return sum_;
     }
-    int numTypeProduct(Connection conn) 
+    public static int numTypeProduct(Connection conn) 
     {
         CallableStatement cstmt = null;
         int sum_ = 0;
@@ -194,7 +194,7 @@ public class controller
         }
         return sum_;
     }
-    int numItemProduct(Connection conn) 
+    public static int numItemProduct(Connection conn) 
     {
         CallableStatement cstmt = null;
         int sum_ = 0;
@@ -218,7 +218,7 @@ public class controller
         }
         return sum_;
     }
-    boolean createMemberShip(Connection conn,String fullname,String addr, String phone) 
+    public static boolean createMemberShip(Connection conn,String fullname,String addr, String phone) 
     {
         PreparedStatement stmt=null;
         boolean result = false;
@@ -244,7 +244,7 @@ public class controller
         }
         return result;
     }
-    boolean updatePointMemberShip(Connection conn,String id,int point) 
+    public static boolean updatePointMemberShip(Connection conn,String id,int point) 
     {
         PreparedStatement stmt=null;
         boolean result = false;
@@ -269,7 +269,7 @@ public class controller
         }
         return result;
     }
-    Membership getMemberShip(Connection conn,String id) 
+    public static Membership getMemberShip(Connection conn,String id) 
     {
         PreparedStatement stmt=null;
         ResultSet rs = null;
@@ -302,7 +302,7 @@ public class controller
         }
         return temp;
     }
-    ArrayList<Membership> getAllMemberShip(Connection conn) 
+    public static ArrayList<Membership> getAllMemberShip(Connection conn) 
     {
         PreparedStatement stmt=null;
         ResultSet rs = null;
@@ -335,7 +335,7 @@ public class controller
         }
         return list;
     }
-    Staff getAccount(Connection conn,String staffID)
+    public static Staff getAccount(Connection conn,String staffID)
     {
         PreparedStatement stmt=null;
         ResultSet rs = null;
@@ -361,7 +361,7 @@ public class controller
         }
         return temp;
     }
-    ArrayList<Staff> getAllAccount(Connection conn)
+    public static ArrayList<Staff> getAllAccount(Connection conn)
     {
         PreparedStatement stmt=null;
         ResultSet rs = null;
@@ -392,7 +392,7 @@ public class controller
         }
         return list;
     }
-    boolean removeAccount(Connection conn,String accountID) 
+    public static boolean removeAccount(Connection conn,String accountID) 
     {
         PreparedStatement stmt=null;
         boolean result = false;
@@ -416,7 +416,7 @@ public class controller
         }
         return result;
     }
-    boolean updateAccount(Connection conn,String username,String fullName,String dob,String address,String pass,String type) 
+    public static boolean updateAccount(Connection conn,String username,String fullName,String dob,String address,String pass,String type) 
     {
         PreparedStatement stmt=null;
         boolean result = false;
@@ -446,7 +446,7 @@ public class controller
         return result;
     }
 
-    boolean createAccount(Connection conn,String username,String fullName,String dob,String address,String pass,String type) 
+    public static boolean createAccount(Connection conn,String username,String fullName,String dob,String address,String pass,String type) 
     {
         PreparedStatement stmt=null;
         boolean result = false;
@@ -475,7 +475,7 @@ public class controller
         }
         return result;
     }
-    Bill getBillInfo(Connection conn,String billID)
+    public static Bill getBillInfo(Connection conn,String billID)
     {   
         PreparedStatement stmt=null;
         ResultSet rs = null;
@@ -511,5 +511,191 @@ public class controller
             }
         }
         return temp;
+    }
+    public static int getNumTypeProduct(Connection conn){
+        PreparedStatement stmt=null;
+        ResultSet rs = null;
+        int result = 0;
+        try{
+            stmt = conn.prepareCall("Select Count(*) from typeProduct");
+            rs = stmt.executeQuery();
+            if (rs.next())
+            {
+                result = rs.getInt(1);
+            }
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+        }finally{
+            try {
+                if (stmt != null)
+                {
+                    stmt.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+    public static int getNumSoldProduct(Connection conn){
+        PreparedStatement stmt=null;
+        ResultSet rs = null;
+        int result = 0;
+        try{
+            stmt = conn.prepareCall("Select sum(Amount) from billunit");
+            rs = stmt.executeQuery();
+            if (rs.next())
+            {
+                result = rs.getInt(1);
+            }
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+        }finally{
+            try {
+                if (stmt != null)
+                {
+                    stmt.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+    public static long getRevenue(Connection conn){
+        PreparedStatement stmt=null;
+        ResultSet rs = null;
+        long result = 0;
+        try{
+            stmt = conn.prepareCall("select sum(billunit.Amount*productinfo.Price) from billunit left join productinfo on billunit.ProductID = productinfo.Id");
+            rs = stmt.executeQuery();
+            if (rs.next())
+            {
+                result = rs.getLong(1);
+            }
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+        }finally{
+            try {
+                if (stmt != null)
+                {
+                    stmt.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+    public static int getnumBill(Connection conn) {
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "Select count(*) from bill";
+		int numproduct = 0;
+		try {
+			stmt = conn.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				numproduct = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				if (rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return numproduct;
+    }
+    public static int getStockProductNum(Connection conn) {
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "Select sum(Amount) from billunit";
+		int numproduct = 0;
+		try {
+			stmt = conn.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				numproduct = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				if (rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return numproduct;
+    }
+    public static int getAboutExpireProductNum(Connection conn) {
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "Select count(*) from productstock where productstock.Numstock > 0 and productstock.Numstock < 5";
+		int numproduct = 0;
+		try {
+			stmt = conn.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				numproduct = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				if (rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return numproduct;
+    }
+    public static int getAboutOutStockProductNum(Connection conn) {
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "Select count(*) from productstock where (productstock.LastestEXP - NOW()) /60/60/24  <= 3 and (productstock.LastestEXP - NOW()) /60/60/24  > 0";
+		int numproduct = 0;
+		try {
+			stmt = conn.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				numproduct = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				if (rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return numproduct;
     }
 }
