@@ -219,7 +219,8 @@ DROP TABLE IF EXISTS `promo`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `promo` (
   `ID` int NOT NULL,
-  `Content` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `discount` int DEFAULT NULL,
+  `productID` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -230,7 +231,7 @@ CREATE TABLE `promo` (
 
 LOCK TABLES `promo` WRITE;
 /*!40000 ALTER TABLE `promo` DISABLE KEYS */;
-INSERT INTO `promo` VALUES (1,'Giảm 20% thứ 2 đầu tuần'),(2,'Giảm 50% cuối ngày');
+INSERT INTO `promo` VALUES (1,1000,'1'),(2,2000,'2');
 /*!40000 ALTER TABLE `promo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -383,15 +384,17 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `createAccount`(fullname nvarchar(30),dob datetime,addr nvarchar(200),pass nvarchar(200),type nvarchar(30))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createAccount`(username nvarchar(30),fullname nvarchar(30),dob datetime,addr nvarchar(200),pass nvarchar(200),type nvarchar(30))
 BEGIN
   INSERT INTO `quanlycuahang`.`account`
-	(`FullName`,
+	(`Id`,
+	`FullName`,
 	`DoB`,
 	`Addr`,
 	`Pass`,
 	`Type`)
 	VALUES(
+	username,
 	fullname,
 	dob,
 	addr,
@@ -415,7 +418,8 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `createMembership`(fullname nvarchar(30), address nvarchar(200), phone varchar(20))
 BEGIN
-	insert into membership(FullName,Addr,PhoneNum,Point) values(fullname, address, phone, 0 );
+    set @i = (select count(*) from membership) + 1;
+	insert into membership(Id,FullName,Addr,PhoneNum,Point) values(@i,fullname, address, phone, 0 );
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -646,10 +650,12 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `SearchProductByName`(
-								INPUT NVARCHAR(100))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SearchProductByName`(INPUT NVARCHAR(100))
 Begin
-	SELECT * FROM quanlycuahang.productinfo WHERE ProductName LIKE INPUT;
+	declare temp nvarchar(200);
+    set temp= concat('%',INPUT,'%');
+    
+	SELECT * FROM quanlycuahang.productinfo WHERE ProductName LIKE temp;
 End ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -669,6 +675,25 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `takeAccount`(id int)
 BEGIN
     select * from account where Id = id;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `updateAccount` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateAccount`(username nvarchar(30),fullname nvarchar(30),dob datetime,addr nvarchar(200),pass nvarchar(200),type nvarchar(30))
+BEGIN
+  Update `account` set FullName = fullname,DoB = dob,Addr = addr,Pass = pass,Type = type where Id = username;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -704,4 +729,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-01-10  7:04:25
+-- Dump completed on 2021-01-10 16:23:52

@@ -416,6 +416,35 @@ public class controller
         }
         return result;
     }
+    boolean updateAccount(Connection conn,String username,String fullName,String dob,String address,String pass,String type) 
+    {
+        PreparedStatement stmt=null;
+        boolean result = false;
+        try{
+            stmt = conn.prepareCall("{CALL updateAccount(?,?,?,?,?,?)}");
+            stmt.setString(1, username);
+            stmt.setString(2, fullName);
+            stmt.setString(3, dob);
+            stmt.setString(4, address);
+            stmt.setString(5, pass);
+            stmt.setString(6, type);
+            stmt.executeQuery();
+            result = true;
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+        }finally{
+            try {
+                if (stmt != null)
+                {
+                    stmt.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
 
     boolean createAccount(Connection conn,String username,String fullName,String dob,String address,String pass,String type) 
     {

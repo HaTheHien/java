@@ -50,8 +50,9 @@ create table BillUnit
 create table Promo
 (
 	ID Integer,
-	Content nvarchar(100),
-    constraint PK_Promo_ID primary key(ID)
+	discount Integer,
+	productID nvarchar(30),
+    	constraint PK_Promo_ID primary key(ID)
 );
 create table TypeProduct
 (
@@ -137,8 +138,8 @@ VALUES ('1',N'Nguyễn Thị Hai',N'Phường 1 Thành Phố HCM','12345',100),
 		('2',N'Nguyễn Văn Bảy',N'Phường 2 Thành Phố HCM','23456',20);
 
 INSERT INTO Promo
-VALUES	(1, N'Giảm 20% thứ 2 đầu tuần'),
-		(2, N'Giảm 50% cuối ngày');
+VALUES	(1, 1000, 1),
+	(2, 2000, 2);
 
 CREATE FUNCTION turnOver()
 RETURNS double DETERMINISTIC
@@ -164,7 +165,6 @@ CREATE FUNCTION numItemProduct()
 RETURNS int DETERMINISTIC
 return (Select  count(*) from product);
 
-DROP PROCEDURE SearchProductByName
 DELIMITER  $$
 CREATE PROCEDURE SearchProductByName(INPUT NVARCHAR(100))
 Begin
@@ -172,47 +172,47 @@ Begin
     set temp= concat('%',INPUT,'%');
     
 	SELECT * FROM quanlycuahang.productinfo WHERE ProductName LIKE temp;
-End;
-DROP PROCEDURE SearchProductByName;
-
-Call SearchProductByName(N'Dầu');
+End$$
+DELIMITER;
 
 DELIMITER  $$
 CREATE PROCEDURE SearchProductByID(
 								INPUT Integer)
 Begin
 	SELECT * FROM quanlycuahang.productinfo WHERE ID = INPUT;
-End;
+End$$
+DELIMITER;
 
 DELIMITER $$
 CREATE PROCEDURE GetAllProducts()
 Begin
 	SELECT * FROM quanlycuahang.productinfo;
-End;
-Call GetAllProducts();
+End$$
+DELIMITER;
+
 
 DELIMITER $$
 CREATE PROCEDURE GetAllPromos()
 Begin
 	SELECT * FROM quanlycuahang.promo;
-End;
-Call GetAllPromos();
+End$$
+DELIMITER;
 
 DELIMITER $$
 CREATE PROCEDURE InsertPromo(ID Integer, Content NVARCHAR(100))
 Begin
 	INSERT INTO promo
     VALUES (ID, Content);
-End;
-Call InsertPromo(3, 'Đồng giá 10k ngày 11/11');
+End$$
+DELIMITER;
 
 DELIMITER $$
 CREATE PROCEDURE RemovePromo(ID Integer)
 Begin
 	DELETE FROM promo
     WHERE promo.ID = ID;
-End;
-Call RemovePromo(3);
+End$$
+DELIMITER;
 
 DELIMITER $$
 CREATE PROCEDURE GetBillInfo(ID Integer)
@@ -220,7 +220,90 @@ Begin
 	SELECT bill.BillID, bill.SellerID, bill.BuyDate, bill.MembershipID, Amount, ID, Brand, ProductName, Price, UrlImage
     FROM (bill left JOIN billunit ON bill.billid = billunit.billid) right join productinfo on billunit.ProductID=productinfo.Id
     WHERE bill.BillID = ID;
-End;
-Call GetBillInfo(2);
+End$$
+DELIMITER;
+DELIMITER $$
+CREATE PROCEDURE getMembership(id int)
+BEGIN
+  select * from membership where MemId = id;
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE getAllMembership()
+BEGIN
+  select * from membership;
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE updateMembership(id int,new_point int)
+BEGIN
+   update membership set membership.Point = new_point where MemId = id;
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE createMembership(fullname nvarchar(30), address nvarchar(200), phone varchar(20))
+BEGIN
+    set @i = (select count(*) from membership) + 1;
+	insert into membership(Id,FullName,Addr,PhoneNum,Point) values(@i,fullname, address, phone, 0 );
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE takeAccount(id int)
+BEGIN
+    select * from account where Id = id;
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE getAllAccount()
+BEGIN
+  select Id,FullName,DoB,Addr,Type from account;
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE removeAccount(id int)
+BEGIN
+  DELETE FROM account where Id = id;
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE createAccount(username nvarchar(30),fullname nvarchar(30),dob datetime,addr nvarchar(200),pass nvarchar(200),type nvarchar(30))
+BEGIN
+  INSERT INTO `quanlycuahang`.`account`
+	(`Id`,
+	`FullName`,
+	`DoB`,
+	`Addr`,
+	`Pass`,
+	`Type`)
+	VALUES(
+	username,
+	fullname,
+	dob,
+	addr,
+	pass,
+	type);
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE updateAccount(username nvarchar(30),fullname nvarchar(30),dob datetime,addr nvarchar(200),pass nvarchar(200),type nvarchar(30))
+BEGIN
+  Update `account` set FullName = fullname,DoB = dob,Addr = addr,Pass = pass,Type = type where Id = username;
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE getAllBill(id int)
+BEGIN
+	select * from bill left join billunit on bill.BillID = billunit.BillId left join productinfo on ProductID = productinfo.Id where bill.BillId = id;
+END$$
+DELIMITER;
 
 
