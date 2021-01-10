@@ -69,6 +69,21 @@ public class MainScreen {
         mainFrame.revalidate();
         mainFrame.repaint();
     }
+    public void setup_POSPanel(){
+        mainFrame.remove(this.centerPanel);
+        centerPanel = new POSPanel(new Dimension(screenSize.width*8/10,screenSize.height - naviPanel.getHeight()));
+        Utility.addComponent(mainFrame, centerPanel, new GridBagConstraints(), 2, 1, 8, 19,GridBagConstraints.PAGE_START,0,0,8,19,GridBagConstraints.BOTH);
+        mainFrame.revalidate();
+        mainFrame.repaint();
+    }
+    public void setup_productDetailPanel(){
+        mainFrame.remove(this.centerPanel);
+        centerPanel = new POSPanel(new Dimension(screenSize.width*8/10,screenSize.height - naviPanel.getHeight()));
+        Utility.addComponent(mainFrame, centerPanel, new GridBagConstraints(), 2, 1, 8, 19,GridBagConstraints.PAGE_START,0,0,8,19,GridBagConstraints.BOTH);
+        mainFrame.revalidate();
+        mainFrame.repaint();
+    }
+
     public MainScreen() {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
