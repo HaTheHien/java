@@ -13,7 +13,7 @@ public abstract class Model {
             String url = "jdbc:mysql://localhost:3306/quanlycuahang"; 
             Properties info = new Properties(); 
             info.put("user", "root"); 
-            info.put("password", "password");
+            info.put("password", "gangnamsai1506");
             conn=DriverManager.getConnection(url,info);
         }
         catch (SQLException se) { // Handle errors for JDBC

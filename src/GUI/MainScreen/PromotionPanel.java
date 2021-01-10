@@ -75,6 +75,7 @@ public class PromotionPanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 693;
         gridBagConstraints.ipady = 35;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;

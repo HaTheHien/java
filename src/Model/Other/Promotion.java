@@ -1,46 +1,22 @@
 package Model.Other;
 public class Promotion {
+	public int promoID;
+	public int promoDiscount;
 
-	private String namePromo;
-	private String idPromo;
-
-	//constructor
-
-	public Promotion(String name,String id)
-	{
-		this.namePromo=name;
-		this.idPromo=id;
-	}
-	public Promotion( Promotion b)
-	{
-		this.namePromo=b.getNamePromo();
-		this.idPromo=b.getIdPromo();
+	public int getPromoID() {
+		return promoID;
 	}
 
-	public boolean checkPromotion() {
-		// TODO - implement Promotion.checkPromotion
-		throw new UnsupportedOperationException();
+	public void setPromoID(int promoID) {
+		this.promoID = promoID;
 	}
 
-	
-
-
-	public String getNamePromo()
-	{
-		return this.namePromo;
-	}
-	public String getIdPromo()
-	{
-		return this.idPromo;
+	public int getPromoDiscount() {
+		return promoDiscount;
 	}
 
-	public void setNamePromo(String name)
-	{
-		this.namePromo=name;
+	public void setPromoDiscount(int promoDiscount) {
+		this.promoDiscount = promoDiscount;
+	}
 
-	}
-	public void setIdPromo(String id)
-	{
-		this.idPromo=id;
-	}
 }

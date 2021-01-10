@@ -62,14 +62,19 @@ public class MenuBar extends JPanel {
             }
         });
         this.promotion_label.addMouseListener(new MouseAdapter() {
-                public void mouseClicked(MouseEvent e) {
-                    mainScreen.setup_promotionPanel();
-                }
-            });
-            this.membership_label.addMouseListener(new MouseAdapter() {
-                public void mouseClicked(MouseEvent e) {
-                    mainScreen.setup_membershipPanel();
-                }
-            });
+            public void mouseClicked(MouseEvent e) {
+                mainScreen.setup_promotionPanel();
+            }
+        });
+        this.membership_label.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                mainScreen.setup_membershipPanel();
+            }
+        });
+        this.pos_label.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                mainScreen.setup_POSPanel();
+            }
+        });
     }
 }

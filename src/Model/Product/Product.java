@@ -1,19 +1,25 @@
 package Model.Product;
 
+import Model.Other.Promotion;
+
 public class Product {
 	private ProductInfo info;
 	private ProductStockInfoq stockInfo;
+	private ProductType productype;
+	private Promotion promotion;
+	private String urlImgString;
 
 	public Product() {
 		// TODO - implement Product.Product
 		throw new UnsupportedOperationException();
 	}
 
-	public Product(ProductInfo inf, ProductStockInfoq stock)
+	public Product(ProductInfo inf, ProductStockInfoq stock,ProductType productype,Promotion promotion)
 	{
-		super();
 		this.info=inf;
 		this.stockInfo=stock;
+		this.productype = productype;
+		this.promotion = promotion;
 	}
 
 	public Product(Product b)
@@ -38,5 +44,30 @@ public class Product {
 	{
 		return this.stockInfo;
 	}
+
+	public ProductType getProducType() {
+		return this.productype;
+	}
+
+	public void setProducType(ProductType productype) {
+		this.productype = productype;
+	}
+
+	public String getUrlImgString() {
+		return urlImgString;
+	}
+
+	public void setUrlImgString(String urlImgString) {
+		this.urlImgString = urlImgString;
+	}
+
+	public Promotion getPromotion() {
+		return promotion;
+	}
+
+	public void setPromotion(Promotion promotion) {
+		this.promotion = promotion;
+	}
+
 
 }
