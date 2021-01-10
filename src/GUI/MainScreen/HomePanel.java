@@ -1,6 +1,6 @@
 package GUI.MainScreen;
 
-import GUI.GUI_Utility.*;
+import GUI.GUI_Utility.Utility;
 import javax.swing.*;
 import javax.swing.text.StyleConstants;
 

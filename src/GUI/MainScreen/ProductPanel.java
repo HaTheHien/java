@@ -14,7 +14,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import Controller.ProductPanel_controller;
-
 import java.awt.event.*;
 import java.awt.*;
 

@@ -166,12 +166,16 @@ return (Select  count(*) from product);
 
 DROP PROCEDURE SearchProductByName
 DELIMITER  $$
-CREATE PROCEDURE SearchProductByName(
-								INPUT NVARCHAR(100))
+CREATE PROCEDURE SearchProductByName(INPUT NVARCHAR(100))
 Begin
-	SELECT * FROM quanlycuahang.productinfo WHERE ProductName LIKE INPUT;
+	declare temp nvarchar(200);
+    set temp= concat('%',INPUT,'%');
+    
+	SELECT * FROM quanlycuahang.productinfo WHERE ProductName LIKE temp;
 End;
-Call SearchProductByName(N'Nước uống');
+DROP PROCEDURE SearchProductByName;
+
+Call SearchProductByName(N'Dầu');
 
 DELIMITER  $$
 CREATE PROCEDURE SearchProductByID(
@@ -219,67 +223,4 @@ Begin
 End;
 Call GetBillInfo(2);
 
-DELIMITER $$
-CREATE PROCEDURE getMembership(id int)
-BEGIN
-  select * from membership where MemId = id;
-END
 
-DELIMITER $$
-CREATE PROCEDURE getAllMembership()
-BEGIN
-  select * from membership;
-END
-
-DELIMITER $$
-CREATE PROCEDURE updateMembership(id int,new_point int)
-BEGIN
-   update membership set membership.Point = new_point where MemId = id;
-END
-
-DELIMITER $$
-CREATE PROCEDURE createMembership(fullname nvarchar(30), address nvarchar(200), phone varchar(20))
-BEGIN
-	insert into membership(FullName,Addr,PhoneNum,Point) values(fullname, address, phone, 0 );
-END
-
-DELIMITER $$
-CREATE PROCEDURE takeAccount(id int)
-BEGIN
-    select * from account where Id = id;
-END
-
-DELIMITER $$
-CREATE PROCEDURE getAllAccount()
-BEGIN
-  select Id,FullName,DoB,Addr,Type from account;
-END
-
-DELIMITER $$
-CREATE PROCEDURE removeAccount(id int)
-BEGIN
-  DELETE FROM account where Id = id;
-END
-
-DELIMITER $$
-CREATE PROCEDURE createAccount(fullname nvarchar(30),dob datetime,addr nvarchar(200),pass nvarchar(200),type nvarchar(30))
-BEGIN
-  INSERT INTO `quanlycuahang`.`account`
-	(`FullName`,
-	`DoB`,
-	`Addr`,
-	`Pass`,
-	`Type`)
-	VALUES(
-	fullname,
-	dob,
-	addr,
-	pass,
-	type);
-END
-
-DELIMITER $$
-CREATE PROCEDURE getAllBill(id int)
-BEGIN
-	select * from bill left join billunit on bill.BillID = billunit.BillId left join productinfo on ProductID = productinfo.Id where bill.BillId = id;
-END
