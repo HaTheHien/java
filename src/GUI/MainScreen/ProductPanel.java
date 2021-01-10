@@ -67,8 +67,8 @@ public class ProductPanel extends JPanel {
         };
 
         // ADD PRODUCT HERE
-        tableModel.addRow(new String[] { "Bar code", "Product name", "Product type", "Price", "Stock" });
-
+        //tableModel.addRow(new String[] { "Bar code", "Product name", "Product type", "Price", "Stock" });
+        
         productTable.setModel(tableModel);
         // productTable.getSelectionModel().addListSelectionListener(
         // new ListSelectionListener());
@@ -112,13 +112,15 @@ public class ProductPanel extends JPanel {
         gridBagConstraints.insets = new java.awt.Insets(19, 6, 0, 10);
         add(newbarCodeField, gridBagConstraints);
 
+        //Create controller and binding UI to controller
         productPanel_controller =  new ProductPanel_controller(this);
         searchField.addKeyListener(productPanel_controller);
+        newbarCodeField.addKeyListener(productPanel_controller);
         productTable.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 // TODO:
             }
         });
     }// </editor-fold>
-
+    
 }

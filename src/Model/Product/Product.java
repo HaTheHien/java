@@ -1,4 +1,5 @@
 package Model.Product;
+
 public class Product {
 	private ProductInfo info;
 	private ProductStockInfoq stockInfo;
