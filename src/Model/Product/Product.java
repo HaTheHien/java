@@ -1,5 +1,11 @@
 package Model.Product;
 
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import Model.Model;
 import Model.Other.Promotion;
 
 public class Product {
@@ -67,6 +73,38 @@ public class Product {
 
 	public void setPromotion(Promotion promotion) {
 		this.promotion = promotion;
+	}
+	public boolean updateProduct(){
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "CALL `quanlycuahang`.`updateProduct`(?, ?, ?, ?, ?, ?, ?, ?,?)";
+		try {
+			stmt = Model.conn.prepareStatement(sql);
+			stmt.setString(1, this.info.getCodeBar());
+			stmt.setString(2, this.info.getProductName());
+			stmt.setString(3, this.info.getBrand());
+			stmt.setInt(4, this.info.getPrice());
+			stmt.setInt(5, this.stockInfo.getNumStock());
+			stmt.setDate(6, this.stockInfo.getLastestEXP());
+			stmt.setLong	(7, this.promotion.getPromoDiscount());
+			stmt.setString(8, this.urlImgString);
+			stmt.setString(9, this.productype.getTypeID());
+			int res = stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				if (rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return true;
 	}
 
 

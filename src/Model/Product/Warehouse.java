@@ -9,7 +9,7 @@ import Model.Other.Promotion;
 
 public class Warehouse {
 
-	private ArrayList<ProductType> productTypeList;
+	//private ArrayList<ProductType> productTypeList;
 
 	public static ArrayList<Product> getAllProduct() {
 		ArrayList<Product> allProducts = new ArrayList<Product>();
@@ -36,7 +36,7 @@ public class Warehouse {
 				p.getProductStockInfo().setNumStock(rs.getInt("numStock"));
 
 				p.getPromotion().setPromoID(rs.getInt("idPromo"));
-				p.getPromotion().setPromoDiscount(rs.getInt("discount"));
+				p.getPromotion().setPromoDiscount(rs.getLong("discount"));
 
 				allProducts.add(p);
 			}
@@ -205,5 +205,37 @@ public class Warehouse {
 			}
 		}
 		return numproduct;
+	}
+	
+	public static ArrayList<ProductType> getAllProductType(){
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT * FROM quanlycuahang.typeproduct";
+		ArrayList<ProductType> allType = new ArrayList<>();
+		try {
+			stmt = Model.conn.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			ProductType pt = null;
+			while (rs.next()) {
+				pt = new ProductType();
+				pt.setTypeID(rs.getString("TypeID"));
+				pt.setTypeName(rs.getString("Name"));
+				allType.add(pt);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				if (rs != null)
+					rs.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return allType;
 	}
 }

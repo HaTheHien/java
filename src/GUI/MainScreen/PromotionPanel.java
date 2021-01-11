@@ -1,5 +1,6 @@
 package GUI.MainScreen;
 
+import Controller.PromoPanel_controller;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -56,6 +57,8 @@ public class PromotionPanel extends javax.swing.JPanel {
         promotionTable.setModel(tableModel);
 
         jScrollPane1.setViewportView(promotionTable);
+        
+        PromoPanel_controller proPanel_control = new PromoPanel_controller(this);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
