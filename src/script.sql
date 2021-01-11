@@ -46,8 +46,7 @@ create table BillUnit
 (
 	BillID nvarchar(30),
 	ProductID nvarchar(30),
-	Amount int,
-	constraint PK_bill_product_id primary key(BillID,ProductID)
+	Amount int
 );
 create table Promo
 (
@@ -182,6 +181,10 @@ return (Select count(*) from productstock where (productstock.LastestEXP - NOW()
 CREATE FUNCTION numTypeProduct()
 RETURNS int DETERMINISTIC
 return (Select  count(*) from typeproduct);
+
+CREATE FUNCTION discount(idProduct NVARCHAR(100))
+RETURNS int DETERMINISTIC
+return (Select discount from promo where productID = idProduct);
 
 CREATE FUNCTION numItemProduct()
 RETURNS int DETERMINISTIC
@@ -493,3 +496,72 @@ BEGIN
     insert into product(id, typeID) 
     values(id, new_typeID);
 END$$
+
+DELIMITER $$
+CREATE PROCEDURE quanlycuahang.addBill(ID NVARCHAR(100),
+                        new_date date,
+                        membershipID NVARCHAR(100),
+                        sellerID NVARCHAR(100))
+BEGIN
+	Insert into Bill(BillID, BuyDate, MembershipID, SellerID)
+    Values(ID, new_date, membershipID, sellerID);
+END$$
+
+
+DELIMITER $$
+CREATE PROCEDURE quanlycuahang.addBillUnit(BillID NVARCHAR(100),
+                        idProduct NVARCHAR(100),
+                        amount int)
+BEGIN
+	Insert into BillUnit(BillID, ProductID, Amount)
+    Values(BillID, idProduct, amount);
+END$$
+
+DELIMITER $$
+CREATE PROCEDURE GetAllProductOfAType(id NVARCHAR(100))
+Begin
+	SELECT quanlycuahang.productinfo.ID AS `ID`,
+            quanlycuahang.productinfo.Brand AS `brand`, 
+            quanlycuahang.productinfo.ProductName AS `productName`,
+            quanlycuahang.productinfo.Price AS `price`,
+            quanlycuahang.productinfo.UrlImage AS `urlImage`,
+			quanlycuahang.typeproduct.TypeID AS `typeID`,
+			quanlycuahang.typeproduct.Name AS `typeName`,
+            quanlycuahang.productstock.Numstock AS `numStock`,
+            quanlycuahang.productstock.LastestEXP AS `lastestEXP`,
+            quanlycuahang.promo.ID AS `idPromo`,
+            quanlycuahang.promo.discount AS `discount`
+	FROM quanlycuahang.productinfo
+		left join quanlycuahang.productstock on quanlycuahang.productinfo.Id = quanlycuahang.productstock.Id
+		left join quanlycuahang.promo on quanlycuahang.productinfo.ID = quanlycuahang.promo.productID
+        left join quanlycuahang.product on quanlycuahang.productinfo.Id = quanlycuahang.product.Id
+        left join quanlycuahang.typeproduct on quanlycuahang.typeproduct.typeID = quanlycuahang.product.TypeID
+	WHERE product.typeID = id;
+End$$
+
+drop procedure SearchProductByNameAndtype;
+DELIMITER  $$
+CREATE PROCEDURE SearchProductByNameAndType(idProduct NVARCHAR(100), idType NVARCHAR(100))
+Begin
+	declare temp nvarchar(100);
+    set temp= concat('%',idProduct,'%');
+    
+	SELECT quanlycuahang.productinfo.ID AS `ID`,
+            quanlycuahang.productinfo.Brand AS `brand`, 
+            quanlycuahang.productinfo.ProductName AS `productName`,
+            quanlycuahang.productinfo.Price AS `price`,
+            quanlycuahang.productinfo.UrlImage AS `urlImage`,
+			quanlycuahang.typeproduct.TypeID AS `typeID`,
+			quanlycuahang.typeproduct.Name AS `typeName`,
+            quanlycuahang.productstock.Numstock AS `numStock`,
+            quanlycuahang.productstock.LastestEXP AS `lastestEXP`,
+            quanlycuahang.promo.ID AS `idPromo`,
+            quanlycuahang.promo.discount AS `discount`
+	FROM quanlycuahang.productinfo
+		left join quanlycuahang.productstock on quanlycuahang.productinfo.Id = quanlycuahang.productstock.Id
+		left join quanlycuahang.promo on quanlycuahang.productinfo.ID = quanlycuahang.promo.productID
+        left join quanlycuahang.product on quanlycuahang.productinfo.Id = quanlycuahang.product.Id
+        left join quanlycuahang.typeproduct on quanlycuahang.typeproduct.typeID = quanlycuahang.product.TypeID
+	WHERE quanlycuahang.productinfo.ProductName LIKE temp AND quanlycuahang.product.typeID = idType;
+End$$
+CALL `quanlycuahang`.`SearchProductByNameAndType`(N'Dầu ăn',N'1');
