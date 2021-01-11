@@ -158,4 +158,6 @@ public class Bill {
 		}
 		return true;
 	}
+	public void setSellerID(String string) {
+	}
 }

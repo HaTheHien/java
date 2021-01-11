@@ -4,7 +4,6 @@ import java.lang.Thread.State;
 
 import Model.Product.Product;
 import Model.Product.ProductInfo;
-import Model.Product.Product;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -33,10 +32,10 @@ public class BillUnit {
 		this.product=info;
 
 	}
-	public void setAmount(Integer amount)
-	{
-		this.amount=amount;
-	}
+	// public BillUnit(String codebar,Integer amount){
+	// 	this.product = Warehouse.getAllProductByID(codebar).get(0);
+	// 	this.amount = amount;
+	// }
 	public Product getProduct()
 	{
 		return this.product;
@@ -46,6 +45,8 @@ public class BillUnit {
 		return this.amount;
 	}
 
+	public BillUnit() {
+	}
 	//UI
 	public Long getTotal()
 	{
@@ -107,5 +108,15 @@ public class BillUnit {
 		int remain = product.getProductStockInfo().getNumStock() - amount;
 		product.getProductStockInfo().setNumStock(remain);
 		return product.updateStock();
+	}
+
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
+
+	public void setAmount(Integer amount) {
+		this.amount = amount;
 	}
 }

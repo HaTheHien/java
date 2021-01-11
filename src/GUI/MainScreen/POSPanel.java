@@ -54,7 +54,7 @@ public class POSPanel extends javax.swing.JPanel {
         public javax.swing.JLabel jLabel5;
         public javax.swing.table.DefaultTableModel tableModel = new javax.swing.table.DefaultTableModel(
                 new Object[][] { { null, null, null, null } },
-                new String[] { "Tên hàng hoá", "Đơn giá", "Số  lượng", "Tổng" }) {
+                new String[] { "Barcode","Tên hàng hoá", "Đơn giá", "Số  lượng", "Tổng" }) {
             /**
              *
              */
@@ -352,6 +352,7 @@ public class POSPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(11, 6, 11, 0);
         add(Payment_Panel, gridBagConstraints);
 
+        tableModel.setRowCount(0);
         posPanel_controller = new POSPanel_controller(this);
     }// </editor-fold>
 
