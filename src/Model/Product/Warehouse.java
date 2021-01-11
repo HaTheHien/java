@@ -284,6 +284,53 @@ public class Warehouse {
 		}
 		return allProducts;
 	}
+	public static ArrayList<Product> getProductByNameAndType(String nameProduct, String idType){
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "CALL `quanlycuahang`.`SearchProductByNameAndType`(?,?);";
+		ArrayList<Product> allProducts = new ArrayList<>();
+		try {
+			stmt = Model.conn.prepareStatement(sql);
+			stmt.setString(1, nameProduct);
+			stmt.setString(2, idType);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				Product p = new Product(new ProductInfo(), new ProductStockInfoq(),new ProductType(), new Promotion());
+				p.getProductInfo().setCodeBar(rs.getString("id"));
+				p.getProductInfo().setBrand(rs.getString("brand"));
+				p.getProductInfo().setProductName(rs.getString("productName"));
+				p.getProductInfo().setPrice(rs.getInt("price"));
+				p.setUrlImgString(rs.getString("urlImage"));
+
+				if (rs.getString("typeName") != null)
+					p.getProducType().setTypeName(rs.getString("typeName"));
+				p.getProducType().setTypeID(rs.getString("typeID"));
+			
+
+				p.getProductStockInfo().setLastestEXP(rs.getDate("lastestEXP"));
+				p.getProductStockInfo().setNumStock(rs.getInt("numStock"));
+
+				p.getPromotion().setPromoID(rs.getInt("idPromo"));
+				p.getPromotion().setPromoDiscount(rs.getInt("discount"));
+
+				allProducts.add(p);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				if (rs != null)
+					rs.close();
+			} catch (SQLException e) {	
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return allProducts;
+	}
 	public static boolean updateProduct(String id, String new_prodName, String new_brand,
 							String new_price, String new_stock,
 							String new_exp, String new_discount,
