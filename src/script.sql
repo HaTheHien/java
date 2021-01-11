@@ -327,7 +327,7 @@ DELIMITER $$
 CREATE PROCEDURE createMembership(fullname nvarchar(30), address nvarchar(200), phone varchar(20))
 BEGIN
     set @i = (select count(*) from membership) + 1;
-	insert into membership(Id,FullName,Addr,PhoneNum,Point) values(@i,fullname, address, phone, 0 );
+	insert into membership(memID,FullName,Addr,PhoneNum,Point) values(@i,fullname, address, phone, 0 );
 END$$
 DELIMITER;
 
@@ -515,6 +515,8 @@ CREATE PROCEDURE quanlycuahang.addBillUnit(BillID NVARCHAR(100),
 BEGIN
 	Insert into BillUnit(BillID, ProductID, Amount)
     Values(BillID, idProduct, amount);
+    
+    Update productstock SET numStock = numStock - amount WHERE id = idProduct; 
 END$$
 
 DELIMITER $$
@@ -564,4 +566,3 @@ Begin
         left join quanlycuahang.typeproduct on quanlycuahang.typeproduct.typeID = quanlycuahang.product.TypeID
 	WHERE quanlycuahang.productinfo.ProductName LIKE temp AND quanlycuahang.product.typeID = idType;
 End$$
-CALL `quanlycuahang`.`SearchProductByNameAndType`(N'Dầu ăn',N'1');
