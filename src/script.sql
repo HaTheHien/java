@@ -259,7 +259,7 @@ End$$
 DELIMITER $$
 CREATE PROCEDURE GetAllPromos()
 Begin
-	SELECT * FROM quanlycuahang.promo;
+	SELECT * FROM quanlycuahang.promo join quanlycuahang.productinfo on promo.productID = productinfo.Id;
 End$$
 DELIMITER;
 
@@ -401,8 +401,41 @@ END$$
 DELIMITER;
 
 DELIMITER $$
-CREATE PROCEDURE createBillUnit(billID varchar(30), productID varchar(30),amount INTEGER)
+CREATE PROCEDURE decreaseStock(idProduct NVARCHAR(100), 
+						decrease int)
 BEGIN
+	DECLARE specialty CONDITION FOR SQLSTATE '45000';
+	set @i = (select numstock from productstock WHERE id = idProduct);
+    	IF (@i - decrease < 0) then
+		set @message = CONCAT("Not enough stock of product id: ",idProduct);
+		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO=30001, MESSAGE_TEXT = @message;
+	end if;
+	SET SQL_SAFE_UPDATES = 0;
+	UPDATE productstock
+    SET numstock = @i - decrease
+    WHERE id = idProduct;
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE updatePointMembership(membershipID varchar(30),  productID varchar(30),amount INTEGER)
+BEGIN
+	set @cur_point = (select Point from membership WHERE MemId = membershipID);
+    set @add_point = (select Price from productinfo WHERE Id = productID) * amount / 100;
+	UPDATE membership
+    SET Point = @cur_point + @add_point
+    WHERE MemId = membershipID;
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE createBillUnit(billID varchar(30), productID varchar(30),amount INTEGER,membershipID varchar(30))
+BEGIN
+	if (membershipID.isNULL() = 0 and not membershipID = '') then
+		call updatePointMembership(membershipID,productID,amount);
+    end if;
+		
+	call decreaseStock(productID, amount);
 	INSERT INTO `quanlycuahang`.`billunit`
 						(`BillID`,
 						`ProductID`,
