@@ -354,14 +354,6 @@ public class Warehouse {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
-		}finally {
-			try {
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException e) {	
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 		return true;	
 	}
