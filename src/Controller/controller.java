@@ -2,6 +2,7 @@ package Controller;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -643,85 +644,46 @@ public class controller
         PreparedStatement stmt=null;
         PreparedStatement stmt1=null;
         ResultSet rs = null;
-        ResultSet rs1 = null;
-        ArrayList <Integer> listBillId = new ArrayList<Integer>();
+        ArrayList <String> listBillId = new ArrayList<String>();
+        ArrayList <String> memID = new ArrayList<String>();
+        ArrayList <String> seller = new ArrayList<String>();
         ArrayList <Bill> listBill = new ArrayList<Bill>();
+        ArrayList <Date> buyDate = new ArrayList<Date>();
         try{
             stmt = conn.prepareCall("Select * from bill");
             rs = stmt.executeQuery();
             while (rs.next())
             {
-                listBillId.add(rs.getInt("BillID"));
+                listBillId.add(rs.getString("BillID"));
+                buyDate.add(rs.getDate("BuyDate"));
+                memID.add(rs.getString("MembershipID"));
+                seller.add(rs.getString("SellerID"));
             }
+                    
+            if (listBillId.size() == 0)
+                return null;
+
+            ArrayList<BillUnit> allBill;
+
             for (int i=0;i<listBillId.size();i++)
             {
+                allBill = new ArrayList<BillUnit>();
+
                 stmt.close();
                 stmt = conn.prepareStatement("call GetBillInfo(?)");
-                stmt.setInt(1,listBillId.get(i));
+                stmt.setString(1,listBillId.get(i));
                 rs = stmt.executeQuery();
-                int flag = -1;
+
                 while(rs.next())
                 {
-                    if (flag == -1)
-                    {
-                        flag = listBill.size();
-                        ArrayList<BillUnit> listBillUnit = new ArrayList<BillUnit>();
-                        stmt1 = conn.prepareStatement("Select * from productStock where Id = ?");
-                        stmt1.setString(1,String.valueOf(listBillId.get(i)));
-                        rs1 = stmt1.executeQuery();
-                        ProductStockInfoq stock = null;
-                        if (rs1.next())
-                        {
-                            stock = new ProductStockInfoq(rs1.getDate("LastestEXP"), rs1.getInt("Numstock"));
-                        }
-                        stmt1.close();
-                        stmt1 = conn.prepareStatement("Select * from typeproduct join product on product.TypeID = typeproduct.TypeID where Id = ?");
-                        stmt1.setString(1,String.valueOf(listBillId.get(i)));
-                        rs1 = stmt1.executeQuery();
-                        ProductType type = null;
-                        if (rs1.next())
-                            type = new ProductType(rs1.getString("TypeID"),rs1.getString("Name"));
-                        stmt1.close();
-                        stmt1 = conn.prepareStatement("Select * from promo where productID = ?");
-                        stmt1.setString(1,String.valueOf(listBillId.get(i)));
-                        rs1 = stmt1.executeQuery();
-                        Promotion promo = null;
-                        if (rs1.next())
-                            promo = new Promotion(rs1.getInt("ID"),rs1.getString("productID"),rs1.getInt("discount"),rs.getString("ProductName"));
-                        stmt1.close();
-                        listBillUnit.add(new BillUnit(new Product(new ProductInfo(rs.getString("Brand"),rs.getString("Productname"),rs.getString("ID"),rs.getInt("Price"),rs.getString("UrlImage")),stock,type,promo),rs.getInt("amount")));
-                        listBill.add(new Bill(listBillUnit,rs.getDate("BuyDate"),rs.getString("MembershipID"),rs.getString("BillID"),rs.getString("SellerID")));
-                    }
-                    else
-                    {
-                        ArrayList<BillUnit> listBillUnit = listBill.get(flag).getAllProductBill();
-                        stmt1 = conn.prepareStatement("Select * from productStock where TypeId = ?");
-                        stmt1.setString(1,String.valueOf(listBillId.get(i)));
-                        rs1 = stmt1.executeQuery();
-                        ProductStockInfoq stock = null;
-                        if (rs1.next())
-                        {
-                            stock = new ProductStockInfoq(rs1.getDate("LastestEXP"), rs1.getInt("Numstock"));
-                        }
-                        stmt1.close();
-                        stmt1 = conn.prepareStatement("Select * from typeproduct join product on product.TypeID = typeproduct.TypeID where Id = ?");
-                        stmt1.setString(1,String.valueOf(listBillId.get(i)));
-                        rs1 = stmt1.executeQuery();
-                        ProductType type = null;
-                        if (rs1.next())
-                            type = new ProductType(rs1.getString("TypeID"),rs1.getString("Name"));
-                        stmt1.close();
-                        stmt1 = conn.prepareStatement("Select * from promo where productID = ?");
-                        stmt1.setString(1,String.valueOf(listBillId.get(i)));
-                        rs1 = stmt1.executeQuery();
-                        Promotion promo = null;
-                        if (rs1.next())
-                            promo = new Promotion(rs1.getInt("ID"),rs1.getString("productID"),rs1.getInt("discount"),rs.getString("ProductName"));
-                        stmt1.close();
-                        listBillUnit.add(new BillUnit(new Product(new ProductInfo(rs.getString("Brand"),rs.getString("Productname"),rs.getString("ID"),rs.getInt("Price"),rs.getString("UrlImage")),stock,type,promo),rs.getInt("amount")));
-                        listBill.get(flag).setAllProductBill(listBillUnit);
-                    }
+                    BillUnit billunit = new BillUnit();
+                    billunit.setAmount(rs.getInt("Amount"));
+
+                    Product product = Warehouse.getAllProductByID(rs.getString("ID")).get(0);
+                    billunit.setProduct(product);
+                    allBill.add(billunit);
                 }
+                listBill.add(new Bill(allBill, buyDate.get(i), memID.get(i), listBillId.get(i), seller.get(i)));
             }
         }catch (SQLException e)
         {
@@ -743,96 +705,57 @@ public class controller
         return listBill;
     }
 
-    public static ArrayList<Bill> filterBillByDate(Connection conn, Date start,Date end) 
+    public static ArrayList<Bill> filterBillByDate(Connection conn, String start, String end) 
     {
         PreparedStatement stmt=null;
         PreparedStatement stmt1=null;
         ResultSet rs = null;
-        ResultSet rs1 = null;
-        ArrayList <Integer> listBillId = new ArrayList<Integer>();
+        ArrayList <String> listBillId = new ArrayList<String>();
+        ArrayList <String> memID = new ArrayList<String>();
+        ArrayList <String> seller = new ArrayList<String>();
         ArrayList <Bill> listBill = new ArrayList<Bill>();
+        ArrayList <Date> buyDate = new ArrayList<Date>();
+            
         try{
             stmt = conn.prepareCall("Select * from bill where datediff(BuyDate,?) >= 0 and datediff(?,BuyDate) >= 0");
-            stmt.setDate(1, start);
-            stmt.setDate(2, end);
+            stmt.setDate(1, Date.valueOf(start));
+            stmt.setDate(2, Date.valueOf(end));
             rs = stmt.executeQuery();
             while (rs.next())
             {
-                listBillId.add(rs.getInt("BillID"));
+                listBillId.add(rs.getString("BillID"));
+                buyDate.add(rs.getDate("BuyDate"));
+                memID.add(rs.getString("MembershipID"));
+                seller.add(rs.getString("SellerID"));
             }
+            if (listBillId.size() == 0)
+                return null;
+            ArrayList<BillUnit> allBill;
+
             for (int i=0;i<listBillId.size();i++)
             {
+                allBill = new ArrayList<BillUnit>();
+
                 stmt.close();
                 stmt = conn.prepareStatement("call GetBillInfo(?)");
-                stmt.setInt(1,listBillId.get(i));
+                stmt.setString(1,listBillId.get(i));
                 rs = stmt.executeQuery();
-                int flag = -1;
+
                 while(rs.next())
                 {
-                    if (flag == -1)
-                    {
-                        flag = listBill.size();
-                        ArrayList<BillUnit> listBillUnit = new ArrayList<BillUnit>();
-                        stmt1 = conn.prepareStatement("Select * from productStock where Id = ?");
-                        stmt1.setString(1,String.valueOf(listBillId.get(i)));
-                        rs1 = stmt1.executeQuery();
-                        ProductStockInfoq stock = null;
-                        if (rs1.next())
-                        {
-                            stock = new ProductStockInfoq(rs1.getDate("LastestEXP"), rs1.getInt("Numstock"));
-                        }
-                        stmt1.close();
-                        stmt1 = conn.prepareStatement("Select * from typeproduct join product on product.TypeID = typeproduct.TypeID where Id = ?");
-                        stmt1.setString(1,String.valueOf(listBillId.get(i)));
-                        rs1 = stmt1.executeQuery();
-                        ProductType type = null;
-                        if (rs1.next())
-                            type = new ProductType(rs1.getString("TypeID"),rs1.getString("Name"));
-                        stmt1.close();
-                        stmt1 = conn.prepareStatement("Select * from promo where productID = ?");
-                        stmt1.setString(1,String.valueOf(listBillId.get(i)));
-                        rs1 = stmt1.executeQuery();
-                        Promotion promo = null;
-                        if (rs1.next())
-                            promo = new Promotion(rs1.getInt("ID"),rs1.getString("productID"),rs1.getInt("discount"),rs.getString("ProductName"));
-                        stmt1.close();
-                        listBillUnit.add(new BillUnit(new Product(new ProductInfo(rs.getString("Brand"),rs.getString("Productname"),rs.getString("ID"),rs.getInt("Price"),rs.getString("UrlImage")),stock,type,promo),rs.getInt("amount")));
-                        listBill.add(new Bill(listBillUnit,rs.getDate("BuyDate"),rs.getString("MembershipID"),rs.getString("BillID"),rs.getString("SellerID")));
-                    }
-                    else
-                    {
-                        ArrayList<BillUnit> listBillUnit = listBill.get(flag).getAllProductBill();
-                        stmt1 = conn.prepareStatement("Select * from productStock where TypeId = ?");
-                        stmt1.setString(1,String.valueOf(listBillId.get(i)));
-                        rs1 = stmt1.executeQuery();
-                        ProductStockInfoq stock = null;
-                        if (rs1.next())
-                        {
-                            stock = new ProductStockInfoq(rs1.getDate("LastestEXP"), rs1.getInt("Numstock"));
-                        }
-                        stmt1.close();
-                        stmt1 = conn.prepareStatement("Select * from typeproduct join product on product.TypeID = typeproduct.TypeID where Id = ?");
-                        stmt1.setString(1,String.valueOf(listBillId.get(i)));
-                        rs1 = stmt1.executeQuery();
-                        ProductType type = null;
-                        if (rs1.next())
-                            type = new ProductType(rs1.getString("TypeID"),rs1.getString("Name"));
-                        stmt1.close();
-                        stmt1 = conn.prepareStatement("Select * from promo where productID = ?");
-                        stmt1.setString(1,String.valueOf(listBillId.get(i)));
-                        rs1 = stmt1.executeQuery();
-                        Promotion promo = null;
-                        if (rs1.next())
-                            promo = new Promotion(rs1.getInt("ID"),rs1.getString("productID"),rs1.getInt("discount"),rs.getString("ProductName"));
-                        stmt1.close();
-                        listBillUnit.add(new BillUnit(new Product(new ProductInfo(rs.getString("Brand"),rs.getString("Productname"),rs.getString("ID"),rs.getInt("Price"),rs.getString("UrlImage")),stock,type,promo),rs.getInt("amount")));
-                        listBill.get(flag).setAllProductBill(listBillUnit);
-                    }
+                    BillUnit billunit = new BillUnit();
+                    billunit.setAmount(rs.getInt("Amount"));
+
+                    Product product = Warehouse.getAllProductByID(rs.getString("ID")).get(0);
+                    billunit.setProduct(product);
+                    allBill.add(billunit);
                 }
+                listBill.add(new Bill(allBill, buyDate.get(i), memID.get(i), listBillId.get(i), seller.get(i)));
             }
         }catch (SQLException e)
         {
             e.printStackTrace();
+            return null;
         }finally{
             try {
                 if (stmt != null)

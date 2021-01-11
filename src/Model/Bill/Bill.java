@@ -7,8 +7,6 @@ import java.sql.SQLException;
 
 import Model.Model;
 
-import Model.Product.ProductInfo;
-
 public class Bill {
 
 	private ArrayList<BillUnit> allProductBill;

@@ -21,7 +21,10 @@ public class BIllPanel_controller implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().compareTo("Search") == 0){
-                this.billPanel.listBill = controller.getAllBill(Model.conn);
+            
+            String start = billPanel.startDate.getText().toString();
+            String end = billPanel.endDate.getText().toString();
+            this.billPanel.listBill = controller.filterBillByDate(Model.conn, start, end);
             if (this.billPanel.listBill != null){
                 this.billPanel.tableModel.setRowCount(0);
                 for (Bill b : this.billPanel.listBill) {
