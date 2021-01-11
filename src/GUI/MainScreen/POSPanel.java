@@ -8,6 +8,7 @@ import Controller.POSPanel_controller;
 import GUI.GUI_Utility.WrapLayout;
 import Model.Bill.Bill;
 import Model.Product.Product;
+import Model.Product.ProductType;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -27,9 +28,11 @@ public class POSPanel extends javax.swing.JPanel {
      * Creates new form posPanel
      */
 
+        public MainScreen mainScreen;
         public ArrayList<Product> allProduct;
         public POSPanel_controller posPanel_controller;
         public Bill posBill = new Bill();
+        public ArrayList<ProductType> allType;
         // Variables declaration - do not modify
         public javax.swing.JPanel Payment_Panel;
         public javax.swing.JScrollPane bill_ScrollPane;
@@ -60,15 +63,16 @@ public class POSPanel extends javax.swing.JPanel {
              */
             private static final long serialVersionUID = 1L;
     
-            boolean[] canEdit = new boolean[] { false, false, true, false };
+            boolean[] canEdit = new boolean[] { false, false, true, false,false};
     
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit[columnIndex];
             }
         };
         // End of variables declaration
-    public POSPanel(java.awt.Dimension size) {
+    public POSPanel(java.awt.Dimension size,MainScreen mainScreen) {
         // TODO: combobox
+        this.mainScreen = mainScreen;
         this.setPreferredSize(size);
         initComponents();
         //productBoxPanel.add(new Singleproduct_Panel());
@@ -354,6 +358,11 @@ public class POSPanel extends javax.swing.JPanel {
 
         tableModel.setRowCount(0);
         posPanel_controller = new POSPanel_controller(this);
+        search_Field.addKeyListener(posPanel_controller);
+        delBillunit_Btn.setActionCommand("Delete");
+        delBillunit_Btn.addActionListener(posPanel_controller);
+        paid_Btn.setActionCommand("Paid");
+        paid_Btn.addActionListener(posPanel_controller);
     }// </editor-fold>
 
 

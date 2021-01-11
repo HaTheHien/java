@@ -16,6 +16,7 @@ public class ProductDetailPanel_controller implements KeyListener, ActionListene
 
 
     public ProductDetailPanel_controller(ProductDetailPanel productDetailPanel, MainScreen mainScreen) {
+        // load product data
         this.productDetailPanel = productDetailPanel;
         this.mainScreen = mainScreen;
         this.productDetailPanel.productLabel.setText(this.productDetailPanel.p.getProductInfo().getProductName());
@@ -44,6 +45,7 @@ public class ProductDetailPanel_controller implements KeyListener, ActionListene
         productImg = new ImageIcon(image); 
         this.productDetailPanel.productImg_Label.setIcon(productImg);
 
+        //load product type
         int index = 0;
         for (ProductType pt :this.productDetailPanel.allType) {
             this.productDetailPanel.typeProduct_ComboBox.addItem(pt.getTypeName());
