@@ -3,6 +3,7 @@ package Model.Bill;
 import java.lang.Thread.State;
 import com.mysql.cj.xdevapi.Statement;
 import Model.Product.ProductInfo;
+import Model.Product.Product;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -11,25 +12,25 @@ import Model.Model;
 
 public class BillUnit {
 
-	private ProductInfo productInfo;
+	private Product product;
 	private Integer amount;
 
 	//constructor
-	public BillUnit(ProductInfo info, Integer amount)
+	public BillUnit(Product info, Integer amount)
 	{
-		this.productInfo=info;
+		this.product=info;
 		this.amount=amount;
 	}
 	public BillUnit(BillUnit b)
 	{
-		this.productInfo=b.getProductInfo();
+		this.product = b.getProduct();
 		this.amount=b.getAmount();
 	}
 
 
-	public void setProductInfo(ProductInfo info)
+	public void setProductInfo(Product info)
 	{
-		this.productInfo=info;
+		this.product=info;
 
 	}
 	public void setAmount(Integer amount)
@@ -38,9 +39,9 @@ public class BillUnit {
 	}
 
 
-	public ProductInfo getProductInfo()
+	public Product getProduct()
 	{
-		return this.productInfo;
+		return this.product;
 	}
 	public Integer getAmount()
 	{
@@ -50,7 +51,7 @@ public class BillUnit {
 	//UI
 	public Long getTotal()
 	{
-		return productInfo.getPrice() * amount;
+		return product.getProductInfo().getPrice() * amount;
 	}
 	public Long getDiscount()
 	{
@@ -61,7 +62,7 @@ public class BillUnit {
 		try {
 			//Add bill
 			stmt = Model.conn.prepareStatement(sql);
-			stmt.setString(1, productInfo.getCodeBar());
+			stmt.setString(1, product.getProductInfo().getCodeBar());
 			rs = stmt.executeQuery();
 			while (rs.next()) {
 				result = rs.getLong(1);
@@ -90,7 +91,7 @@ public class BillUnit {
 			//Add bill
 			stmt = Model.conn.prepareStatement(sql);
 			stmt.setString(1, billID);
-			stmt.setString(2, productInfo.getCodeBar());
+			stmt.setString(2, product.getProductInfo().getCodeBar());
 			stmt.setInt(3, amount);
 			stmt.executeQuery();
 		} catch (SQLException e) {
@@ -105,6 +106,8 @@ public class BillUnit {
 				e.printStackTrace();
 			}
 		}
-		return true;
+		int remain = product.getProductStockInfo().getNumStock() - amount;
+		product.getProductStockInfo().setNumStock(remain);
+		return product.updateStock();
 	}
 }
