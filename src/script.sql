@@ -259,7 +259,7 @@ End$$
 DELIMITER $$
 CREATE PROCEDURE GetAllPromos()
 Begin
-	SELECT * FROM quanlycuahang.promo;
+	SELECT * FROM quanlycuahang.promo join quanlycuahang.productinfo on promo.productID = productinfo.Id;
 End$$
 DELIMITER;
 

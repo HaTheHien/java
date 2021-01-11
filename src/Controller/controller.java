@@ -334,6 +334,38 @@ public class controller
         }
         return list;
     }
+    public static ArrayList<Promotion> getAllPromo(Connection conn) 
+    {
+        PreparedStatement stmt=null;
+        ResultSet rs = null;
+        ArrayList<Promotion> list = new ArrayList<Promotion>();
+        try{
+            stmt = conn.prepareCall("{CALL GetAllPromos()}");
+            rs = stmt.executeQuery();
+            while (rs.next())
+            {
+                String id = rs.getString("ID");
+                long discount = rs.getLong("discount");
+                String productID = rs.getString("productID");
+                String productName = rs.getString("ProductName");
+                Promotion temp = new Promotion(id,productID,discount,productName);
+                list.add(temp);
+            }
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+        }finally{
+            try {
+                if (stmt != null)
+                {
+                    stmt.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
     public static Staff getAccount(Connection conn,String staffID)
     {
         PreparedStatement stmt=null;
@@ -742,4 +774,5 @@ public class controller
         }
         return result;
     }
+
 }
