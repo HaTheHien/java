@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 import Model.Model;
 
-import Model.Product.ProductInfo;
+import Model.Product.Product;
 
 public class Bill {
 
@@ -44,10 +44,10 @@ public class Bill {
 		this.sellerID = b.getSellerID();
 	}
 
-	// public void addBillUnit(ProductInfo info, Integer amount) {
-	// 	// TODO - implement Bill.addBillUnit
-	// 	allProductBill.add(new BillUnit(info, amount));
-	// }
+	public void addBillUnit(Product info, Integer amount) {
+		// TODO - implement Bill.addBillUnit
+		allProductBill.add(new BillUnit(info, amount));
+	}
 
 	//Get-Set
 	public String getSellerID()

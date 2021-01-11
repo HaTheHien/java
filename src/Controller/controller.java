@@ -497,10 +497,11 @@ public class controller
         ResultSet rs = null;
         ArrayList <Bill> listBill = new ArrayList<Bill>();
         try{
-            stmt = conn.prepareCall("select *  from bill join billunit on bill.BillID = billunit.billID ");
+            stmt = conn.prepareCall("select *  from bill join billunit on bill.BillID = billunit.billID "
+            +"where datediff(BuyDate,?) >= 0 and datediff(?,BuyDate) >= 0");
             
-            //stmt.setDate(1, string);
-            //stmt.setDate(2, string2);
+            stmt.setDate(1, string);
+            stmt.setDate(2, string2);
             rs = stmt.executeQuery();
             if(!rs.next()){
                 return listBill;
@@ -511,17 +512,14 @@ public class controller
                     b.setSellerID(rs.getString("SellerID"));
                     b.setBuyDate(rs.getDate("BuyDate"));
                     b.setBillID(rs.getString("BillID"));
-                    while(true){
-                        if(rs.getString("BillID").compareTo(b.getBillID()) != 0)
-                            break;
-                        else{
-                            b.setMembershipID(rs.getString("MembershipID"));
-                            BillUnit bUnit = new BillUnit(rs.getString("ProductID"),rs.getInt("Amount"));
-                            b.addBillUnit(bUnit);
-                            if(!rs.next()) break;
-                        }
-                    }
-                    if(!rs.wasNull()) break;
+                    do{
+                        if(rs.getString("BillID").compareTo(b.getBillID()) == 0))
+                            brea
+
+                        b.setMembershipID(rs.getString("MembershipID"));
+                        BillUnit bUnit = new BillUnit(rs.getString("ProductID"),rs.getInt("Amount"));
+                        b.addBillUnit(bUnit);
+                    }while();
                 }
             }
         }catch (SQLException e)

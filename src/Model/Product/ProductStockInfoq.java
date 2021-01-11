@@ -20,9 +20,6 @@ public class ProductStockInfoq {
 		this.lastestEXP=b.getLastestEXP();
 		this.numStock=b.getNumStock();
 	}
-
-
-
 	public  Date getLastestEXP()
 	{
 		return this.lastestEXP;
