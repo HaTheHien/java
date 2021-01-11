@@ -8,7 +8,6 @@
  *
  * @author tuand
  */
-package GUI.MainScreen;
 public class MembershipDetail_Panel extends javax.swing.JPanel {
 
     /**

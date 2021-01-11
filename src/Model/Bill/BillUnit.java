@@ -4,6 +4,7 @@ import java.lang.Thread.State;
 
 import Model.Product.Product;
 import Model.Product.ProductInfo;
+import Model.Product.Warehouse;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -11,6 +12,7 @@ import java.sql.ResultSet;
 import Model.Model;
 
 public class BillUnit {
+
 	private Product product;
 	private Integer amount;
 
@@ -22,28 +24,18 @@ public class BillUnit {
 	}
 	public BillUnit(BillUnit b)
 	{
-		this.product=b.product;
+		this.product=b.getProduct();
 		this.amount=b.getAmount();
 	}
+	public void increOne(){
+		this.amount ++;
+	}
+	public BillUnit(String codebar,Integer amount){
+		this.product = Warehouse.getAllProductByID(codebar).get(0);
+		this.amount = amount;
+	}
 
 
-	public void setProductInfo(Product info)
-	{
-		this.product=info;
-
-	}
-	// public BillUnit(String codebar,Integer amount){
-	// 	this.product = Warehouse.getAllProductByID(codebar).get(0);
-	// 	this.amount = amount;
-	// }
-	public Product getProduct()
-	{
-		return this.product;
-	}
-	public Integer getAmount()
-	{
-		return this.amount;
-	}
 
 	public BillUnit() {
 	}
@@ -105,16 +97,20 @@ public class BillUnit {
 				e.printStackTrace();
 			}
 		}
-		int remain = product.getProductStockInfo().getNumStock() - amount;
-		product.getProductStockInfo().setNumStock(remain);
-		return product.updateStock();
+		return true;
 	}
 
+	public Product getProduct() {
+		return product;
+	}
 
 	public void setProduct(Product product) {
 		this.product = product;
 	}
 
+	public Integer getAmount() {
+		return amount;
+	}
 
 	public void setAmount(Integer amount) {
 		this.amount = amount;
