@@ -3,6 +3,11 @@ package GUI.MainScreen;
 import GUI.GUI_Utility.*;
 import Model.Model;
 import Model.Product.Product;
+import Model.Product.Warehouse;
+import java.util.ArrayList;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import java.awt.*;
 import javax.swing.*;
@@ -119,5 +124,5 @@ public class MainScreen {
                 new MainScreen();
             }
         });
-}
+    }
 }

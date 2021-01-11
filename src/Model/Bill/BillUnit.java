@@ -6,6 +6,7 @@ import Model.Product.ProductInfo;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.ResultSet;
 import Model.Model;
 
 public class BillUnit {
@@ -46,6 +47,41 @@ public class BillUnit {
 		return this.amount;
 	}
 
+	//UI
+	public Long getTotal()
+	{
+		return productInfo.getPrice() * amount;
+	}
+	public Long getDiscount()
+	{
+		Long result = 0L;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT discount(?);";
+		try {
+			//Add bill
+			stmt = Model.conn.prepareStatement(sql);
+			stmt.setString(1, productInfo.getCodeBar());
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				result = rs.getLong(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0L;
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return result * amount;
+	}
+
+	//Database
 	public boolean exportBillUnit(String billID)
 	{
 		PreparedStatement stmt = null;
