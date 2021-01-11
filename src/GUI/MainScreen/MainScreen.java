@@ -2,6 +2,7 @@ package GUI.MainScreen;
 
 import GUI.GUI_Utility.*;
 import Model.Model;
+import Model.Product.Product;
 
 import java.awt.*;
 import javax.swing.*;
@@ -76,9 +77,9 @@ public class MainScreen {
         mainFrame.revalidate();
         mainFrame.repaint();
     }
-    public void setup_productDetailPanel(){
+    public void setup_productDetailPanel(Product p){
         mainFrame.remove(this.centerPanel);
-        centerPanel = new POSPanel(new Dimension(screenSize.width*8/10,screenSize.height - naviPanel.getHeight()));
+        centerPanel = new ProductDetailPanel(new Dimension(screenSize.width*8/10,screenSize.height - naviPanel.getHeight()),this,p);
         Utility.addComponent(mainFrame, centerPanel, new GridBagConstraints(), 2, 1, 8, 19,GridBagConstraints.PAGE_START,0,0,8,19,GridBagConstraints.BOTH);
         mainFrame.revalidate();
         mainFrame.repaint();
@@ -87,7 +88,7 @@ public class MainScreen {
     public MainScreen() {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        screenSize.setSize(screenSize.getWidth()/1.5, screenSize.getHeight()/1.5);
+        screenSize.setSize(screenSize.getWidth()/1.2, screenSize.getHeight()/1.2);
         
         setup_naviPanel();
         setup_menuPanel();

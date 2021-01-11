@@ -11,14 +11,13 @@ import Model.Other.Promotion;
 
 public class Warehouse {
 
-	private ArrayList<ProductType> productTypeList;
+	//private ArrayList<ProductType> productTypeList;
 
 	public static ArrayList<Product> getAllProduct() {
 		ArrayList<Product> allProducts = new ArrayList<Product>();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		String sql = "CALL `quanlycuahang`.`GetAllProductsDetails`();";
-		int numproduct = 0;
 		try {
 			stmt = Model.conn.prepareStatement(sql);
 			rs = stmt.executeQuery();
@@ -208,6 +207,7 @@ public class Warehouse {
 		}
 		return numproduct;
 	}
+	
 	static void updateProduct(String id, String new_prodName, String new_brand,
 							String new_price, String new_stock,
 							String new_exp, String new_discount,
@@ -230,14 +230,37 @@ public class Warehouse {
 			stmt.executeQuery();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}	
+	}
+	public static ArrayList<ProductType> getAllProductType(){
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT * FROM quanlycuahang.typeproduct";
+		ArrayList<ProductType> allType = new ArrayList<>();
+		try {
+			stmt = Model.conn.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			ProductType pt = null;
+			while (rs.next()) {
+				pt = new ProductType();
+				pt.setTypeID(rs.getString("TypeID"));
+				pt.setTypeName(rs.getString("Name"));
+				allType.add(pt);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
 		} finally {
 			try {
 				if (stmt != null)
 					stmt.close();
-			} catch (SQLException e) {
+				if (rs != null)
+					rs.close();
+			} catch (SQLException e) {	
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		return allType;
 	}
 }

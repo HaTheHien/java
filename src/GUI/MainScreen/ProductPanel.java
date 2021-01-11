@@ -19,7 +19,7 @@ import java.awt.*;
 
 public class ProductPanel extends JPanel {
 
-    MainScreen mainScreen;
+    public MainScreen mainScreen;
     // Variables declaration - do not modify
     public JTextField newbarCodeField;
     public JTextField searchField;
@@ -113,7 +113,7 @@ public class ProductPanel extends JPanel {
         add(newbarCodeField, gridBagConstraints);
 
         //Create controller and binding UI to controller
-        productPanel_controller =  new ProductPanel_controller(this);
+        productPanel_controller =  new ProductPanel_controller(this,this.mainScreen);
         searchField.addKeyListener(productPanel_controller);
         newbarCodeField.addKeyListener(productPanel_controller);
         productTable.addMouseListener(new MouseAdapter() {
@@ -121,6 +121,8 @@ public class ProductPanel extends JPanel {
                 // TODO:
             }
         });
+
+        productTable.getSelectionModel().addListSelectionListener(productPanel_controller);
     }// </editor-fold>
     
 }
