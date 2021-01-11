@@ -2,8 +2,12 @@ package Model.Bill;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
-import Model.Bill.BillUnit;
+import Model.Model;
+
+import Model.Product.ProductInfo;
 
 public class Bill {
 
@@ -15,6 +19,14 @@ public class Bill {
 
 
 	//constructor
+	public Bill()
+	{
+		allProductBill = new ArrayList<BillUnit>();
+		buyDate = null;
+		membershipID = null;
+		billID = null;
+		sellerID = null;
+	}
 	public Bill(ArrayList<BillUnit> allBill, Date buyDate, String memID,String billID,String seller)
 	{
 		this.allProductBill=allBill;
@@ -32,8 +44,12 @@ public class Bill {
 		this.sellerID = b.getSellerID();
 	}
 
-	public Bill() {
+	public void addBillUnit(ProductInfo info, Integer amount) {
+		// TODO - implement Bill.addBillUnit
+		allProductBill.add(new BillUnit(info, amount));
 	}
+
+	//Get-Set
 	public String getSellerID()
 	{
 		return this.sellerID;
@@ -72,11 +88,6 @@ public class Bill {
 		this.membershipID = membershipID;
 	}
 
-	public void addBillUnit() {
-		// TODO - implement Bill.addBillUnit
-		throw new UnsupportedOperationException();
-	}
-
 	public String getBillID() {
 		return this.billID;
 	}
@@ -93,4 +104,34 @@ public class Bill {
 	}
 
 
+	public boolean exportBill()
+	{
+		PreparedStatement stmt = null;
+		String sql = "Call `quanlycuahang`.`addBill`(?,?,?,?);";
+		try {
+			//Add bill
+			stmt = Model.conn.prepareStatement(sql);
+			stmt.setString(1, billID);
+			stmt.setDate(2, buyDate);
+			stmt.setString(3, membershipID);
+			stmt.setString(4, sellerID);
+			stmt.executeQuery();
+			for (BillUnit unit : allProductBill)
+			{
+				unit.exportBillUnit(billID);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return true;
+	}
 }

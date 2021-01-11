@@ -1,11 +1,13 @@
 package Model.Product;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import Model.Model;
 import Model.Other.Promotion;
+
 
 public class Warehouse {
 
@@ -16,7 +18,6 @@ public class Warehouse {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		String sql = "CALL `quanlycuahang`.`GetAllProductsDetails`();";
-		int numproduct = 0;
 		try {
 			stmt = Model.conn.prepareStatement(sql);
 			rs = stmt.executeQuery();
@@ -205,12 +206,11 @@ public class Warehouse {
 			}
 		}
 		return numproduct;
-	}
-	
+	}	
 	public static ArrayList<ProductType> getAllProductType(){
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT * FROM quanlycuahang.typeproduct";
+		String sql = "SELECT * FROM quanlycuahang.typeproduct;";
 		ArrayList<ProductType> allType = new ArrayList<>();
 		try {
 			stmt = Model.conn.prepareStatement(sql);
@@ -231,11 +231,136 @@ public class Warehouse {
 					stmt.close();
 				if (rs != null)
 					rs.close();
-			} catch (SQLException e) {
+			} catch (SQLException e) {	
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		return allType;
+	}
+	public static ArrayList<Product> getAllProductOfAType(String idType){
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "CALL `quanlycuahang`.`GetAllProductOfAType`(?);";
+		ArrayList<Product> allProducts = new ArrayList<>();
+		try {
+			stmt = Model.conn.prepareStatement(sql);
+			stmt.setString(1, idType);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				Product p = new Product(new ProductInfo(), new ProductStockInfoq(),new ProductType(), new Promotion());
+				p.getProductInfo().setCodeBar(rs.getString("id"));
+				p.getProductInfo().setBrand(rs.getString("brand"));
+				p.getProductInfo().setProductName(rs.getString("productName"));
+				p.getProductInfo().setPrice(rs.getInt("price"));
+				p.setUrlImgString(rs.getString("urlImage"));
+
+				if (rs.getString("typeName") != null)
+					p.getProducType().setTypeName(rs.getString("typeName"));
+				p.getProducType().setTypeID(rs.getString("typeID"));
+			
+
+				p.getProductStockInfo().setLastestEXP(rs.getDate("lastestEXP"));
+				p.getProductStockInfo().setNumStock(rs.getInt("numStock"));
+
+				p.getPromotion().setPromoID(rs.getInt("idPromo"));
+				p.getPromotion().setPromoDiscount(rs.getInt("discount"));
+
+				allProducts.add(p);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+				if (rs != null)
+					rs.close();
+			} catch (SQLException e) {	
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return allProducts;
+	}
+	public static boolean updateProduct(String id, String new_prodName, String new_brand,
+							String new_price, String new_stock,
+							String new_exp, String new_discount,
+							String new_url, String new_typeProduct)
+	{
+		PreparedStatement stmt = null;
+		String sql = "CALL updateProduct(?, ?, ?, ?, ?, ?, ?, ?, ?);";
+		try {
+			stmt = Model.conn.prepareStatement(sql);
+			stmt.setString(1, id);
+			stmt.setString(2, new_prodName);
+			stmt.setString(3, new_brand);
+			stmt.setInt(4, Integer.parseInt(new_price));
+			stmt.setInt(5, Integer.parseInt(new_stock));
+			stmt.setDate(6, Date.valueOf(new_exp));
+			stmt.setInt(7, Integer.parseInt(new_discount));
+			stmt.setString(8, new_url);
+			stmt.setInt(9, Integer.parseInt(new_typeProduct));
+			
+			stmt.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;	
+	}
+	public static boolean addProduct(String new_prodName, String new_brand,
+						String new_price, String new_url,
+						String new_typeID)
+	{
+		PreparedStatement stmt = null;
+		String sql = "CALL `quanlycuahang`.`addProduct`(?, ?, ?, ?, ?);";
+		try {
+			stmt = Model.conn.prepareStatement(sql);
+			stmt.setString(1, new_prodName);
+			stmt.setString(2, new_brand);
+			stmt.setInt(3, Integer.parseInt(new_price));
+			stmt.setString(4, new_url);
+			stmt.setString(5, new_typeID);
+
+			stmt.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException e) {	
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return true;
+	}
+	
+	public static boolean addStock(String idProduct, String count)
+	{
+		PreparedStatement stmt = null;
+		String sql = "CALL `quanlycuahang`.`addStock`(?, ?);";
+		try {
+			stmt = Model.conn.prepareStatement(sql);
+			stmt.setString(1, idProduct);
+			stmt.setInt(2, Integer.parseInt(count));
+			stmt.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException e) {	
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return true;
 	}
 }

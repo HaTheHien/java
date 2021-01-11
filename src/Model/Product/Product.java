@@ -1,6 +1,5 @@
 package Model.Product;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -74,6 +73,7 @@ public class Product {
 	public void setPromotion(Promotion promotion) {
 		this.promotion = promotion;
 	}
+	//query
 	public boolean updateProduct(){
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -106,6 +106,29 @@ public class Product {
 		}
 		return true;
 	}
-
+	public boolean updateStock()
+	{
+		PreparedStatement stmt = null;
+		String sql = "CALL `quanlycuahang`.`updateStock`(?, ?, ?);";
+		try {
+			stmt = Model.conn.prepareStatement(sql);
+			stmt.setString(1, this.info.getCodeBar());
+			stmt.setInt(2, this.stockInfo.getNumStock());
+			stmt.setDate(3, this.stockInfo.getLastestEXP());
+			stmt.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException e) {	
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return true;
+	}
 
 }
