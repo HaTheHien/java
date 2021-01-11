@@ -293,30 +293,7 @@ public class Warehouse {
 		}
 		return true;
 	}
-	public static boolean updateStock(String idProduct, String count, String exp)
-	{
-		PreparedStatement stmt = null;
-		String sql = "CALL `quanlycuahang`.`updateStock`(?, ?, ?);";
-		try {
-			stmt = Model.conn.prepareStatement(sql);
-			stmt.setString(1, idProduct);
-			stmt.setInt(2, Integer.parseInt(count));
-			stmt.setDate(3, Date.valueOf(exp));
-			stmt.executeQuery();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		} finally {
-			try {
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException e) {	
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return true;
-	}
+	
 	public static boolean addStock(String idProduct, String count)
 	{
 		PreparedStatement stmt = null;
