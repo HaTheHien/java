@@ -1,8 +1,12 @@
 package GUI.MainScreen;
 
+import java.util.ArrayList;
+
 import javax.swing.JLabel;
 
+import Controller.POSPanel_controller;
 import GUI.GUI_Utility.WrapLayout;
+import Model.Bill.Bill;
 import Model.Product.Product;
 
 /*
@@ -16,52 +20,53 @@ import Model.Product.Product;
  * @author tuand
  */
 
-class Singleproduct_Panel extends javax.swing.JPanel {
-    java.awt.GridBagConstraints gridBagConstraints;
-    javax.swing.JLabel productImg = new javax.swing.JLabel();
-    javax.swing.JLabel productPrice = new javax.swing.JLabel();
-    javax.swing.JLabel productName = new javax.swing.JLabel();
-    public Singleproduct_Panel(Product p){
-        this.setPreferredSize(new java.awt.Dimension(200, 180));
-        this.setLayout(new java.awt.GridBagLayout());
-
-        productImg.setText("jLabel1");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 166;
-        gridBagConstraints.ipady = 120;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        this.add(productImg, gridBagConstraints);
-
-        productPrice.setText("jLabel5");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.ipadx = 146;
-        gridBagConstraints.ipady = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 10, 11, 0);
-        this.add(productPrice, gridBagConstraints);
-
-        productName.setText("jLabel5");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.ipadx = 146;
-        gridBagConstraints.ipady = 9;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(6, 10, 0, 0);
-        this.add(productName, gridBagConstraints);
-
-    }
-}
 
 public class POSPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form posPanel
      */
+
+        public ArrayList<Product> allProduct;
+        public POSPanel_controller posPanel_controller;
+        public Bill posBill = new Bill();
+        // Variables declaration - do not modify
+        public javax.swing.JPanel Payment_Panel;
+        public javax.swing.JScrollPane bill_ScrollPane;
+        public javax.swing.JTable billunit_table;
+        public javax.swing.JPanel cast_Panel;
+        public javax.swing.JTextField coupon_Field;
+        public javax.swing.JButton delBillunit_Btn;
+        public javax.swing.JTextField finaltotal_Field;
+        public javax.swing.JLabel jLabel3;
+        public javax.swing.JLabel jLabel4;
+        public javax.swing.JPanel jPanel2;
+        public javax.swing.JPanel singleproduct_Panel;
+        public javax.swing.JScrollPane jScrollPane2;
+        public javax.swing.JLabel label;
+        public javax.swing.JButton paid_Btn;
+        public javax.swing.JPanel productBoxPanel;
+        public javax.swing.JTextField search_Field;
+        public javax.swing.JPanel search_Panel;
+        public javax.swing.JTextField total_Field;
+        public javax.swing.JComboBox<String> typesel_ComboBox;
+        public javax.swing.JTextField membership_Field ;
+        public javax.swing.JLabel jLabel5;
+        public javax.swing.table.DefaultTableModel tableModel = new javax.swing.table.DefaultTableModel(
+                new Object[][] { { null, null, null, null } },
+                new String[] { "Tên hàng hoá", "Đơn giá", "Số  lượng", "Tổng" }) {
+            /**
+             *
+             */
+            private static final long serialVersionUID = 1L;
+    
+            boolean[] canEdit = new boolean[] { false, false, true, false };
+    
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        };
+        // End of variables declaration
     public POSPanel(java.awt.Dimension size) {
         // TODO: combobox
         this.setPreferredSize(size);
@@ -95,11 +100,13 @@ public class POSPanel extends javax.swing.JPanel {
         label = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         finaltotal_Field = new javax.swing.JTextField();
         total_Field = new javax.swing.JTextField();
         coupon_Field = new javax.swing.JTextField();
         delBillunit_Btn = new javax.swing.JButton();
         paid_Btn = new javax.swing.JButton();
+        membership_Field  = new  javax.swing.JTextField ();
         //singleproduct_Panel = new Singleproduct_Panel();
         setLayout(new java.awt.GridBagLayout());
 
@@ -237,13 +244,41 @@ public class POSPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
         gridBagConstraints.insets = new java.awt.Insets(18, 76, 10, 0);
         cast_Panel.add(jLabel4, gridBagConstraints);
+        
+       
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel5.setText("ID thành viên");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 45;
+        gridBagConstraints.ipady = 16;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
+        gridBagConstraints.insets = new java.awt.Insets(18, 76, 10, 0);
+        cast_Panel.add(jLabel5, gridBagConstraints);
+        
+        membership_Field.setText("jTextField1");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.gridheight = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 256;
+        gridBagConstraints.ipady = 13;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 80);
+        cast_Panel.add(membership_Field, gridBagConstraints);
 
         finaltotal_Field.setText("jTextField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.gridheight = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 256;
         gridBagConstraints.ipady = 13;
@@ -316,41 +351,9 @@ public class POSPanel extends javax.swing.JPanel {
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(11, 6, 11, 0);
         add(Payment_Panel, gridBagConstraints);
+
+        posPanel_controller = new POSPanel_controller(this);
     }// </editor-fold>
 
-    // Variables declaration - do not modify
-    public javax.swing.JPanel Payment_Panel;
-    public javax.swing.JScrollPane bill_ScrollPane;
-    public javax.swing.JTable billunit_table;
-    public javax.swing.JPanel cast_Panel;
-    public javax.swing.JTextField coupon_Field;
-    public javax.swing.JButton delBillunit_Btn;
-    public javax.swing.JTextField finaltotal_Field;
-    public javax.swing.JLabel jLabel3;
-    public javax.swing.JLabel jLabel4;
-    public javax.swing.JPanel jPanel2;
-    public javax.swing.JPanel singleproduct_Panel;
-    public javax.swing.JScrollPane jScrollPane2;
-    public javax.swing.JLabel label;
-    public javax.swing.JButton paid_Btn;
-    public javax.swing.JPanel productBoxPanel;
-    public javax.swing.JTextField search_Field;
-    public javax.swing.JPanel search_Panel;
-    public javax.swing.JTextField total_Field;
-    public javax.swing.JComboBox<String> typesel_ComboBox;
-    public javax.swing.table.DefaultTableModel tableModel = new javax.swing.table.DefaultTableModel(
-            new Object[][] { { null, null, null, null } },
-            new String[] { "Tên hàng hoá", "Đơn giá", "Số  lượng", "Tổng" }) {
-        /**
-         *
-         */
-        private static final long serialVersionUID = 1L;
 
-        boolean[] canEdit = new boolean[] { false, false, true, false };
-
-        public boolean isCellEditable(int rowIndex, int columnIndex) {
-            return canEdit[columnIndex];
-        }
-    };
-    // End of variables declaration
 }

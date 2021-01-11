@@ -83,10 +83,10 @@ public class Product {
 			stmt.setString(1, this.info.getCodeBar());
 			stmt.setString(2, this.info.getProductName());
 			stmt.setString(3, this.info.getBrand());
-			stmt.setInt(4, this.info.getPrice());
+			stmt.setLong(4, this.info.getPrice());
 			stmt.setInt(5, this.stockInfo.getNumStock());
 			stmt.setDate(6, this.stockInfo.getLastestEXP());
-			stmt.setLong	(7, this.promotion.getPromoDiscount());
+			stmt.setLong(7, this.promotion.getPromoDiscount());
 			stmt.setString(8, this.urlImgString);
 			stmt.setString(9, this.productype.getTypeID());
 			int res = stmt.executeUpdate();

@@ -1,5 +1,7 @@
 package GUI.MainScreen;
 
+import java.util.ArrayList;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -23,6 +25,7 @@ import Model.Product.*;
 public class ProductDetailPanel extends javax.swing.JPanel {
 
     public Product p;
+    public ArrayList<ProductType> allType = Warehouse.getAllProductType();
     ProductDetailPanel_controller productPanelDetail_controller;
     MainScreen mainScreen;
 

@@ -32,6 +32,8 @@ public class Bill {
 		this.sellerID = b.getSellerID();
 	}
 
+	public Bill() {
+	}
 	public String getSellerID()
 	{
 		return this.sellerID;
@@ -86,5 +88,9 @@ public class Bill {
 	public void setBillID(String billID) {
 		this.billID = billID;
 	}
+	public void addBillUnit(BillUnit u){
+		this.allProductBill.add(u);
+	}
+
 
 }

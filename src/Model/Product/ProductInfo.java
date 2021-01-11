@@ -4,9 +4,9 @@ public class ProductInfo {
 	private String brand;
 	private String productName;
 	private String codeBar;
-	private Integer price;
+	private long price;
 
-	public ProductInfo(String brand_,String name_,String codeBar_,Integer price_)
+	public ProductInfo(String brand_,String name_,String codeBar_,long price_)
 	{
 		brand = brand_;
 		productName = name_;
@@ -66,7 +66,7 @@ public class ProductInfo {
 		throw new UnsupportedOperationException();
 	}
 
-	public Integer getPrice() {
+	public long getPrice() {
 		return this.price;
 	}
 
@@ -74,7 +74,7 @@ public class ProductInfo {
 	 * 
 	 * @param price
 	 */
-	public void setPrice(Integer price) {
+	public void setPrice(long price) {
 		this.price = price;
 	}
 

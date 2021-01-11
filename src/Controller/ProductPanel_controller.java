@@ -24,7 +24,7 @@ public class ProductPanel_controller implements KeyListener, ListSelectionListen
             for (Product p : allProducts) {
                 productPanel.tableModel.addRow(new String[] { p.getProductInfo().getCodeBar(),
                         p.getProductInfo().getProductName(), p.getProducType().getTypeName(),
-                        p.getProductInfo().getPrice().toString(), p.getProductStockInfo().getNumStock().toString() });
+                        Long.toString(p.getProductInfo().getPrice()), p.getProductStockInfo().getNumStock().toString() });
             }
     }
 
@@ -43,8 +43,8 @@ public class ProductPanel_controller implements KeyListener, ListSelectionListen
                 for (Product p : allProducts) {
                     productPanel.tableModel
                             .addRow(new String[] { p.getProductInfo().getCodeBar(), p.getProductInfo().getProductName(),
-                                    p.getProducType().getTypeName(), p.getProductInfo().getPrice().toString(),
-                                    p.getProductStockInfo().getNumStock().toString() });
+                                    p.getProducType().getTypeName(), Long.toString(p.getProductInfo().getPrice()),
+                                    p.getProductStockInfo().getNumStock().toString()});
                 }
         }
     }
