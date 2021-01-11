@@ -40,7 +40,7 @@ public class ProductDetailPanel_controller implements KeyListener, ActionListene
                 .setText(this.productDetailPanel.p.getProductStockInfo().getLastestEXP().toString());
 
         this.productDetailPanel.promo_Field
-                .setText(this.productDetailPanel.p.getPromotion().getPromoDiscount().toString());
+                .setText(Long.valueOf(productDetailPanel.p.getPromotion().getPromoDiscount()).toString());
 
         this.productDetailPanel.urlImg_Field.setText(this.productDetailPanel.p.getUrlImgString());
 

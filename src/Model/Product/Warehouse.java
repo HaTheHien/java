@@ -206,36 +206,11 @@ public class Warehouse {
 			}
 		}
 		return numproduct;
-	}
-	
-	static void updateProduct(String id, String new_prodName, String new_brand,
-							String new_price, String new_stock,
-							String new_exp, String new_discount,
-							String new_url, String new_typeProduct)
-	{
-		PreparedStatement stmt = null;
-		String sql = "CALL updateProduct(?, ?, ?, ?, ?, ?, ?, ?, ?);";
-		try {
-			stmt = Model.conn.prepareStatement(sql);
-			stmt.setString(1, id);
-			stmt.setString(2, new_prodName);
-			stmt.setString(3, new_brand);
-			stmt.setInt(4, Integer.parseInt(new_price));
-			stmt.setInt(5, Integer.parseInt(new_stock));
-			stmt.setDate(6, Date.valueOf(new_exp));
-			stmt.setInt(7, Integer.parseInt(new_discount));
-			stmt.setString(8, new_url);
-			stmt.setInt(9, Integer.parseInt(new_typeProduct));
-			
-			stmt.executeQuery();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}	
-	}
+	}	
 	public static ArrayList<ProductType> getAllProductType(){
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT * FROM quanlycuahang.typeproduct";
+		String sql = "SELECT * FROM quanlycuahang.typeproduct;";
 		ArrayList<ProductType> allType = new ArrayList<>();
 		try {
 			stmt = Model.conn.prepareStatement(sql);
@@ -262,5 +237,99 @@ public class Warehouse {
 			}
 		}
 		return allType;
+	}
+	static void updateProduct(String id, String new_prodName, String new_brand,
+							String new_price, String new_stock,
+							String new_exp, String new_discount,
+							String new_url, String new_typeProduct)
+	{
+		PreparedStatement stmt = null;
+		String sql = "CALL updateProduct(?, ?, ?, ?, ?, ?, ?, ?, ?);";
+		try {
+			stmt = Model.conn.prepareStatement(sql);
+			stmt.setString(1, id);
+			stmt.setString(2, new_prodName);
+			stmt.setString(3, new_brand);
+			stmt.setInt(4, Integer.parseInt(new_price));
+			stmt.setInt(5, Integer.parseInt(new_stock));
+			stmt.setDate(6, Date.valueOf(new_exp));
+			stmt.setInt(7, Integer.parseInt(new_discount));
+			stmt.setString(8, new_url);
+			stmt.setInt(9, Integer.parseInt(new_typeProduct));
+			
+			stmt.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+	}
+	static void addProduct(String new_prodName, String new_brand,
+						String new_price, String new_url,
+						String new_typeID)
+	{
+		PreparedStatement stmt = null;
+		String sql = "CALL `quanlycuahang`.`addProduct`(?, ?, ?, ?, ?);";
+		try {
+			stmt = Model.conn.prepareStatement(sql);
+			stmt.setString(1, new_prodName);
+			stmt.setString(2, new_brand);
+			stmt.setInt(3, Integer.parseInt(new_price));
+			stmt.setString(4, new_url);
+			stmt.setString(5, new_typeID);
+
+			stmt.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException e) {	
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	static void updateStock(String idProduct, String count, String exp)
+	{
+		PreparedStatement stmt = null;
+		String sql = "CALL `quanlycuahang`.`updateStock`(?, ?, ?);";
+		try {
+			stmt = Model.conn.prepareStatement(sql);
+			stmt.setString(1, idProduct);
+			stmt.setInt(2, Integer.parseInt(count));
+			stmt.setDate(3, Date.valueOf(exp));
+			stmt.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException e) {	
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	static void addStock(String idProduct, String count)
+	{
+		PreparedStatement stmt = null;
+		String sql = "CALL `quanlycuahang`.`addStock`(?, ?);";
+		try {
+			stmt = Model.conn.prepareStatement(sql);
+			stmt.setString(1, idProduct);
+			stmt.setInt(2, Integer.parseInt(count));
+			stmt.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException e) {	
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 }
