@@ -25,7 +25,7 @@ public class POSPanel_controller {
                                 spp.p.getProductInfo().getProductName(),
                                 Long.toString(spp.p.getProductInfo().getPrice()), "1",
                                 Long.toString(spp.p.getProductInfo().getPrice())});
-                        posPanel.posBill.addBillUnit(new BillUnit(spp.p.getProductInfo().getCodeBar(), 1));
+                        posPanel.posBill.addBillUnit(new BillUnit(spp.p, 1));
                     } else {
                         updatePOS(p);
                     }
