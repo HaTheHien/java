@@ -438,7 +438,7 @@ BEGIN
 END$$
 
 DELIMITER $$
-CREATE PROCEDURE updateStock(idProduct NVARCHAR(100), 
+CREATE PROCEDURE quanlycuahang.updateStock(idProduct NVARCHAR(100), 
 						count int,
                         exp date)
 BEGIN
@@ -449,15 +449,21 @@ BEGIN
 END$$
 
 DELIMITER $$
-CREATE PROCEDURE updateProduct(idProduct NVARCHAR(100), 
+
+CREATE PROCEDURE quanlycuahang.updateProduct(idProduct NVARCHAR(100), 
 						new_prodName NVARCHAR(100),
                         new_brand NVARCHAR(100),
                         new_price int,
                         new_stock int,
                         new_exp DATE,
                         new_discount int,
-                        new_url nvarchar(100))
+                        new_url nvarchar(100),
+                        new_typeProduct int)
 BEGIN
+	update product
+    set TypeID= new_typeProduct
+    where Id= idProduct;
+    
     UPDATE productinfo
     SET productName = new_prodName,
 		brand = new_brand,
