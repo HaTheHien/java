@@ -76,5 +76,10 @@ public class MenuBar extends JPanel {
                 mainScreen.setup_POSPanel();
             }
         });
+        this.bill_label.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                mainScreen.setup_billPanel();
+            }
+        });
     }
 }

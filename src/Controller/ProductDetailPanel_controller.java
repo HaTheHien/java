@@ -76,7 +76,7 @@ public class ProductDetailPanel_controller implements KeyListener, ActionListene
                 .setPromoDiscount(Integer.parseInt(this.productDetailPanel.promo_Field.getText()));
 
         this.productDetailPanel.p.setUrlImgString(this.productDetailPanel.urlImg_Field.getText());
-
+        
         this.productDetailPanel.p.getProducType().setTypeID(
                 this.productDetailPanel.allType.get(this.productDetailPanel.typeProduct_ComboBox.getSelectedIndex()).getTypeID());
 

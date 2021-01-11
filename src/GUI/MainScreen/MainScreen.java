@@ -85,6 +85,13 @@ public class MainScreen {
         mainFrame.repaint();
     }
 
+    public void setup_billPanel(){
+        mainFrame.remove(this.centerPanel);
+        centerPanel = new BillPanel(new Dimension(screenSize.width*8/10,screenSize.height - naviPanel.getHeight()),this);
+        Utility.addComponent(mainFrame, centerPanel, new GridBagConstraints(), 2, 1, 8, 19,GridBagConstraints.PAGE_START,0,0,8,19,GridBagConstraints.BOTH);
+        mainFrame.revalidate();
+        mainFrame.repaint();
+    }
     public MainScreen() {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
