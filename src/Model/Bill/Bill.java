@@ -104,6 +104,30 @@ public class Bill {
 	}
 
 
+	//UI
+	public Long getTotalPriceWithoutDiscount()
+	{
+		Long result = 0L;
+		for (BillUnit u : allProductBill)
+			result += u.getTotal();
+		return result;
+	}
+	
+	public Long getDiscount()
+	{
+		Long result = 0L;
+		for (BillUnit u: allProductBill)
+			result += u.getDiscount();
+		
+		return result;
+	}
+
+	public Long getTotalPriceWithDiscount()
+	{
+		return getTotalPriceWithoutDiscount() - getDiscount();
+	}
+
+	//Database
 	public boolean exportBill()
 	{
 		PreparedStatement stmt = null;

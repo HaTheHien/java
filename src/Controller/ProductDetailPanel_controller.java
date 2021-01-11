@@ -1,6 +1,5 @@
 package Controller;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import java.awt.Image;
 import GUI.MainScreen.MainScreen;
