@@ -295,13 +295,15 @@ Begin
 End$$
 
 DELIMITER $$
-CREATE PROCEDURE GetBillInfo(ID Integer)
+CREATE PROCEDURE GetBillInfo(ID NVARCHAR(100))
 Begin
 	SELECT bill.BillID, bill.SellerID, bill.BuyDate, bill.MembershipID, Amount, ID, Brand, ProductName, Price, UrlImage
     FROM (bill left JOIN billunit ON bill.billid = billunit.billid) right join productinfo on billunit.ProductID=productinfo.Id
     WHERE bill.BillID = ID;
 End$$
 DELIMITER;
+call GetBillInfo(2);
+
 DELIMITER $$
 CREATE PROCEDURE getMembership(id int)
 BEGIN
