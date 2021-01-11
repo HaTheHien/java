@@ -418,8 +418,23 @@ END$$
 DELIMITER;
 
 DELIMITER $$
-CREATE PROCEDURE createBillUnit(billID varchar(30), productID varchar(30),amount INTEGER)
+CREATE PROCEDURE updatePointMembership(membershipID varchar(30),  productID varchar(30),amount INTEGER)
 BEGIN
+	set @cur_point = (select Point from membership WHERE MemId = membershipID);
+    set @add_point = (select Price from productinfo WHERE Id = productID) * amount / 100;
+	UPDATE membership
+    SET Point = @cur_point + @add_point
+    WHERE MemId = membershipID;
+END$$
+DELIMITER;
+
+DELIMITER $$
+CREATE PROCEDURE createBillUnit(billID varchar(30), productID varchar(30),amount INTEGER,membershipID varchar(30))
+BEGIN
+	if (membershipID.isNULL() = 0 and not membershipID = '') then
+		call updatePointMembership(membershipID,productID,amount);
+    end if;
+		
 	call decreaseStock(productID, amount);
 	INSERT INTO `quanlycuahang`.`billunit`
 						(`BillID`,

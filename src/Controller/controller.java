@@ -243,31 +243,6 @@ public class controller
         }
         return result;
     }
-    public static boolean updatePointMemberShip(Connection conn,String id,int point) 
-    {
-        PreparedStatement stmt=null;
-        boolean result = false;
-        try{
-            stmt = conn.prepareCall("{CALL createMembership(?,?)}");
-            stmt.setString(1, id);
-            stmt.setInt(2, point);
-            stmt.executeQuery();
-            result = true;
-        }catch (SQLException e)
-        {
-            e.printStackTrace();
-        }finally{
-            try {
-                if (stmt != null)
-                {
-                    stmt.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return result;
-    }
     public static Membership getMemberShip(Connection conn,String id) 
     {
         PreparedStatement stmt=null;
@@ -738,20 +713,18 @@ public class controller
         try{
             stmt = conn.prepareCall("{CALL createBill(?,?)}");
             stmt.setString(1, bill.getSellerID());
-            if (bill.getMembershipID() == null || bill.getMembershipID().isEmpty())
-                stmt.setNull(2,Types.INTEGER);
-            else
-                stmt.setString(2, bill.getMembershipID());
+            stmt.setString(2, bill.getMembershipID());
             rs = stmt.executeQuery();
             if (rs.next())
                 id = rs.getString(1);
             ArrayList<BillUnit> billProduct = bill.getAllProductBill();
             for (int i = 0;i<billProduct.size();i++)
             {
-                stmt = conn.prepareCall("{CALL createBillUnit(?,?,?)}");
+                stmt = conn.prepareCall("{CALL createBillUnit(?,?,?,?)}");
                 stmt.setString(1, id);
                 stmt.setString(2, billProduct.get(i).getProductInfo().getCodeBar());
                 stmt.setInt(3, billProduct.get(i).getAmount());
+                stmt.setString(4, bill.getMembershipID());
                 stmt.executeQuery();
             }
             result = true;
