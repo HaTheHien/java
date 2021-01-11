@@ -491,19 +491,44 @@ public class controller
         }
         return result;
     }
-    public static ArrayList<Integer> filterBillByDate(Connection conn, Date start,Date end) 
+    public static ArrayList<Bill> filterBillByDate(Connection conn, Date start,Date end) 
     {
         PreparedStatement stmt=null;
         ResultSet rs = null;
         ArrayList <Integer> listBillId = new ArrayList<Integer>();
+        ArrayList <Bill> listBill = new ArrayList<Bill>();
         try{
-            stmt = conn.prepareCall("Select * from bill where BuyDate >= ? and BuyDate <= ?");
+            stmt = conn.prepareCall("Select * from bill where datediff(BuyDate,?) >= 0 and datediff(?,BuyDate) >= 0");
             stmt.setDate(1, start);
             stmt.setDate(2, end);
             rs = stmt.executeQuery();
-            if (rs.next())
+            while (rs.next())
             {
                 listBillId.add(rs.getInt("BillID"));
+            }
+            System.out.println(listBillId.size());
+            for (int i=0;i<listBillId.size();i++)
+            {
+                stmt = conn.prepareStatement("call GetBillInfo(?)");
+                stmt.setInt(1,listBillId.get(i));
+                rs = stmt.executeQuery();
+                int flag = -1;
+                while(rs.next())
+                {
+                    if (flag == -1)
+                    {
+                        flag = listBill.size();
+                        ArrayList<BillUnit> listBillUnit = new ArrayList<BillUnit>();
+                        listBillUnit.add(new BillUnit(new ProductInfo(rs.getString("Brand"),rs.getString("Productname"),rs.getString("ID"),rs.getInt("Price"),rs.getString("UrlImage")),rs.getInt("amount")));
+                        listBill.add(new Bill(listBillUnit,rs.getDate("BuyDate"),rs.getString("MembershipID"),rs.getString("BillID"),rs.getString("SellerID")));
+                    }
+                    else
+                    {
+                        ArrayList<BillUnit> listBillUnit = listBill.get(flag).getAllProductBill();
+                        listBillUnit.add(new BillUnit(new ProductInfo(rs.getString("Brand"),rs.getString("Productname"),rs.getString("ID"),rs.getInt("Price"),rs.getString("UrlImage")),rs.getInt("amount")));
+                        listBill.get(flag).setAllProductBill(listBillUnit);
+                    }
+                }
             }
         }catch (SQLException e)
         {
@@ -518,7 +543,7 @@ public class controller
                 e.printStackTrace();
             }
         }
-        return listBillId;
+        return listBill;
     }
     public static boolean updateAccount(Connection conn,String username,String fullName,String dob,String address,String pass,String type) 
     {

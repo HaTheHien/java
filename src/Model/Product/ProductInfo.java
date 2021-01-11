@@ -5,6 +5,7 @@ public class ProductInfo {
 	private String productName;
 	private String codeBar;
 	private long price;
+	private String URLImage;
 
 	public ProductInfo(String brand_,String name_,String codeBar_,long price_)
 	{
@@ -12,6 +13,14 @@ public class ProductInfo {
 		productName = name_;
 		codeBar = codeBar_;
 		price = price_;
+	}
+	public ProductInfo(String brand_,String name_,String codeBar_,long price_,String URLimage)
+	{
+		brand = brand_;
+		productName = name_;
+		codeBar = codeBar_;
+		price = price_;
+		URLImage= URLimage;
 	}
 	public ProductInfo(){
 		
