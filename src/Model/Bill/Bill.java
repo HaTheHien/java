@@ -99,6 +99,10 @@ public class Bill {
 	public void setBillID(String billID) {
 		this.billID = billID;
 	}
+	public void addBillUnit(BillUnit u){
+		this.allProductBill.add(u);
+	}
+
 
 	public boolean exportBill()
 	{

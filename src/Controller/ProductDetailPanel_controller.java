@@ -2,13 +2,9 @@ package Controller;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.event.ListSelectionListener;
-
 import java.awt.Image;
 import GUI.MainScreen.MainScreen;
 import GUI.MainScreen.ProductDetailPanel;
-import GUI.MainScreen.ProductPanel;
-import Model.Product.Product;
 import Model.Product.ProductType;
 import Model.Product.Warehouse;
 import java.awt.event.*;
@@ -18,7 +14,7 @@ import java.util.ArrayList;
 public class ProductDetailPanel_controller implements KeyListener, ActionListener {
     ProductDetailPanel productDetailPanel;
     MainScreen mainScreen;
-    ArrayList<ProductType> allType = Warehouse.getAllProductType();
+
 
     public ProductDetailPanel_controller(ProductDetailPanel productDetailPanel, MainScreen mainScreen) {
         this.productDetailPanel = productDetailPanel;
@@ -29,7 +25,7 @@ public class ProductDetailPanel_controller implements KeyListener, ActionListene
 
         this.productDetailPanel.productname_Field.setText(this.productDetailPanel.p.getProductInfo().getProductName());
 
-        this.productDetailPanel.price_Field.setText(this.productDetailPanel.p.getProductInfo().getPrice().toString());
+        this.productDetailPanel.price_Field.setText(Long.toString(this.productDetailPanel.p.getProductInfo().getPrice()));
 
         this.productDetailPanel.brand_Field.setText(this.productDetailPanel.p.getProductInfo().getBrand());
 
@@ -40,7 +36,7 @@ public class ProductDetailPanel_controller implements KeyListener, ActionListene
                 .setText(this.productDetailPanel.p.getProductStockInfo().getLastestEXP().toString());
 
         this.productDetailPanel.promo_Field
-                .setText(Long.valueOf(productDetailPanel.p.getPromotion().getPromoDiscount()).toString());
+                .setText(Long.toString(productDetailPanel.p.getPromotion().getPromoDiscount()));
 
         this.productDetailPanel.urlImg_Field.setText(this.productDetailPanel.p.getUrlImgString());
 
@@ -50,7 +46,7 @@ public class ProductDetailPanel_controller implements KeyListener, ActionListene
         this.productDetailPanel.productImg_Label.setIcon(productImg);
 
         int index = 0;
-        for (ProductType pt : allType) {
+        for (ProductType pt :this.productDetailPanel.allType) {
             this.productDetailPanel.typeProduct_ComboBox.addItem(pt.getTypeName());
             if(pt.getTypeID().compareTo(this.productDetailPanel.p.getProducType().getTypeID()) == 0){
                 this.productDetailPanel.typeProduct_ComboBox.setSelectedIndex(index);
@@ -60,6 +56,7 @@ public class ProductDetailPanel_controller implements KeyListener, ActionListene
     }
 
     public boolean updateProduct() {
+        //update product in database
 
         this.productDetailPanel.p.getProductInfo().setCodeBar(this.productDetailPanel.barcode_Field.getText());
 
@@ -81,7 +78,7 @@ public class ProductDetailPanel_controller implements KeyListener, ActionListene
         this.productDetailPanel.p.setUrlImgString(this.productDetailPanel.urlImg_Field.getText());
 
         this.productDetailPanel.p.getProducType().setTypeID(
-                allType.get(this.productDetailPanel.typeProduct_ComboBox.getSelectedIndex()).getTypeID());
+                this.productDetailPanel.allType.get(this.productDetailPanel.typeProduct_ComboBox.getSelectedIndex()).getTypeID());
 
         return this.productDetailPanel.p.updateProduct();
     }
