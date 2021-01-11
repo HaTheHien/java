@@ -238,7 +238,7 @@ public class Warehouse {
 		}
 		return allType;
 	}
-	public static void updateProduct(String id, String new_prodName, String new_brand,
+	public static boolean updateProduct(String id, String new_prodName, String new_brand,
 							String new_price, String new_stock,
 							String new_exp, String new_discount,
 							String new_url, String new_typeProduct)
@@ -260,9 +260,11 @@ public class Warehouse {
 			stmt.executeQuery();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}	
+			return false;
+		}
+		return true;	
 	}
-	public static void addProduct(String new_prodName, String new_brand,
+	public static boolean addProduct(String new_prodName, String new_brand,
 						String new_price, String new_url,
 						String new_typeID)
 	{
@@ -279,6 +281,7 @@ public class Warehouse {
 			stmt.executeQuery();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		} finally {
 			try {
 				if (stmt != null)
@@ -288,8 +291,9 @@ public class Warehouse {
 				e.printStackTrace();
 			}
 		}
+		return true;
 	}
-	public static void updateStock(String idProduct, String count, String exp)
+	public static boolean updateStock(String idProduct, String count, String exp)
 	{
 		PreparedStatement stmt = null;
 		String sql = "CALL `quanlycuahang`.`updateStock`(?, ?, ?);";
@@ -301,6 +305,7 @@ public class Warehouse {
 			stmt.executeQuery();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		} finally {
 			try {
 				if (stmt != null)
@@ -310,8 +315,9 @@ public class Warehouse {
 				e.printStackTrace();
 			}
 		}
+		return true;
 	}
-	public static void addStock(String idProduct, String count)
+	public static boolean addStock(String idProduct, String count)
 	{
 		PreparedStatement stmt = null;
 		String sql = "CALL `quanlycuahang`.`addStock`(?, ?);";
@@ -322,6 +328,7 @@ public class Warehouse {
 			stmt.executeQuery();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		} finally {
 			try {
 				if (stmt != null)
@@ -331,5 +338,6 @@ public class Warehouse {
 				e.printStackTrace();
 			}
 		}
+		return true;
 	}
 }
