@@ -4,6 +4,8 @@ import GUI.GUI_Utility.*;
 import Model.Model;
 import Model.Product.Product;
 import Model.Product.Warehouse;
+import Model.User.Staff;
+
 import java.util.ArrayList;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,6 +22,7 @@ public class MainScreen {
     JLabel shopname =  new JLabel("Shop name");
     JLabel username = new JLabel("User name");
     JPanel menuPanel = new JPanel();
+    Staff staff;
     
     JPanel centerPanel =  null;
  
@@ -97,7 +100,7 @@ public class MainScreen {
         mainFrame.revalidate();
         mainFrame.repaint();
     }
-    public MainScreen() {
+    public MainScreen(Staff staff) {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         screenSize.setSize(screenSize.getWidth()/1.2, screenSize.getHeight()/1.2);
@@ -114,6 +117,7 @@ public class MainScreen {
         mainFrame.pack();
         mainFrame.setVisible(true);
 
+        this.staff = staff;
 
     }
 
@@ -121,7 +125,7 @@ public class MainScreen {
         Model.setupModel();
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new MainScreen();
+                new MainScreen(null);
             }
         });
     }
