@@ -1,10 +1,5 @@
 package GUI.MainScreen;
 
-import java.util.ArrayList;
-
-import Controller.BIllPanel_controller;
-import Model.Bill.Bill;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -21,19 +16,6 @@ public class BillPanel extends javax.swing.JPanel {
      * Creates new form Bill
      */
     MainScreen mainScreen;
-    public ArrayList<Bill> listBill;
-    
-    // Variables declaration - do not modify                     
-    public javax.swing.JTable billTable;
-    public javax.swing.JTextField endDate;
-    public javax.swing.JPanel jPanel1;
-    public javax.swing.JScrollPane jScrollPane1;
-    public javax.swing.JLabel promotionLabel;
-    public javax.swing.JTextField startDate;
-    public javax.swing.table.DefaultTableModel tableModel;
-    public BIllPanel_controller billpanel_controller;
-    public javax.swing.JButton filterBtn;
-    // End of variables declaration         
     public BillPanel(java.awt.Dimension size,MainScreen mainScreen) {
         setPreferredSize(size);
         setLayout(new java.awt.GridBagLayout());
@@ -55,9 +37,8 @@ public class BillPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         billTable = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
-        startDate = new javax.swing.JTextField("1970-1-1");
-        endDate = new javax.swing.JTextField("2021-1-11");
-        filterBtn = new javax.swing.JButton("Search");
+        startDate = new javax.swing.JTextField();
+        endDate = new javax.swing.JTextField();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -77,16 +58,22 @@ public class BillPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(6, 10, 0, 10);
         add(promotionLabel, gridBagConstraints);
 
-
-        tableModel = new javax.swing.table.DefaultTableModel(
+        billTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
                 "Mã hoá đơn", "Ngày mua", "Nhân viên thanh toán", "Mã thành viên"
             }
-        );
-        billTable.setModel(tableModel);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(billTable);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -103,6 +90,12 @@ public class BillPanel extends javax.swing.JPanel {
 
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
+        startDate.setText("Start");
+        startDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startDateActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -113,25 +106,20 @@ public class BillPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 0);
         jPanel1.add(startDate, gridBagConstraints);
 
+        endDate.setText("End");
+        endDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                endDateActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.ipadx = 193;
         gridBagConstraints.ipady = 12;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 0);
-        jPanel1.add(endDate, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 193;
-        gridBagConstraints.ipady = 12;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(11, 10, 11, 363);
-        jPanel1.add(filterBtn, gridBagConstraints);
+        jPanel1.add(endDate, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -141,8 +129,6 @@ public class BillPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         add(jPanel1, gridBagConstraints);
-        billpanel_controller = new BIllPanel_controller(this);
-        filterBtn.addActionListener(this.billpanel_controller);
     }// </editor-fold>                        
 
     private void startDateActionPerformed(java.awt.event.ActionEvent evt) {                                          
@@ -153,5 +139,13 @@ public class BillPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }                                       
 
-          
+
+    // Variables declaration - do not modify                     
+    private javax.swing.JTable billTable;
+    private javax.swing.JTextField endDate;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel promotionLabel;
+    private javax.swing.JTextField startDate;
+    // End of variables declaration                   
 }

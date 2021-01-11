@@ -1,6 +1,7 @@
 package Controller;
 
 import java.sql.*;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -8,7 +9,6 @@ import java.util.List;
 
 import Model.Other.*;
 import Model.Product.ProductInfo;
-import Model.Product.Warehouse;
 import Model.User.Staff;
 import Model.Bill.*;
 public class controller
@@ -491,37 +491,43 @@ public class controller
         }
         return result;
     }
-    public static ArrayList<Bill> filterBillByDate(Connection conn, Date string,Date string2) 
+    public static ArrayList<Bill> filterBillByDate(Connection conn, Date start,Date end) 
     {
         PreparedStatement stmt=null;
         ResultSet rs = null;
+        ArrayList <Integer> listBillId = new ArrayList<Integer>();
         ArrayList <Bill> listBill = new ArrayList<Bill>();
         try{
-            stmt = conn.prepareCall("select *  from bill join billunit on bill.BillID = billunit.billID ");
-            
-            //stmt.setDate(1, string);
-            //stmt.setDate(2, string2);
+            stmt = conn.prepareCall("Select * from bill where datediff(BuyDate,?) >= 0 and datediff(?,BuyDate) >= 0");
+            stmt.setDate(1, start);
+            stmt.setDate(2, end);
             rs = stmt.executeQuery();
-            if(!rs.next()){
-                return listBill;
+            while (rs.next())
+            {
+                listBillId.add(rs.getInt("BillID"));
             }
-            else{
-                while(true){
-                    Bill b = new Bill();
-                    b.setSellerID(rs.getString("SellerID"));
-                    b.setBuyDate(rs.getDate("BuyDate"));
-                    b.setBillID(rs.getString("BillID"));
-                    while(true){
-                        if(rs.getString("BillID").compareTo(b.getBillID()) != 0)
-                            break;
-                        else{
-                            b.setMembershipID(rs.getString("MembershipID"));
-                            BillUnit bUnit = new BillUnit(rs.getString("ProductID"),rs.getInt("Amount"));
-                            b.addBillUnit(bUnit);
-                            if(!rs.next()) break;
-                        }
+            System.out.println(listBillId.size());
+            for (int i=0;i<listBillId.size();i++)
+            {
+                stmt = conn.prepareStatement("call GetBillInfo(?)");
+                stmt.setInt(1,listBillId.get(i));
+                rs = stmt.executeQuery();
+                int flag = -1;
+                while(rs.next())
+                {
+                    if (flag == -1)
+                    {
+                        flag = listBill.size();
+                        ArrayList<BillUnit> listBillUnit = new ArrayList<BillUnit>();
+                        listBillUnit.add(new BillUnit(new ProductInfo(rs.getString("Brand"),rs.getString("Productname"),rs.getString("ID"),rs.getInt("Price"),rs.getString("UrlImage")),rs.getInt("amount")));
+                        listBill.add(new Bill(listBillUnit,rs.getDate("BuyDate"),rs.getString("MembershipID"),rs.getString("BillID"),rs.getString("SellerID")));
                     }
-                    if(!rs.wasNull()) break;
+                    else
+                    {
+                        ArrayList<BillUnit> listBillUnit = listBill.get(flag).getAllProductBill();
+                        listBillUnit.add(new BillUnit(new ProductInfo(rs.getString("Brand"),rs.getString("Productname"),rs.getString("ID"),rs.getInt("Price"),rs.getString("UrlImage")),rs.getInt("amount")));
+                        listBill.get(flag).setAllProductBill(listBillUnit);
+                    }
                 }
             }
         }catch (SQLException e)
@@ -598,43 +604,43 @@ public class controller
         }
         return result;
     }
-    // public static Bill getBillInfo(Connection conn,String billID)
-    // {   
-    //     PreparedStatement stmt=null;
-    //     ResultSet rs = null;
-    //     Bill temp = null;
-    //     try{
-    //         stmt = conn.prepareCall("{CALL GetBillInfo(?)}");
-    //         stmt.setString(1, billID);
-    //         rs = stmt.executeQuery();
-    //         ArrayList<BillUnit> list= new ArrayList<BillUnit>();
-    //         while (rs.next())
-    //         {
-    //             if (temp == null)
-    //             {
-    //                 java.sql.Timestamp datetime =  rs.getTimestamp("BuyDate");
-    //                 java.util.Date dbSqlTimeConverted = new java.util.Date(datetime.getTime());
-    //                 temp = new Bill(list, rs.getDate("BuyDate"),rs.getString("MembershipID"), rs.getString("BillID"),rs.getString("SellerID"));
-    //             }
-    //             BillUnit bUnit = new BillUnit(new ProductInfo(rs.getString("Brand"),rs.getString("ProductName"), rs.getString("ID"),rs.getInt("Price")),rs.getInt("Amount"));
-    //             list.add(bUnit);
-    //             temp.setAllProductBill(list);
-    //         }
-    //     }catch (SQLException e)
-    //     {
-    //         e.printStackTrace();
-    //     }finally{
-    //         try {
-    //             if (stmt != null)
-    //             {
-    //                 stmt.close();
-    //             }
-    //         } catch (SQLException e) {
-    //             e.printStackTrace();
-    //         }
-    //     }
-    //     return temp;
-    // }
+    public static Bill getBillInfo(Connection conn,String billID)
+    {   
+        PreparedStatement stmt=null;
+        ResultSet rs = null;
+        Bill temp = null;
+        try{
+            stmt = conn.prepareCall("{CALL GetBillInfo(?)}");
+            stmt.setString(1, billID);
+            rs = stmt.executeQuery();
+            ArrayList<BillUnit> list= new ArrayList<BillUnit>();
+            while (rs.next())
+            {
+                if (temp == null)
+                {
+                    java.sql.Timestamp datetime =  rs.getTimestamp("BuyDate");
+                    java.util.Date dbSqlTimeConverted = new java.util.Date(datetime.getTime());
+                    temp = new Bill(list, rs.getDate("BuyDate"),rs.getString("MembershipID"), rs.getString("BillID"),rs.getString("SellerID"));
+                }
+                BillUnit bUnit = new BillUnit(new ProductInfo(rs.getString("Brand"),rs.getString("ProductName"), rs.getString("ID"),rs.getInt("Price")),rs.getInt("Amount"));
+                list.add(bUnit);
+                temp.setAllProductBill(list);
+            }
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+        }finally{
+            try {
+                if (stmt != null)
+                {
+                    stmt.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return temp;
+    }
     public static int getNumTypeProduct(Connection conn){
         PreparedStatement stmt=null;
         ResultSet rs = null;
@@ -821,48 +827,48 @@ public class controller
 		}
 		return numproduct;
     }
-    // public static boolean createBill(Connection conn,Bill bill) 
-    // {
-    //     PreparedStatement stmt=null;
-    //     ResultSet rs = null;
-    //     String id = null;
-    //     boolean result = false;
-    //     try{
-    //         stmt = conn.prepareCall("{CALL createBill(?,?)}");
-    //         stmt.setString(1, bill.getSellerID());
-    //         stmt.setString(2, bill.getMembershipID());
-    //         rs = stmt.executeQuery();
-    //         if (rs.next())
-    //             id = rs.getString(1);
-    //         ArrayList<BillUnit> billProduct = bill.getAllProductBill();
-    //         for (int i = 0;i<billProduct.size();i++)
-    //         {
-    //             stmt = conn.prepareCall("{CALL createBillUnit(?,?,?,?)}");
-    //             stmt.setString(1, id);
-    //             stmt.setString(2, billProduct.get(i).getProductInfo().getCodeBar());
-    //             stmt.setInt(3, billProduct.get(i).getAmount());
-    //             stmt.setString(4, bill.getMembershipID());
-    //             stmt.executeQuery();
-    //         }
-    //         result = true;
-    //     }catch (SQLException e)
-    //     {
-    //         e.printStackTrace();
-    //     }finally{
-    //         try {
-    //             if (stmt != null)
-    //             {
-    //                 stmt.close();
-    //             }
-    //             if (rs != null)
-    //             {
-    //                 rs.close();
-    //             }
-    //         } catch (SQLException e) {
-    //             e.printStackTrace();
-    //         }
-    //     }
-    //     return result;
-    // }
+    public static boolean createBill(Connection conn,Bill bill) 
+    {
+        PreparedStatement stmt=null;
+        ResultSet rs = null;
+        String id = null;
+        boolean result = false;
+        try{
+            stmt = conn.prepareCall("{CALL createBill(?,?)}");
+            stmt.setString(1, bill.getSellerID());
+            stmt.setString(2, bill.getMembershipID());
+            rs = stmt.executeQuery();
+            if (rs.next())
+                id = rs.getString(1);
+            ArrayList<BillUnit> billProduct = bill.getAllProductBill();
+            for (int i = 0;i<billProduct.size();i++)
+            {
+                stmt = conn.prepareCall("{CALL createBillUnit(?,?,?,?)}");
+                stmt.setString(1, id);
+                stmt.setString(2, billProduct.get(i).getProductInfo().getCodeBar());
+                stmt.setInt(3, billProduct.get(i).getAmount());
+                stmt.setString(4, bill.getMembershipID());
+                stmt.executeQuery();
+            }
+            result = true;
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+        }finally{
+            try {
+                if (stmt != null)
+                {
+                    stmt.close();
+                }
+                if (rs != null)
+                {
+                    rs.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
 
 }

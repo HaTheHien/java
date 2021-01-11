@@ -2,10 +2,7 @@ package Model.Bill;
 
 import java.lang.Thread.State;
 import com.mysql.cj.xdevapi.Statement;
-
-import Model.Product.Product;
 import Model.Product.ProductInfo;
-import Model.Product.Warehouse;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -14,36 +11,46 @@ import Model.Model;
 
 public class BillUnit {
 
-	private Product product;
+	private ProductInfo productInfo;
 	private Integer amount;
 
 	//constructor
-	public BillUnit(Product info, Integer amount)
+	public BillUnit(ProductInfo info, Integer amount)
 	{
-		this.product=info;
+		this.productInfo=info;
 		this.amount=amount;
 	}
 	public BillUnit(BillUnit b)
 	{
-		this.product=b.getProduct();
+		this.productInfo=b.getProductInfo();
 		this.amount=b.getAmount();
 	}
-	public void increOne(){
-		this.amount ++;
+
+
+	public void setProductInfo(ProductInfo info)
+	{
+		this.productInfo=info;
+
 	}
-	public BillUnit(String codebar,Integer amount){
-		this.product = Warehouse.getAllProductByID(codebar).get(0);
-		this.amount = amount;
+	public void setAmount(Integer amount)
+	{
+		this.amount=amount;
 	}
 
 
-
-	public BillUnit() {
+	public ProductInfo getProductInfo()
+	{
+		return this.productInfo;
 	}
+	public Integer getAmount()
+	{
+		return this.amount;
+	}
+
 	//UI
 	public Long getTotal()
 	{
-		return product.getProductInfo().getPrice() * amount;
+		return productInfo.getPrice() * amount;
 	}
 	public Long getDiscount()
 	{
@@ -54,7 +61,7 @@ public class BillUnit {
 		try {
 			//Add bill
 			stmt = Model.conn.prepareStatement(sql);
-			stmt.setString(1, product.getProductInfo().getCodeBar());
+			stmt.setString(1, productInfo.getCodeBar());
 			rs = stmt.executeQuery();
 			while (rs.next()) {
 				result = rs.getLong(1);
@@ -83,7 +90,7 @@ public class BillUnit {
 			//Add bill
 			stmt = Model.conn.prepareStatement(sql);
 			stmt.setString(1, billID);
-			stmt.setString(2, product.getProductInfo().getCodeBar());
+			stmt.setString(2, productInfo.getCodeBar());
 			stmt.setInt(3, amount);
 			stmt.executeQuery();
 		} catch (SQLException e) {
@@ -99,21 +106,5 @@ public class BillUnit {
 			}
 		}
 		return true;
-	}
-
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
-	public Integer getAmount() {
-		return amount;
-	}
-
-	public void setAmount(Integer amount) {
-		this.amount = amount;
 	}
 }
