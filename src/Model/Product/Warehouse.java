@@ -238,7 +238,7 @@ public class Warehouse {
 		}
 		return allType;
 	}
-	static void updateProduct(String id, String new_prodName, String new_brand,
+	public static void updateProduct(String id, String new_prodName, String new_brand,
 							String new_price, String new_stock,
 							String new_exp, String new_discount,
 							String new_url, String new_typeProduct)
@@ -262,7 +262,7 @@ public class Warehouse {
 			e.printStackTrace();
 		}	
 	}
-	static void addProduct(String new_prodName, String new_brand,
+	public static void addProduct(String new_prodName, String new_brand,
 						String new_price, String new_url,
 						String new_typeID)
 	{
@@ -289,7 +289,7 @@ public class Warehouse {
 			}
 		}
 	}
-	static void updateStock(String idProduct, String count, String exp)
+	public static void updateStock(String idProduct, String count, String exp)
 	{
 		PreparedStatement stmt = null;
 		String sql = "CALL `quanlycuahang`.`updateStock`(?, ?, ?);";
@@ -311,7 +311,7 @@ public class Warehouse {
 			}
 		}
 	}
-	static void addStock(String idProduct, String count)
+	public static void addStock(String idProduct, String count)
 	{
 		PreparedStatement stmt = null;
 		String sql = "CALL `quanlycuahang`.`addStock`(?, ?);";
