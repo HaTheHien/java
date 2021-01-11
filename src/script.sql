@@ -401,8 +401,26 @@ END$$
 DELIMITER;
 
 DELIMITER $$
+CREATE PROCEDURE decreaseStock(idProduct NVARCHAR(100), 
+						decrease int)
+BEGIN
+	DECLARE specialty CONDITION FOR SQLSTATE '45000';
+	set @i = (select numstock from productstock WHERE id = idProduct);
+    	IF (@i - decrease < 0) then
+		set @message = CONCAT("Not enough stock of product id: ",idProduct);
+		SIGNAL SQLSTATE '45000' SET MYSQL_ERRNO=30001, MESSAGE_TEXT = @message;
+	end if;
+	SET SQL_SAFE_UPDATES = 0;
+	UPDATE productstock
+    SET numstock = @i - decrease
+    WHERE id = idProduct;
+END$$
+DELIMITER;
+
+DELIMITER $$
 CREATE PROCEDURE createBillUnit(billID varchar(30), productID varchar(30),amount INTEGER)
 BEGIN
+	call decreaseStock(productID, amount);
 	INSERT INTO `quanlycuahang`.`billunit`
 						(`BillID`,
 						`ProductID`,

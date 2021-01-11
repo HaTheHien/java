@@ -1,5 +1,10 @@
 package GUI.MainScreen;
 
+import Controller.MembershipPanel_controller;
+import Controller.controller;
+import Model.Model;
+import Model.Other.Membership;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -44,6 +49,7 @@ public class MembershipPanel extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         addMember_Btn = new javax.swing.JButton();
         memname_Field = new javax.swing.JTextField();
+        memSDT_Field = new javax.swing.JTextField();
 
         jLabel1.setText("jLabel1");
 
@@ -62,7 +68,7 @@ public class MembershipPanel extends javax.swing.JPanel {
         };
 
         // ADD PRODUCT HERE
-        tableModel.addRow(new String[] { "Bar code", "Product name", "Product type", "Price", "Stock" });
+        MembershipPanel_controller membership_controller = new MembershipPanel_controller(this);
 
         membershipTable.setModel(tableModel);
 
@@ -98,25 +104,40 @@ public class MembershipPanel extends javax.swing.JPanel {
 
         addMember_Btn.setText("THÊM THÀNH VIÊN");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 525;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 160;
+        gridBagConstraints.ipadx = 80;
         gridBagConstraints.ipady = 20;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        addMember_Btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addMember_BtnActionPerformed(evt);
+            }
+        });
         jPanel1.add(addMember_Btn, gridBagConstraints);
 
         memname_Field.setText("NHẬP TÊN THÀNH VIÊN MỚI");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 525;
+        gridBagConstraints.ipadx = 250;
         gridBagConstraints.ipady = 23;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         jPanel1.add(memname_Field, gridBagConstraints);
+
+        memSDT_Field.setText("NHẬP SỐ ĐIỆN THOẠI");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 275;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 250;
+        gridBagConstraints.ipady = 23;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        jPanel1.add(memSDT_Field, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -126,7 +147,17 @@ public class MembershipPanel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 11, 10);
         add(jPanel1, gridBagConstraints);
+
     }// </editor-fold>
+
+    void addMember_BtnActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        boolean result = controller.createMemberShip(Model.conn, memname_Field.getText(), "", memSDT_Field.getText());
+        if (result)
+        {
+            int newID = tableModel.getRowCount() + 1;
+            tableModel.addRow(new String[]{String.valueOf(newID),memname_Field.getText(),memSDT_Field.getText()});
+        }
+    }
 
     // Variables declaration - do not modify
     private javax.swing.JButton addMember_Btn;
@@ -135,6 +166,7 @@ public class MembershipPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField memname_Field;
+    private javax.swing.JTextField memSDT_Field;
     private javax.swing.JTable membershipTable;
     // End of variables declaration
 }
