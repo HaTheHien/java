@@ -808,7 +808,9 @@ public class controller
                     java.util.Date dbSqlTimeConverted = new java.util.Date(datetime.getTime());
                     temp = new Bill(list, rs.getDate("BuyDate"),rs.getString("MembershipID"), rs.getString("BillID"),rs.getString("SellerID"));
                 }
-                BillUnit bUnit = new BillUnit(new ProductInfo(rs.getString("Brand"),rs.getString("ProductName"), rs.getString("ID"),rs.getInt("Price")),rs.getInt("Amount"));
+                Product product = new Product();
+                product.setProductInfo(new ProductInfo(rs.getString("Brand"),rs.getString("ProductName"), rs.getString("ID"),rs.getInt("Price")));
+                BillUnit bUnit = new BillUnit(product,rs.getInt("Amount"));
                 list.add(bUnit);
                 temp.setAllProductBill(list);
             }
@@ -1032,7 +1034,7 @@ public class controller
                 stmt.close();
                 stmt = conn.prepareCall("{CALL createBillUnit(?,?,?,?)}");
                 stmt.setString(1, id);
-                stmt.setString(2, billProduct.get(i).getProductInfo().getCodeBar());
+                stmt.setString(2, billProduct.get(i).getProduct().getProductInfo().getCodeBar());
                 stmt.setInt(3, billProduct.get(i).getAmount());
                 stmt.setString(4, bill.getMembershipID());
                 stmt.executeQuery();

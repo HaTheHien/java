@@ -1,7 +1,6 @@
 package Model.Bill;
 
 import java.lang.Thread.State;
-import com.mysql.cj.xdevapi.Statement;
 
 import Model.Product.Product;
 import Model.Product.ProductInfo;
