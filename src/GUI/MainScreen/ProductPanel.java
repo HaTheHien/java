@@ -116,11 +116,6 @@ public class ProductPanel extends JPanel {
         productPanel_controller =  new ProductPanel_controller(this,this.mainScreen);
         searchField.addKeyListener(productPanel_controller);
         newbarCodeField.addKeyListener(productPanel_controller);
-        productTable.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                // TODO:
-            }
-        });
 
         productTable.getSelectionModel().addListSelectionListener(productPanel_controller);
     }// </editor-fold>

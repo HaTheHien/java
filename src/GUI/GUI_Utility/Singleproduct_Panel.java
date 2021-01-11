@@ -2,6 +2,8 @@ package GUI.GUI_Utility;
 
 import javax.swing.ImageIcon;
 
+import Controller.POSPanel_controller;
+
 import java.awt.Image;
 import Model.Product.Product;
 
@@ -11,12 +13,15 @@ public class Singleproduct_Panel extends javax.swing.JPanel {
     javax.swing.JLabel productPrice = new javax.swing.JLabel();
     javax.swing.JLabel productName = new javax.swing.JLabel();
     javax.swing.JLabel productStock = new javax.swing.JLabel();
-    public Singleproduct_Panel(Product p){
+    POSPanel_controller posPanel_controller;
+    public Product p;
+    public Singleproduct_Panel(Product p, POSPanel_controller posPanel_controller){
+        this.p = p;
         this.setPreferredSize(new java.awt.Dimension(200, 400));
         this.setLayout(new java.awt.GridBagLayout());
 
 
-        ImageIcon img = new ImageIcon(p.getUrlImgString());
+        ImageIcon img = new ImageIcon(this.p.getUrlImgString());
         Image image = img.getImage().getScaledInstance(180,180,java.awt.Image.SCALE_SMOOTH); // scale it the smooth way // transform it
         img = new ImageIcon(image); 
         productImg.setIcon(img);
@@ -28,7 +33,7 @@ public class Singleproduct_Panel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.CENTER;
         this.add(productImg, gridBagConstraints);
 
-        productStock.setText("Số lượng:" + p.getProductStockInfo().getNumStock());
+        productStock.setText("Số lượng:" + this.p.getProductStockInfo().getNumStock());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -38,7 +43,7 @@ public class Singleproduct_Panel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(6, 10, 0, 0);
         this.add(productStock, gridBagConstraints);
 
-        productPrice.setText("Giá:" + Long.toString(p.getProductInfo().getPrice()));
+        productPrice.setText("Giá:" + Long.toString(this.p.getProductInfo().getPrice()));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -48,7 +53,7 @@ public class Singleproduct_Panel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(6, 10, 11, 0);
         this.add(productPrice, gridBagConstraints);
 
-        productName.setText(p.getProductInfo().getProductName());
+        productName.setText(this.p.getProductInfo().getProductName());
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
