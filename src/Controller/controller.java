@@ -3,6 +3,8 @@ package Controller;
 import java.sql.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import Model.Other.*;
@@ -319,8 +321,8 @@ public class controller
             rs = stmt.executeQuery();
             while (rs.next())
             {
-                String id = rs.getString("ID");
-                long discount = rs.getLong("discount");
+                int id = rs.getInt("ID");
+                int discount = rs.getInt("discount");
                 String productID = rs.getString("productID");
                 String productName = rs.getString("ProductName");
                 Promotion temp = new Promotion(id,productID,discount,productName);
@@ -421,6 +423,102 @@ public class controller
             }
         }
         return result;
+    }
+    public static boolean removePromo(Connection conn,int Id) 
+    {
+        PreparedStatement stmt=null;
+        boolean result = false;
+        try{
+            stmt = conn.prepareCall("DELETE FROM promo where ID = ?;");
+            stmt.setInt(1, Id);
+            stmt.executeUpdate();
+            result = true;
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+        }finally{
+            try {
+                if (stmt != null)
+                {
+                    stmt.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+    public static boolean createPromo(Connection conn,String ProductID,int discount) 
+    {
+        PreparedStatement stmt=null;
+        boolean result = false;
+        try{
+            ArrayList<Promotion> list = getAllPromo(conn);
+            Collections.sort(list,new Comparator<Promotion>() {
+                @Override
+                public int compare(Promotion o1, Promotion o2) {
+                    if (o1.getPromoID() > o2.getPromoID())
+                        return 1;
+                    else
+                        return -1;
+                }
+            });
+            int id = 1;
+            for (int i=0;i<list.size();i++)
+            {
+                if (list.get(i).getPromoID() != id)
+                    break;
+                id++;
+            }
+            stmt = conn.prepareCall("INSERT INTO promo(ID,discount,productID) VALUES(?,?,?);");
+            stmt.setInt(1, id);
+            stmt.setInt(2, discount);
+            stmt.setString(3, ProductID);
+            stmt.executeUpdate();
+            result = true;
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+        }finally{
+            try {
+                if (stmt != null)
+                {
+                    stmt.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+    public static ArrayList<Integer> filterBillByDate(Connection conn, Date start,Date end) 
+    {
+        PreparedStatement stmt=null;
+        ResultSet rs = null;
+        ArrayList <Integer> listBillId = new ArrayList<Integer>();
+        try{
+            stmt = conn.prepareCall("Select * from bill where BuyDate >= ? and BuyDate <= ?");
+            stmt.setDate(1, start);
+            stmt.setDate(2, end);
+            rs = stmt.executeQuery();
+            if (rs.next())
+            {
+                listBillId.add(rs.getInt("BillID"));
+            }
+        }catch (SQLException e)
+        {
+            e.printStackTrace();
+        }finally{
+            try {
+                if (stmt != null)
+                {
+                    stmt.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return listBillId;
     }
     public static boolean updateAccount(Connection conn,String username,String fullName,String dob,String address,String pass,String type) 
     {

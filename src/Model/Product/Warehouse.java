@@ -37,7 +37,7 @@ public class Warehouse {
 				p.getProductStockInfo().setNumStock(rs.getInt("numStock"));
 
 				p.getPromotion().setPromoID(rs.getInt("idPromo"));
-				p.getPromotion().setPromoDiscount(rs.getLong("discount"));
+				p.getPromotion().setPromoDiscount(rs.getInt("discount"));
 
 				allProducts.add(p);
 			}
