@@ -1,11 +1,13 @@
 package Model.Product;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import Model.Model;
 import Model.Other.Promotion;
+
 
 public class Warehouse {
 
@@ -205,5 +207,37 @@ public class Warehouse {
 			}
 		}
 		return numproduct;
+	}
+	static void updateProduct(String id, String new_prodName, String new_brand,
+							String new_price, String new_stock,
+							String new_exp, String new_discount,
+							String new_url, String new_typeProduct)
+	{
+		PreparedStatement stmt = null;
+		String sql = "CALL updateProduct(?, ?, ?, ?, ?, ?, ?, ?, ?);";
+		try {
+			stmt = Model.conn.prepareStatement(sql);
+			stmt.setString(1, id);
+			stmt.setString(2, new_prodName);
+			stmt.setString(3, new_brand);
+			stmt.setInt(4, Integer.parseInt(new_price));
+			stmt.setInt(5, Integer.parseInt(new_stock));
+			stmt.setDate(6, Date.valueOf(new_exp));
+			stmt.setInt(7, Integer.parseInt(new_discount));
+			stmt.setString(8, new_url);
+			stmt.setInt(9, Integer.parseInt(new_typeProduct));
+			
+			stmt.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (stmt != null)
+					stmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 }
