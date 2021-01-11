@@ -2,6 +2,8 @@ package Model.Bill;
 
 import java.lang.Thread.State;
 import com.mysql.cj.xdevapi.Statement;
+
+import Model.Product.Product;
 import Model.Product.ProductInfo;
 import Model.Product.Product;
 
@@ -11,7 +13,6 @@ import java.sql.ResultSet;
 import Model.Model;
 
 public class BillUnit {
-
 	private Product product;
 	private Integer amount;
 
@@ -23,7 +24,7 @@ public class BillUnit {
 	}
 	public BillUnit(BillUnit b)
 	{
-		this.product = b.getProduct();
+		this.product=b.product;
 		this.amount=b.getAmount();
 	}
 
@@ -37,8 +38,6 @@ public class BillUnit {
 	{
 		this.amount=amount;
 	}
-
-
 	public Product getProduct()
 	{
 		return this.product;
