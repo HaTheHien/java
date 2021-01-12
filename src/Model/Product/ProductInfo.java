@@ -7,6 +7,10 @@ public class ProductInfo {
 	private long price;
 	private String URLImage;
 
+	public ProductInfo(String codeBar)
+	{
+		this.codeBar = codeBar;
+	}
 	public ProductInfo(String brand_,String name_,String codeBar_,long price_)
 	{
 		brand = brand_;

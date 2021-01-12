@@ -7,6 +7,9 @@ public class Promotion {
 	public Promotion(){
 
 	}
+	public Promotion(String idProduct){
+		productID = idProduct;
+	}
 	public Promotion(int id,String product_id,int Discount, String productName_)
 	{
 		promoID = id;

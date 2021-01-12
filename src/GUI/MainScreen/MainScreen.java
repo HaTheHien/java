@@ -100,16 +100,15 @@ public class MainScreen {
         mainFrame.revalidate();
         mainFrame.repaint();
     }
-<<<<<<< HEAD
 
     
-    public void setup_billdetailPanel(Bill b){
-        mainFrame.remove(this.centerPanel);
-        centerPanel = new BilldetailPanel(new Dimension(screenSize.width*8/10,screenSize.height - naviPanel.getHeight()),this,b);
-        Utility.addComponent(mainFrame, centerPanel, new GridBagConstraints(), 2, 1, 8, 19,GridBagConstraints.PAGE_START,0,0,8,19,GridBagConstraints.BOTH);
-        mainFrame.revalidate();
-        mainFrame.repaint();
-    }
+    // public void setup_billdetailPanel(Bill b){
+    //     mainFrame.remove(this.centerPanel);
+    //     centerPanel = new BilldetailPanel(new Dimension(screenSize.width*8/10,screenSize.height - naviPanel.getHeight()),this,b);
+    //     Utility.addComponent(mainFrame, centerPanel, new GridBagConstraints(), 2, 1, 8, 19,GridBagConstraints.PAGE_START,0,0,8,19,GridBagConstraints.BOTH);
+    //     mainFrame.revalidate();
+    //     mainFrame.repaint();
+    // }
     public void setup_staffPanel(){
         mainFrame.remove(this.centerPanel);
         centerPanel = new StaffPanel(new Dimension(screenSize.width*8/10,screenSize.height - naviPanel.getHeight()),this);
@@ -124,8 +123,7 @@ public class MainScreen {
         mainFrame.revalidate();
         mainFrame.repaint();
     }
-=======
->>>>>>> parent of 885a81c... add more( chưa chạy dc ma up lên cho đỡ mất code)
+
     public MainScreen(Staff staff) {
         this.staff = staff;
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -147,12 +145,7 @@ public class MainScreen {
        
         
 
-<<<<<<< HEAD
         username.setText(this.staff.getFullname());
-
-
-=======
->>>>>>> parent of 885a81c... add more( chưa chạy dc ma up lên cho đỡ mất code)
     }
 
     public static void main(String[] args) {

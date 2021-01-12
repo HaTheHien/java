@@ -350,13 +350,8 @@ public class controller
         PreparedStatement stmt=null;
         ResultSet rs = null;
         Staff temp = new Staff();
-<<<<<<< HEAD
-        try {
-            stmt = conn.prepareCall("select * from account where Id = ?");
-=======
         try{
             stmt = conn.prepareCall("{CALL takeAccount(?)}");
->>>>>>> parent of 885a81c... add more( chưa chạy dc ma up lên cho đỡ mất code)
             stmt.setString(1, staffID);
             rs = stmt.executeQuery();
             Staff a = new Staff();
@@ -373,6 +368,7 @@ public class controller
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
         }
         return temp;
     }
@@ -381,13 +377,9 @@ public class controller
         PreparedStatement stmt=null;
         ResultSet rs = null;
         ArrayList<Staff> list = new ArrayList<Staff>();
-<<<<<<< HEAD
+
         try {
             stmt = conn.prepareCall("SELECT * FROM quanlycuahang.account");
-=======
-        try{
-            stmt = conn.prepareCall("{CALL getAllAccount()}");
->>>>>>> parent of 885a81c... add more( chưa chạy dc ma up lên cho đỡ mất code)
             rs = stmt.executeQuery();
             Staff a = new Staff();
             while(true)
@@ -650,23 +642,17 @@ public class controller
         PreparedStatement stmt=null;
         PreparedStatement stmt1=null;
         ResultSet rs = null;
-<<<<<<< HEAD
         ArrayList <String> listBillId = new ArrayList<String>();
         ArrayList <String> memID = new ArrayList<String>();
         ArrayList <String> seller = new ArrayList<String>();
         ArrayList <Bill> listBill = new ArrayList<Bill>();
         ArrayList <Date> buyDate = new ArrayList<Date>();
-=======
-        ResultSet rs1 = null;
-        ArrayList <Integer> listBillId = new ArrayList<Integer>();
-        ArrayList <Bill> listBill = new ArrayList<Bill>();
->>>>>>> parent of 885a81c... add more( chưa chạy dc ma up lên cho đỡ mất code)
+
         try{
             stmt = conn.prepareCall("Select * from bill");
             rs = stmt.executeQuery();
             while (rs.next())
             {
-<<<<<<< HEAD
                 listBillId.add(rs.getString("BillID"));
                 buyDate.add(rs.getDate("BuyDate"));
                 memID.add(rs.getString("MembershipID"));
@@ -762,88 +748,13 @@ public class controller
                     Product product = Warehouse.getAllProductByID(rs.getString("ID")).get(0);
                     billunit.setProduct(product);
                     allBill.add(billunit);
-=======
-                listBillId.add(rs.getInt("BillID"));
-            }
-            for (int i=0;i<listBillId.size();i++)
-            {
-                stmt.close();
-                stmt = conn.prepareStatement("call GetBillInfo(?)");
-                stmt.setInt(1,listBillId.get(i));
-                rs = stmt.executeQuery();
-                int flag = -1;
-                while(rs.next())
-                {
-                    if (flag == -1)
-                    {
-                        flag = listBill.size();
-                        ArrayList<BillUnit> listBillUnit = new ArrayList<BillUnit>();
-                        stmt1 = conn.prepareStatement("Select * from productStock where Id = ?");
-                        stmt1.setString(1,String.valueOf(listBillId.get(i)));
-                        rs1 = stmt1.executeQuery();
-                        ProductStockInfoq stock = null;
-                        if (rs1.next())
-                        {
-                            stock = new ProductStockInfoq(rs1.getDate("LastestEXP"), rs1.getInt("Numstock"));
-                        }
-                        stmt1.close();
-                        stmt1 = conn.prepareStatement("Select * from typeproduct join product on product.TypeID = typeproduct.TypeID where Id = ?");
-                        stmt1.setString(1,String.valueOf(listBillId.get(i)));
-                        rs1 = stmt1.executeQuery();
-                        ProductType type = null;
-                        if (rs1.next())
-                            type = new ProductType(rs1.getString("TypeID"),rs1.getString("Name"));
-                        stmt1.close();
-                        stmt1 = conn.prepareStatement("Select * from promo where productID = ?");
-                        stmt1.setString(1,String.valueOf(listBillId.get(i)));
-                        rs1 = stmt1.executeQuery();
-                        Promotion promo = null;
-                        if (rs1.next())
-                            promo = new Promotion(rs1.getInt("ID"),rs1.getString("productID"),rs1.getInt("discount"),rs.getString("ProductName"));
-                        stmt1.close();
-                        listBillUnit.add(new BillUnit(new Product(new ProductInfo(rs.getString("Brand"),rs.getString("Productname"),rs.getString("ID"),rs.getInt("Price"),rs.getString("UrlImage")),stock,type,promo),rs.getInt("amount")));
-                        listBill.add(new Bill(listBillUnit,rs.getDate("BuyDate"),rs.getString("MembershipID"),rs.getString("BillID"),rs.getString("SellerID")));
-                    }
-                    else
-                    {
-                        ArrayList<BillUnit> listBillUnit = listBill.get(flag).getAllProductBill();
-                        stmt1 = conn.prepareStatement("Select * from productStock where TypeId = ?");
-                        stmt1.setString(1,String.valueOf(listBillId.get(i)));
-                        rs1 = stmt1.executeQuery();
-                        ProductStockInfoq stock = null;
-                        if (rs1.next())
-                        {
-                            stock = new ProductStockInfoq(rs1.getDate("LastestEXP"), rs1.getInt("Numstock"));
-                        }
-                        stmt1.close();
-                        stmt1 = conn.prepareStatement("Select * from typeproduct join product on product.TypeID = typeproduct.TypeID where Id = ?");
-                        stmt1.setString(1,String.valueOf(listBillId.get(i)));
-                        rs1 = stmt1.executeQuery();
-                        ProductType type = null;
-                        if (rs1.next())
-                            type = new ProductType(rs1.getString("TypeID"),rs1.getString("Name"));
-                        stmt1.close();
-                        stmt1 = conn.prepareStatement("Select * from promo where productID = ?");
-                        stmt1.setString(1,String.valueOf(listBillId.get(i)));
-                        rs1 = stmt1.executeQuery();
-                        Promotion promo = null;
-                        if (rs1.next())
-                            promo = new Promotion(rs1.getInt("ID"),rs1.getString("productID"),rs1.getInt("discount"),rs.getString("ProductName"));
-                        stmt1.close();
-                        listBillUnit.add(new BillUnit(new Product(new ProductInfo(rs.getString("Brand"),rs.getString("Productname"),rs.getString("ID"),rs.getInt("Price"),rs.getString("UrlImage")),stock,type,promo),rs.getInt("amount")));
-                        listBill.get(flag).setAllProductBill(listBillUnit);
-                    }
->>>>>>> parent of 885a81c... add more( chưa chạy dc ma up lên cho đỡ mất code)
                 }
                 listBill.add(new Bill(allBill, buyDate.get(i), memID.get(i), listBillId.get(i), seller.get(i)));
             }
         }catch (SQLException e)
         {
             e.printStackTrace();
-<<<<<<< HEAD
             return null;
-=======
->>>>>>> parent of 885a81c... add more( chưa chạy dc ma up lên cho đỡ mất code)
         }finally{
             try {
                 if (stmt != null)
@@ -860,11 +771,6 @@ public class controller
         }
         return listBill;
     }
-<<<<<<< HEAD
-
-=======
-  
->>>>>>> parent of 885a81c... add more( chưa chạy dc ma up lên cho đỡ mất code)
     public static int getNumTypeProduct(Connection conn){
         PreparedStatement stmt=null;
         ResultSet rs = null;

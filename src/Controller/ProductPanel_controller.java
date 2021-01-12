@@ -8,11 +8,12 @@ import javax.swing.event.ListSelectionListener;
 
 import GUI.MainScreen.MainScreen;
 import GUI.MainScreen.ProductPanel;
-import Model.Product.Product;
+import Model.Product.*;
+import Model.Other.*;
 import Model.Product.Warehouse;
 import java.awt.event.*;
 
-public class ProductPanel_controller implements KeyListener, ListSelectionListener {
+public class ProductPanel_controller implements ActionListener, KeyListener, ListSelectionListener {
     ProductPanel productPanel;
     MainScreen mainScreen;
 
@@ -68,17 +69,14 @@ public class ProductPanel_controller implements KeyListener, ListSelectionListen
             }
             this.productPanel.mainScreen.setup_productDetailPanel(p);
     }
-<<<<<<< HEAD
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getActionCommand().compareTo("Add") == 0){
             ProductType pt = Warehouse.getAllProductType().get(0);
             Product p = new Product(new ProductInfo(this.productPanel.newbarCodeField.getText()), new ProductStockInfoq(), pt, new Promotion(this.productPanel.newbarCodeField.getText()));
-            Warehouse.addProduct(this.productPanel.newbarCodeField.getText(),"", "", "0", "", pt.getTypeID());
+            Warehouse.addProduct(this.productPanel.newbarCodeField.getText(),"", "", "0", pt.getTypeID());
             productPanel.mainScreen.setup_productDetailPanel(p);
         }
     }
-=======
->>>>>>> parent of 885a81c... add more( chưa chạy dc ma up lên cho đỡ mất code)
 }
