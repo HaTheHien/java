@@ -264,7 +264,6 @@ public class POSPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(18, 76, 10, 0);
         cast_Panel.add(jLabel5, gridBagConstraints);
         
-        membership_Field.setText("jTextField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;

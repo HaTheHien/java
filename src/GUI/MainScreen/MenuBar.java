@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import GUI.GUI_Utility.*;
+import Model.User.Staff;
 
 public class MenuBar extends JPanel {
     MainScreen mainScreen;
@@ -15,9 +16,9 @@ public class MenuBar extends JPanel {
     JLabel promotion_label = new JLabel("Khuyến mại");
     JLabel membership_label = new JLabel("Khách hàng");
     JLabel bill_label = new JLabel("Danh sách hoá đơn");
-    JLabel staff_label = new JLabel("Nhân viên");
+    public JLabel staff_label = new JLabel("Nhân viên");
 
-    public MenuBar(Dimension size, MainScreen mainScreen) {
+    public MenuBar(Dimension size, MainScreen mainScreen,Staff staff) {
         this.mainScreen = mainScreen;
         setSize(size);
         setLayout(new GridBagLayout());
@@ -56,6 +57,12 @@ public class MenuBar extends JPanel {
                 GridBagConstraints.HORIZONTAL);
         Utility.addComponent(this, staff_label, layoutConstraints, 0, 7, 1, 1, GridBagConstraints.CENTER, 0, 5, 1, 1,
                 GridBagConstraints.HORIZONTAL);
+
+        if( staff == null || staff.getType().compareTo("Admin")!=0){
+            this.staff_label.setVisible(false);
+        }
+
+
         this.product_label.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 mainScreen.setup_productPanel();

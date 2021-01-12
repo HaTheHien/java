@@ -7,7 +7,7 @@ public class Staff {
     private Date dob;
     private String address;
     private String type;
-    private String permission;
+    private String password;
 
     public static Staff getStaff(ResultSet rs) {
         Staff s = null;
@@ -18,8 +18,8 @@ public class Staff {
                 s.fullname = rs.getString("Fullname");
                 s.dob = rs.getDate("DoB");
                 s.address = rs.getString("Addr");
+                s.password = rs.getString("Pass");
                 s.type = rs.getString("Type");
-                s.permission = rs.getString("Type");
             }
         }catch(SQLException e){
             e.printStackTrace();
@@ -68,12 +68,13 @@ public class Staff {
         return dob;
     }
 
-    public String getPermission() {
-        return permission;
+
+    public String getPassword() {
+        return password;
     }
 
-    public void setPermission(String permission) {
-        this.permission = permission;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 

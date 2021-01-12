@@ -131,6 +131,11 @@ public class POSPanel_controller implements KeyListener, ActionListener  {
             int index = this.posPanel.billunit_table.getSelectedRow();
             this.posPanel.tableModel.removeRow(index);
             this.posPanel.posBill.getAllProductBill().remove(index);
+            Long total = posPanel.posBill.getTotalPriceWithDiscount();
+            Long finaltotal = posPanel.posBill.getTotalPriceWithoutDiscount();
+            posPanel.total_Field.setText(total.toString());
+            posPanel.finaltotal_Field.setText(finaltotal.toString());
+
         }
         if(e.getActionCommand().compareTo("Paid") == 0){
 

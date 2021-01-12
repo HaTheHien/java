@@ -80,6 +80,5 @@ public class ProductPanel_controller implements KeyListener, ListSelectionListen
             Warehouse.addProduct(this.productPanel.newbarCodeField.getText(),"", "", "0", "", pt.getTypeID());
             productPanel.mainScreen.setup_productDetailPanel(p);
         }
-
     }
 }

@@ -40,7 +40,7 @@ public class MainScreen {
     }
     
     public void setup_menuPanel(){
-        menuPanel =  new MenuBar(new Dimension(screenSize.width*2/10,screenSize.height - naviPanel.getHeight()),this);
+        menuPanel =  new MenuBar(new Dimension(screenSize.width*2/10,screenSize.height - naviPanel.getHeight()),this,staff);
     }
     
     public void setup_homePanel(){
@@ -126,7 +126,15 @@ public class MainScreen {
         mainFrame.revalidate();
         mainFrame.repaint();
     }
+    public void setup_staffDetailPanel(Staff s){
+        mainFrame.remove(this.centerPanel);
+        centerPanel = new StaffDetailPanel(new Dimension(screenSize.width*8/10,screenSize.height - naviPanel.getHeight()),this,s);
+        Utility.addComponent(mainFrame, centerPanel, new GridBagConstraints(), 2, 1, 8, 19,GridBagConstraints.PAGE_START,0,0,8,19,GridBagConstraints.BOTH);
+        mainFrame.revalidate();
+        mainFrame.repaint();
+    }
     public MainScreen(Staff staff) {
+        this.staff = staff;
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         screenSize.setSize(screenSize.getWidth()/1.2, screenSize.getHeight()/1.2);
@@ -143,9 +151,11 @@ public class MainScreen {
         mainFrame.pack();
         mainFrame.setVisible(true);
 
-        this.staff = staff;
+       
+        
 
         username.setText(this.staff.getFullname());
+
 
     }
 

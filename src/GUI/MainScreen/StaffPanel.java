@@ -2,7 +2,6 @@ package GUI.MainScreen;
 
 import java.util.ArrayList;
 
-import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
 
 import Controller.StaffPanel_controller;
 import Model.User.Staff;
@@ -22,7 +21,7 @@ public class StaffPanel extends javax.swing.JPanel {
     /**
      *
      */
-    private static final long serialVersionUID = 1L;
+    public static final long serialVersionUID = 1L;
 
     /**
      * Creates new form staff
@@ -44,7 +43,7 @@ public class StaffPanel extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
-    private void initComponents() {
+    public void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
         staffl_ScrollPanel = new javax.swing.JScrollPane();
@@ -81,13 +80,16 @@ public class StaffPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(11, 10, 0, 10);
         add(jLabel1, gridBagConstraints);
+        staffPanel_controller = new StaffPanel_controller(this);
+        staff_table.getSelectionModel().addListSelectionListener(staffPanel_controller);
+
     }// </editor-fold>                        
 
 
     // Variables declaration - do not modify                     
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JTable staff_table;
-    private javax.swing.JScrollPane staffl_ScrollPanel;
+    public javax.swing.JLabel jLabel1;
+    public javax.swing.JTable staff_table;
+    public javax.swing.JScrollPane staffl_ScrollPanel;
     public javax.swing.table.DefaultTableModel tableModel = new javax.swing.table.DefaultTableModel(
         new Object [][] {
 

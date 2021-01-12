@@ -316,7 +316,7 @@ public class controller {
         ResultSet rs = null;
         Staff temp = new Staff();
         try {
-            stmt = conn.prepareCall("{CALL takeAccount(?)}");
+            stmt = conn.prepareCall("select * from account where Id = ?");
             stmt.setString(1, staffID);
             rs = stmt.executeQuery();
             Staff a = new Staff();
@@ -340,7 +340,7 @@ public class controller {
         ResultSet rs = null;
         ArrayList<Staff> list = new ArrayList<Staff>();
         try {
-            stmt = conn.prepareCall("{CALL getAllAccount()}");
+            stmt = conn.prepareCall("SELECT * FROM quanlycuahang.account");
             rs = stmt.executeQuery();
             Staff a = new Staff();
             while (true) {
