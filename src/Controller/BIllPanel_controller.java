@@ -37,7 +37,6 @@ public class BillPanel_controller implements ActionListener, ListSelectionListen
                 }
             }
         }
-
     }
 
     @Override
@@ -54,3 +53,4 @@ public class BillPanel_controller implements ActionListener, ListSelectionListen
         this.billPanel.mainScreen.setup_billdetailPanel(b);
     }
 }
+    
