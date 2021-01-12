@@ -5,7 +5,7 @@ import javax.swing.*;
 import GUI.Login.*;
 import Model.*;
 import Model.User.*;
-
+import GUI.MainScreen.*;
 
 
 public class Login_controller implements ActionListener {
@@ -27,6 +27,14 @@ public class Login_controller implements ActionListener {
             }
             else{
                 System.out.println(s.getId());
+                this.loginScreen.mainFrame.setVisible(false);  
+                this.loginScreen.mainFrame.dispose(); 
+                SwingUtilities.invokeLater(new Runnable() {
+
+                    public void run() {
+                        new MainScreen(s);
+                    }
+                });
             }
         }
     }

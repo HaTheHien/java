@@ -11,11 +11,11 @@ public class Login_screen{
     Connection conn = null;
     int size_x = 750;
     int size_y = 600;
-    JFrame mainFrame = new JFrame();
-    JPanel mainPanel = new JPanel();
+    public JFrame mainFrame = new JFrame();
+    public JPanel mainPanel = new JPanel();
 
-    JPanel loginImg_Panel = new JPanel();
-    JPanel loginInput_Panel = new JPanel();
+    public JPanel loginImg_Panel = new JPanel();
+    public JPanel loginInput_Panel = new JPanel();
 
     public JTextField username_Field = new JTextField();
     public JPasswordField password_Field = new JPasswordField();
