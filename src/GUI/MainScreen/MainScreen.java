@@ -28,7 +28,7 @@ public class MainScreen {
  
     private void setup_naviPanel() {
         naviPanel.setPreferredSize(new Dimension(screenSize.width,screenSize.height/20));
-        naviPanel.setBackground(new Color(255,165,165));
+        naviPanel.setBackground(Color.GRAY);
         naviPanel.setLayout(new GridBagLayout());
     
         GridBagConstraints consLayout = new GridBagConstraints();

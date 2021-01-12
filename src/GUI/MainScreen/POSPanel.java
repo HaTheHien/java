@@ -276,7 +276,7 @@ public class POSPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 80);
         cast_Panel.add(membership_Field, gridBagConstraints);
 
-        finaltotal_Field.setText("");
+        finaltotal_Field.setText("jTextField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
@@ -289,7 +289,7 @@ public class POSPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 80);
         cast_Panel.add(finaltotal_Field, gridBagConstraints);
 
-        total_Field.setText("");
+        total_Field.setText("jTextField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
@@ -302,7 +302,7 @@ public class POSPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 80);
         cast_Panel.add(total_Field, gridBagConstraints);
 
-        coupon_Field.setText("");
+        coupon_Field.setText("jTextField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;

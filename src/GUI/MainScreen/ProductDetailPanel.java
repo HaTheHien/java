@@ -387,7 +387,7 @@ public class ProductDetailPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(11, 4, 0, 0);
         jPanel2.add(jLabel1, gridBagConstraints);
 
-        jTextField1.setText("");
+        jTextField1.setText("jTextField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;

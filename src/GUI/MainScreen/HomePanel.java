@@ -127,7 +127,7 @@ public class HomePanel extends JPanel {
 
         setup_activityPanel();
         setup_stockPanel();
-        //product_panel();
+        product_panel();
         GridBagConstraints lc = new GridBagConstraints();
         Utility.addComponent(this, revenue_label, lc, 0, 0, 5, 2, GridBagConstraints.CENTER, 0, 0, 5, 2,
                 GridBagConstraints.NONE);

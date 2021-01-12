@@ -35,21 +35,12 @@ public class MenuBar extends JPanel {
         membership_label.setPreferredSize(new Dimension(size.width, size.height / 10));
         bill_label.setPreferredSize(new Dimension(size.width, size.height / 10));
 
-
         home_label.setBorder(BorderFactory.createLineBorder(Color.black));
         pos_label.setBorder(BorderFactory.createLineBorder(Color.black));
         product_label.setBorder(BorderFactory.createLineBorder(Color.black));
         promotion_label.setBorder(BorderFactory.createLineBorder(Color.black));
         membership_label.setBorder(BorderFactory.createLineBorder(Color.black));
         bill_label.setBorder(BorderFactory.createLineBorder(Color.black));
-
-        home_label.setBackground(new Color(252,218,218));
-        pos_label.setBackground(new Color(252,218,218));
-        product_label.setBackground(new Color(252,218,218));
-        promotion_label.setBackground(new Color(252,218,218));
-        bill_label.setBackground(new Color(252,218,218));
-        staff_label.setBackground(new Color(252,218,218));
-
 
         Utility.addComponent(this, home_label, layoutConstraints, 0, 0, 1, 1, GridBagConstraints.CENTER, 0, 5, 1, 1,
                 GridBagConstraints.HORIZONTAL);
