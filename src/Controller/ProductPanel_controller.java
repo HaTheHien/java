@@ -5,17 +5,14 @@ import java.util.ArrayList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+
 import GUI.MainScreen.MainScreen;
 import GUI.MainScreen.ProductPanel;
-import Model.Other.Promotion;
 import Model.Product.Product;
-import Model.Product.ProductInfo;
-import Model.Product.ProductStockInfoq;
-import Model.Product.ProductType;
 import Model.Product.Warehouse;
 import java.awt.event.*;
 
-public class ProductPanel_controller implements KeyListener, ListSelectionListener,ActionListener {
+public class ProductPanel_controller implements KeyListener, ListSelectionListener {
     ProductPanel productPanel;
     MainScreen mainScreen;
 
@@ -71,6 +68,7 @@ public class ProductPanel_controller implements KeyListener, ListSelectionListen
             }
             this.productPanel.mainScreen.setup_productDetailPanel(p);
     }
+<<<<<<< HEAD
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -81,4 +79,6 @@ public class ProductPanel_controller implements KeyListener, ListSelectionListen
             productPanel.mainScreen.setup_productDetailPanel(p);
         }
     }
+=======
+>>>>>>> parent of 885a81c... add more( chưa chạy dc ma up lên cho đỡ mất code)
 }

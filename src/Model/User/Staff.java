@@ -7,7 +7,10 @@ public class Staff {
     private Date dob;
     private String address;
     private String type;
+<<<<<<< HEAD
     private String password;
+=======
+>>>>>>> parent of 885a81c... add more( chưa chạy dc ma up lên cho đỡ mất code)
 
     public static Staff getStaff(ResultSet rs) {
         Staff s = null;
@@ -67,6 +70,7 @@ public class Staff {
     public Date getDob() {
         return dob;
     }
+<<<<<<< HEAD
 
 
     public String getPassword() {
@@ -78,6 +82,8 @@ public class Staff {
     }
 
 
+=======
+>>>>>>> parent of 885a81c... add more( chưa chạy dc ma up lên cho đỡ mất code)
     
 
 }

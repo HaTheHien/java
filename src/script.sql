@@ -1,4 +1,4 @@
-﻿DROP DATABASE IF EXISTS quanlycuahang;
+
 create database quanlycuahang;
 use quanlycuahang;
 
@@ -441,6 +441,7 @@ BEGIN
     SET lastestEXP = EXP 
     WHERE id = idProduct;
 END$$
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE quanlycuahang.updateStock(idProduct NVARCHAR(100), 
@@ -452,6 +453,7 @@ BEGIN
     SET numstock = count, lastestExp = exp
     WHERE id = idProduct;
 END$$
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE quanlycuahang.updateProduct(idProduct NVARCHAR(100), 
@@ -481,23 +483,30 @@ BEGIN
     Call updateStock(idProduct, new_stock, new_exp);
     Call updatePromo(idProduct, new_discount);
 END$$
+DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE quanlycuahang.addProduct(new_prodName NVARCHAR(100),
+CREATE PROCEDURE quanlycuahang.addProduct(new_id varchar(30),
+						new_prodName NVARCHAR(100),
                         new_brand NVARCHAR(100),
                         new_price int,
                         new_url NVARCHAR(100),
                         new_typeID NVARCHAR(100))
 BEGIN
-	declare id int;
-	SELECT count(*) + 1 into id from productinfo;
-    
-    insert into productinfo(id, brand, ProductName, Price, urlImage) 
-    values(id, new_brand, new_prodName,new_price,new_url);
-    
     insert into product(id, typeID) 
-    values(id, new_typeID);
+    values(new_id, new_typeID);
+    insert into productinfo(id, brand, ProductName, Price, urlImage) 
+    values(new_id, new_brand, new_prodName,new_price,new_url);
+    INSERT INTO `quanlycuahang`.`productstock`
+									(`Id`,
+									`LastestEXP`,
+									`Numstock`)
+									VALUES(
+									new_id,
+									CURDATE(),
+									0);
 END$$
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE quanlycuahang.addBill(ID NVARCHAR(100),
@@ -508,6 +517,7 @@ BEGIN
 	Insert into Bill(BillID, BuyDate, MembershipID, SellerID)
     Values(ID, new_date, membershipID, sellerID);
 END$$
+DELIMITER ;
 
 
 DELIMITER $$
@@ -520,6 +530,7 @@ BEGIN
     
     Update productstock SET numStock = numStock - amount WHERE id = idProduct; 
 END$$
+DELIMITER ;
 
 DELIMITER $$
 CREATE PROCEDURE GetAllProductOfAType(id NVARCHAR(100))
@@ -542,8 +553,8 @@ Begin
         left join quanlycuahang.typeproduct on quanlycuahang.typeproduct.typeID = quanlycuahang.product.TypeID
 	WHERE product.typeID = id;
 End$$
+DELIMITER ;
 
-drop procedure SearchProductByNameAndtype;
 DELIMITER  $$
 CREATE PROCEDURE SearchProductByNameAndType(idProduct NVARCHAR(100), idType NVARCHAR(100))
 Begin
@@ -568,3 +579,59 @@ Begin
         left join quanlycuahang.typeproduct on quanlycuahang.typeproduct.typeID = quanlycuahang.product.TypeID
 	WHERE quanlycuahang.productinfo.ProductName LIKE temp AND quanlycuahang.product.typeID = idType;
 End$$
+DELIMITER ;
+
+DELIMITER $$
+create procedure quanlycuahang.removeProduct(id varchar(30))
+BEGIN
+	DECLARE done INT DEFAULT FALSE;
+	DECLARE billIdDelete varchar(30) DEFAULT "";
+	DECLARE cur1 CURSOR FOR SELECT bill.BillID FROM bill join billunit on bill.BillID = billunit.BillID where billunit.ProductID = id;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    SET SQL_SAFE_UPDATES = 0;
+	open cur1;
+	getBill: LOOP
+		FETCH cur1 INTO billIdDelete;
+        if (billIdDelete IS NULL OR billIdDelete = '') THEN
+			LEAVE getBill;
+        END IF;
+        SELECT billIdDelete;
+        IF done THEN
+		  LEAVE getBill;
+		END IF;
+		delete from billunit where billunit.BillID = billIdDelete;
+		delete from bill where BillID =  billIdDelete;
+	END LOOP getBill;
+	delete from productinfo where Id = id;
+    delete from productstock where Id = id;
+	delete from promo where ProductID = id;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAllPromosWithName`()
+Begin
+	SELECT * FROM quanlycuahang.promo JOIN quanlycuahang.productinfo on quanlycuahang.promo.productID = quanlycuahang.productinfo.id;
+End$$
+DELIMITER ;
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAllProductsDetails`()
+Begin
+	SELECT quanlycuahang.productinfo.ID AS ID,
+            quanlycuahang.productinfo.Brand AS brand, 
+            quanlycuahang.productinfo.ProductName AS productName,
+            quanlycuahang.productinfo.Price AS price,
+            quanlycuahang.productinfo.UrlImage AS urlImage,
+			quanlycuahang.typeproduct.TypeID AS typeID,
+			quanlycuahang.typeproduct.Name AS typeName,
+            quanlycuahang.productstock.Numstock AS numStock,
+            quanlycuahang.productstock.LastestEXP AS lastestEXP,
+            quanlycuahang.promo.ID AS idPromo,
+            quanlycuahang.promo.discount AS discount
+	FROM quanlycuahang.productinfo
+		left join quanlycuahang.productstock on quanlycuahang.productinfo.Id = quanlycuahang.productstock.Id
+		left join quanlycuahang.promo on quanlycuahang.productinfo.ID = quanlycuahang.promo.productID
+        left join quanlycuahang.product on quanlycuahang.productinfo.Id = quanlycuahang.product.Id
+        left join quanlycuahang.typeproduct on quanlycuahang.typeproduct.typeID = quanlycuahang.product.TypeID;
+End$$
+DELIMITER ;

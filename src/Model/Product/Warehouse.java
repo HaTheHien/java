@@ -357,20 +357,19 @@ public class Warehouse {
 		}
 		return true;	
 	}
-	public static boolean addProduct(String new_id,String new_prodName,String new_brand,
+	public static boolean addProduct(String new_prodName, String new_brand,
 						String new_price, String new_url,
 						String new_typeID)
 	{
 		PreparedStatement stmt = null;
-		String sql = "CALL `quanlycuahang`.`addProduct`(?, ?, ?, ?, ?,?);";
+		String sql = "CALL `quanlycuahang`.`addProduct`(?, ?, ?, ?, ?);";
 		try {
 			stmt = Model.conn.prepareStatement(sql);
-			stmt.setString(1, new_id);
-			stmt.setString(2, new_prodName);
-			stmt.setString(3, new_brand);
-			stmt.setInt(4, Integer.parseInt(new_price));
-			stmt.setString(5, new_url);
-			stmt.setString(6, new_typeID);
+			stmt.setString(1, new_prodName);
+			stmt.setString(2, new_brand);
+			stmt.setInt(3, Integer.parseInt(new_price));
+			stmt.setString(4, new_url);
+			stmt.setString(5, new_typeID);
 
 			stmt.executeQuery();
 		} catch (SQLException e) {

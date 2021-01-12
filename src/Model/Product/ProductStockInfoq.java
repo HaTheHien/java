@@ -9,8 +9,6 @@ public class ProductStockInfoq {
 
 	//constructor
 	public ProductStockInfoq() {
-		this.numStock = 0;
-		this.lastestEXP = new Date(0);
 	}
 	public ProductStockInfoq(Date lastest, Integer num)
 	{

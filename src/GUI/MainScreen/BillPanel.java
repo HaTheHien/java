@@ -2,7 +2,7 @@ package GUI.MainScreen;
 
 import java.util.ArrayList;
 
-import Controller.BillPanel_controller;
+import Controller.BIllPanel_controller;
 import Model.Bill.Bill;
 
 /*
@@ -20,7 +20,7 @@ public class BillPanel extends javax.swing.JPanel {
     /**
      * Creates new form Bill
      */
-    public  MainScreen mainScreen;
+    MainScreen mainScreen;
     public ArrayList<Bill> listBill;
     
     // Variables declaration - do not modify                     
@@ -31,7 +31,7 @@ public class BillPanel extends javax.swing.JPanel {
     public javax.swing.JLabel promotionLabel;
     public javax.swing.JTextField startDate;
     public javax.swing.table.DefaultTableModel tableModel;
-    public BillPanel_controller billpanel_controller;
+    public BIllPanel_controller billpanel_controller;
     public javax.swing.JButton filterBtn;
     // End of variables declaration         
     public BillPanel(java.awt.Dimension size,MainScreen mainScreen) {
@@ -141,10 +141,17 @@ public class BillPanel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
         add(jPanel1, gridBagConstraints);
-        billpanel_controller = new BillPanel_controller(this);
-        billTable.getSelectionModel().addListSelectionListener(billpanel_controller);
+        billpanel_controller = new BIllPanel_controller(this);
         filterBtn.addActionListener(this.billpanel_controller);
     }// </editor-fold>                        
+
+    private void startDateActionPerformed(java.awt.event.ActionEvent evt) {                                          
+        // TODO add your handling code here:
+    }                                         
+
+    private void endDateActionPerformed(java.awt.event.ActionEvent evt) {                                        
+        // TODO add your handling code here:
+    }                                       
 
           
 }

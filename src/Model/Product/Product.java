@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import Controller.controller;
 import Model.Model;
 import Model.Other.Promotion;
 
@@ -16,7 +15,8 @@ public class Product {
 	private String urlImgString;
 
 	public Product() {
-
+		// TODO - implement Product.Product
+		throw new UnsupportedOperationException();
 	}
 
 	public Product(ProductInfo inf, ProductStockInfoq stock,ProductType productype,Promotion promotion)
@@ -90,15 +90,6 @@ public class Product {
 			stmt.setString(8, this.urlImgString);
 			stmt.setString(9, this.productype.getTypeID());
 			int res = stmt.executeUpdate();
-			if(this.promotion.getPromoDiscount() > 0){
-				sql = "CALL `quanlycuahang`.`InsertPromo`(?,?)";
-					
-				stmt = Model.conn.prepareStatement(sql);
-				stmt.setLong(1, this.promotion.getPromoDiscount());
-				stmt.setString(2,  this.info.getCodeBar());
-				res = stmt.executeUpdate();
-			}
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
@@ -125,33 +116,6 @@ public class Product {
 			stmt.setInt(2, this.stockInfo.getNumStock());
 			stmt.setDate(3, this.stockInfo.getLastestEXP());
 			stmt.executeQuery();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		} finally {
-			try {
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException e) {	
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return true;
-	}
-	public static boolean removeProduct(String idProduct)
-	{
-		PreparedStatement stmt = null;
-		String sql = "CALL quanlycuahang.`removeProduct`(?);";
-		String sql2 = "Delete from product where Id = ?";
-		try {
-			stmt = Model.conn.prepareStatement(sql);
-			stmt.setString(1, idProduct);
-			stmt.execute();
-			stmt.close();
-			stmt = Model.conn.prepareStatement(sql2);
-			stmt.setString(1, idProduct);
-			stmt.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;

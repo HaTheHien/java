@@ -16,7 +16,10 @@ public class MenuBar extends JPanel {
     JLabel promotion_label = new JLabel("Khuyến mại");
     JLabel membership_label = new JLabel("Khách hàng");
     JLabel bill_label = new JLabel("Danh sách hoá đơn");
+<<<<<<< HEAD
     public JLabel staff_label = new JLabel("Nhân viên");
+=======
+>>>>>>> parent of 885a81c... add more( chưa chạy dc ma up lên cho đỡ mất code)
 
     public MenuBar(Dimension size, MainScreen mainScreen,Staff staff) {
         this.mainScreen = mainScreen;
@@ -31,7 +34,6 @@ public class MenuBar extends JPanel {
         promotion_label.setPreferredSize(new Dimension(size.width, size.height / 10));
         membership_label.setPreferredSize(new Dimension(size.width, size.height / 10));
         bill_label.setPreferredSize(new Dimension(size.width, size.height / 10));
-        staff_label.setPreferredSize(new Dimension(size.width, size.height / 10));
 
 
         home_label.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -40,7 +42,6 @@ public class MenuBar extends JPanel {
         promotion_label.setBorder(BorderFactory.createLineBorder(Color.black));
         membership_label.setBorder(BorderFactory.createLineBorder(Color.black));
         bill_label.setBorder(BorderFactory.createLineBorder(Color.black));
-        staff_label.setBorder(BorderFactory.createLineBorder(Color.black));
 
         home_label.setBackground(new Color(252,218,218));
         pos_label.setBackground(new Color(252,218,218));
@@ -64,6 +65,7 @@ public class MenuBar extends JPanel {
                 1, GridBagConstraints.HORIZONTAL);
         Utility.addComponent(this, bill_label, layoutConstraints, 0, 6, 1, 1, GridBagConstraints.CENTER, 0, 5, 1, 1,
                 GridBagConstraints.HORIZONTAL);
+<<<<<<< HEAD
         Utility.addComponent(this, staff_label, layoutConstraints, 0, 7, 1, 1, GridBagConstraints.CENTER, 0, 5, 1, 1,
                 GridBagConstraints.HORIZONTAL);
 
@@ -72,6 +74,8 @@ public class MenuBar extends JPanel {
         }
 
 
+=======
+>>>>>>> parent of 885a81c... add more( chưa chạy dc ma up lên cho đỡ mất code)
         this.product_label.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 mainScreen.setup_productPanel();
@@ -100,11 +104,6 @@ public class MenuBar extends JPanel {
         this.bill_label.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 mainScreen.setup_billPanel();
-            }
-        });
-        this.staff_label.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                mainScreen.setup_staffPanel();
             }
         });
     }

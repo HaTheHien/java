@@ -3,7 +3,6 @@ package Controller;
 import java.awt.event.*;
 import javax.swing.*;
 import GUI.Login.*;
-import GUI.MainScreen.MainScreen;
 import Model.*;
 import Model.User.*;
 
@@ -27,14 +26,7 @@ public class Login_controller implements ActionListener {
                 System.out.println("Login fail");
             }
             else{
-                this.loginScreen.mainFrame.setVisible(false);  
-                this.loginScreen.mainFrame.dispose(); 
-                SwingUtilities.invokeLater(new Runnable() {
-
-                    public void run() {
-                        new MainScreen(s);
-                    }
-                });
+                System.out.println(s.getId());
             }
         }
     }

@@ -462,11 +462,9 @@ public class ProductDetailPanel extends javax.swing.JPanel {
 
         
         //Create controller and binding UI to controller
-        productPanelDetail_controller =  new ProductDetailPanel_controller(this,this.mainScreen,false);
+        productPanelDetail_controller =  new ProductDetailPanel_controller(this,this.mainScreen);
         updataProduct_Btn.setActionCommand("update");
         updataProduct_Btn.addActionListener(this.productPanelDetail_controller);
-        delProduct_Btn.setActionCommand("delete");
-        delProduct_Btn.addActionListener(this.productPanelDetail_controller);
     }// </editor-fold>x
 
 

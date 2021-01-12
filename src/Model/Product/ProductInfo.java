@@ -22,14 +22,8 @@ public class ProductInfo {
 		price = price_;
 		URLImage= URLimage;
 	}
-	public ProductInfo(String codeBar){
-		this.brand = "";
-		this.productName = "";
-		this.codeBar = codeBar;
-		this.URLImage = "";
-	}
 	public ProductInfo(){
-
+		
 	}
 	public String getBrand() {
 		return this.brand;
