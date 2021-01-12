@@ -22,6 +22,7 @@ public class ProductType {
 		this.typeID=b.getTypeID();
 	}
 	public ProductType() {
+
 	}
 
 

@@ -4,8 +4,10 @@ public class Promotion {
 	public String productID;
 	public int promoDiscount;
 	public String productName;
+	public Promotion(String codebar){
+		this.productID = codebar;
+	}
 	public Promotion(){
-
 	}
 	public Promotion(int id,String product_id,int Discount, String productName_)
 	{

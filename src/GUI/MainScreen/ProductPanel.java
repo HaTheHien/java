@@ -26,6 +26,7 @@ public class ProductPanel extends JPanel {
     public JTable productTable;
     public JScrollPane productsPanel;
     public DefaultTableModel tableModel;
+    public JButton addProduct_Btn;
     ProductPanel_controller productPanel_controller;
     // End of variables declaration
     /**
@@ -51,7 +52,7 @@ public class ProductPanel extends JPanel {
         productTable = new JTable();
         searchField = new JTextField();
         newbarCodeField = new JTextField();
-
+        addProduct_Btn = new JButton("Add product..");
         setLayout(new java.awt.GridBagLayout());
 
         tableModel = new DefaultTableModel(new Object[][] {},
@@ -78,7 +79,7 @@ public class ProductPanel extends JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         // gridBagConstraints.ipadx = 571;
         // gridBagConstraints.ipady = 329;
@@ -112,12 +113,26 @@ public class ProductPanel extends JPanel {
         gridBagConstraints.insets = new java.awt.Insets(19, 6, 0, 10);
         add(newbarCodeField, gridBagConstraints);
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.NONE;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(19, 6, 0, 10);
+        add(addProduct_Btn, gridBagConstraints);
+
         //Create controller and binding UI to controller
         productPanel_controller =  new ProductPanel_controller(this,this.mainScreen);
         searchField.addKeyListener(productPanel_controller);
         newbarCodeField.addKeyListener(productPanel_controller);
 
         productTable.getSelectionModel().addListSelectionListener(productPanel_controller);
+        newbarCodeField.addKeyListener(productPanel_controller);
+
+        addProduct_Btn.setActionCommand("Add");
+        addProduct_Btn.addActionListener(this.productPanel_controller);
     }// </editor-fold>
     
 }

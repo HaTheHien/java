@@ -5,14 +5,17 @@ import java.util.ArrayList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-
 import GUI.MainScreen.MainScreen;
 import GUI.MainScreen.ProductPanel;
+import Model.Other.Promotion;
 import Model.Product.Product;
+import Model.Product.ProductInfo;
+import Model.Product.ProductStockInfoq;
+import Model.Product.ProductType;
 import Model.Product.Warehouse;
 import java.awt.event.*;
 
-public class ProductPanel_controller implements KeyListener, ListSelectionListener {
+public class ProductPanel_controller implements KeyListener, ListSelectionListener,ActionListener {
     ProductPanel productPanel;
     MainScreen mainScreen;
 
@@ -67,5 +70,16 @@ public class ProductPanel_controller implements KeyListener, ListSelectionListen
                 return;
             }
             this.productPanel.mainScreen.setup_productDetailPanel(p);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getActionCommand().compareTo("Add") == 0){
+            ProductType pt = Warehouse.getAllProductType().get(0);
+            Product p = new Product(new ProductInfo(this.productPanel.newbarCodeField.getText()), new ProductStockInfoq(), pt, new Promotion(this.productPanel.newbarCodeField.getText()));
+            Warehouse.addProduct(this.productPanel.newbarCodeField.getText(),"", "", "0", "", pt.getTypeID());
+            productPanel.mainScreen.setup_productDetailPanel(p);
+        }
+
     }
 }

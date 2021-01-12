@@ -2,6 +2,8 @@ package GUI.MainScreen;
 
 import GUI.GUI_Utility.*;
 import Model.Model;
+import Model.Bill.Bill;
+import Model.Other.Membership;
 import Model.Product.Product;
 import Model.Product.Warehouse;
 import Model.User.Staff;
@@ -93,9 +95,33 @@ public class MainScreen {
         mainFrame.repaint();
     }
 
+    public void setup_MemberDetailPanel(Membership m){
+        mainFrame.remove(this.centerPanel);
+        centerPanel = new MembershipDetail_Panel(new Dimension(screenSize.width*8/10,screenSize.height - naviPanel.getHeight()),this,m);
+        Utility.addComponent(mainFrame, centerPanel, new GridBagConstraints(), 2, 1, 8, 19,GridBagConstraints.PAGE_START,0,0,8,19,GridBagConstraints.BOTH);
+        mainFrame.revalidate();
+        mainFrame.repaint();
+    }
+
     public void setup_billPanel(){
         mainFrame.remove(this.centerPanel);
         centerPanel = new BillPanel(new Dimension(screenSize.width*8/10,screenSize.height - naviPanel.getHeight()),this);
+        Utility.addComponent(mainFrame, centerPanel, new GridBagConstraints(), 2, 1, 8, 19,GridBagConstraints.PAGE_START,0,0,8,19,GridBagConstraints.BOTH);
+        mainFrame.revalidate();
+        mainFrame.repaint();
+    }
+
+    
+    public void setup_billdetailPanel(Bill b){
+        mainFrame.remove(this.centerPanel);
+        centerPanel = new BilldetailPanel(new Dimension(screenSize.width*8/10,screenSize.height - naviPanel.getHeight()),this,b);
+        Utility.addComponent(mainFrame, centerPanel, new GridBagConstraints(), 2, 1, 8, 19,GridBagConstraints.PAGE_START,0,0,8,19,GridBagConstraints.BOTH);
+        mainFrame.revalidate();
+        mainFrame.repaint();
+    }
+    public void setup_staffPanel(){
+        mainFrame.remove(this.centerPanel);
+        centerPanel = new StaffPanel(new Dimension(screenSize.width*8/10,screenSize.height - naviPanel.getHeight()),this);
         Utility.addComponent(mainFrame, centerPanel, new GridBagConstraints(), 2, 1, 8, 19,GridBagConstraints.PAGE_START,0,0,8,19,GridBagConstraints.BOTH);
         mainFrame.revalidate();
         mainFrame.repaint();
@@ -118,6 +144,8 @@ public class MainScreen {
         mainFrame.setVisible(true);
 
         this.staff = staff;
+
+        username.setText(this.staff.getFullname());
 
     }
 

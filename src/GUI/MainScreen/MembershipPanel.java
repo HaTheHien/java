@@ -18,12 +18,12 @@ import Model.Other.Membership;
 public class MembershipPanel extends javax.swing.JPanel {
 
     public javax.swing.table.DefaultTableModel tableModel;
-
+    public MembershipPanel_controller membershipPanel_controller;
     /**
      * Creates new form MembershipPanel
      * @return 
      */
-    MainScreen mainScreen;
+    public MainScreen mainScreen;
     public MembershipPanel(java.awt.Dimension size,MainScreen mainScreen) {
         setPreferredSize(size);
         setLayout(new java.awt.GridBagLayout());
@@ -148,6 +148,9 @@ public class MembershipPanel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 11, 10);
         add(jPanel1, gridBagConstraints);
 
+        membershipTable.getSelectionModel().addListSelectionListener(membership_controller);
+
+
     }// </editor-fold>
 
     void addMember_BtnActionPerformed(java.awt.event.ActionEvent evt) {                                         
@@ -157,16 +160,19 @@ public class MembershipPanel extends javax.swing.JPanel {
             int newID = tableModel.getRowCount() + 1;
             tableModel.addRow(new String[]{String.valueOf(newID),memname_Field.getText(),memSDT_Field.getText()});
         }
+        addMember_Btn.setActionCommand("Add");
+        addMember_Btn.addActionListener(this.membershipPanel_controller);
     }
 
     // Variables declaration - do not modify
-    private javax.swing.JButton addMember_Btn;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField memname_Field;
-    private javax.swing.JTextField memSDT_Field;
-    private javax.swing.JTable membershipTable;
+
+    public javax.swing.JButton addMember_Btn;
+    public javax.swing.JLabel jLabel1;
+    public javax.swing.JLabel jLabel2;
+    public javax.swing.JPanel jPanel1;
+    public javax.swing.JScrollPane jScrollPane1;
+    public javax.swing.JTextField memname_Field;
+    public javax.swing.JTextField memSDT_Field;
+    public javax.swing.JTable membershipTable;
     // End of variables declaration
 }

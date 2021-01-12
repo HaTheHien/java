@@ -155,11 +155,11 @@ public class POSPanel_controller implements KeyListener, ActionListener  {
                 //seller nữa
                 this.posPanel.posBill.exportBill();
                 
-                JOptionPane.showMessageDialog(this.posPanel, "Đã thanh toán");
             }catch(Exception err){
                 err.printStackTrace();
                 JOptionPane.showMessageDialog(this.posPanel, "Thanh toán thất bại");
             }finally{
+                JOptionPane.showMessageDialog(this.posPanel, "Đã thanh toán");
                 this.posPanel.mainScreen.setup_POSPanel();
             }
         }

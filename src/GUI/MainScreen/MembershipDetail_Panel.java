@@ -1,3 +1,8 @@
+package GUI.MainScreen;
+
+import Controller.MembershipDetail_controller;
+import Model.Other.Membership;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,13 +13,21 @@
  *
  * @author tuand
  */
-package GUI.MainScreen;
 public class MembershipDetail_Panel extends javax.swing.JPanel {
 
     /**
      * Creates new form membership
      */
-    public MembershipDetail_Panel() {
+    public Membership m;
+    public MainScreen mainScreen;
+    public MembershipDetail_controller membershipDetail_Panel;
+
+    public MembershipDetail_Panel(java.awt.Dimension size,MainScreen mainScreen, Membership m) {
+        this.m = m;
+        setPreferredSize(size);
+        setLayout(new java.awt.GridBagLayout());
+        setBackground(java.awt.Color.WHITE);
+        this.mainScreen = mainScreen;
         initComponents();
     }
 
@@ -31,17 +44,17 @@ public class MembershipDetail_Panel extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        idfield = new javax.swing.JTextField();
+        namefield = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        numField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        addressField = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        poiintField = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        update_Btn = new javax.swing.JButton();
+        del_Btn = new javax.swing.JButton();
 
         setLayout(new java.awt.GridBagLayout());
 
@@ -72,8 +85,6 @@ public class MembershipDetail_Panel extends javax.swing.JPanel {
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 20);
         jPanel1.add(jLabel2, gridBagConstraints);
-
-        jTextField1.setText("jTextField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -85,9 +96,7 @@ public class MembershipDetail_Panel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 20);
-        jPanel1.add(jTextField1, gridBagConstraints);
-
-        jTextField2.setText("jTextField1");
+        jPanel1.add(idfield, gridBagConstraints);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -99,7 +108,7 @@ public class MembershipDetail_Panel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 20);
-        jPanel1.add(jTextField2, gridBagConstraints);
+        jPanel1.add(namefield, gridBagConstraints);
 
         jLabel3.setText("Họ tên");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -113,8 +122,6 @@ public class MembershipDetail_Panel extends javax.swing.JPanel {
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 20);
         jPanel1.add(jLabel3, gridBagConstraints);
-
-        jTextField3.setText("jTextField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
@@ -126,7 +133,7 @@ public class MembershipDetail_Panel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 20);
-        jPanel1.add(jTextField3, gridBagConstraints);
+        jPanel1.add(numField, gridBagConstraints);
 
         jLabel4.setText("Số  điện thoại");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -140,8 +147,6 @@ public class MembershipDetail_Panel extends javax.swing.JPanel {
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 20);
         jPanel1.add(jLabel4, gridBagConstraints);
-
-        jTextField4.setText("jTextField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
@@ -153,7 +158,7 @@ public class MembershipDetail_Panel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 20);
-        jPanel1.add(jTextField4, gridBagConstraints);
+        jPanel1.add(addressField, gridBagConstraints);
 
         jLabel5.setText("Địa chỉ");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -167,8 +172,6 @@ public class MembershipDetail_Panel extends javax.swing.JPanel {
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 20);
         jPanel1.add(jLabel5, gridBagConstraints);
-
-        jTextField5.setText("jTextField1");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
@@ -180,7 +183,7 @@ public class MembershipDetail_Panel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 20);
-        jPanel1.add(jTextField5, gridBagConstraints);
+        jPanel1.add(poiintField, gridBagConstraints);
 
         jLabel6.setText("Điểm tích luỹ");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -195,7 +198,7 @@ public class MembershipDetail_Panel extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 20);
         jPanel1.add(jLabel6, gridBagConstraints);
 
-        jButton1.setText("CẬP NHẬT THÔNG TIN THÀNH VIÊN");
+        update_Btn.setText("CẬP NHẬT THÔNG TIN THÀNH VIÊN");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 10;
@@ -207,10 +210,10 @@ public class MembershipDetail_Panel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(11, 205, 19, 40);
-        jPanel1.add(jButton1, gridBagConstraints);
+        jPanel1.add(update_Btn, gridBagConstraints);
 
-        jButton2.setBackground(new java.awt.Color(238, 149, 149));
-        jButton2.setText("XOÁ THÀNH VIÊN");
+        del_Btn.setBackground(new java.awt.Color(238, 149, 149));
+        del_Btn.setText("XOÁ THÀNH VIÊN");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
@@ -222,7 +225,7 @@ public class MembershipDetail_Panel extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(8, 35, 19, 0);
-        jPanel1.add(jButton2, gridBagConstraints);
+        jPanel1.add(del_Btn, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -231,23 +234,29 @@ public class MembershipDetail_Panel extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 10, 11, 10);
         add(jPanel1, gridBagConstraints);
+        membershipDetail_Panel = new MembershipDetail_controller(this);
+
+        update_Btn.setActionCommand("update");
+        del_Btn.setActionCommand("del");
+        update_Btn.addActionListener(membershipDetail_Panel);
+        del_Btn.addActionListener(membershipDetail_Panel);
     }// </editor-fold>                        
 
 
     // Variables declaration - do not modify                     
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    public javax.swing.JButton update_Btn;
+    public javax.swing.JButton del_Btn;
+    public javax.swing.JLabel jLabel1;
+    public javax.swing.JLabel jLabel2;
+    public javax.swing.JLabel jLabel3;
+    public javax.swing.JLabel jLabel4;
+    public javax.swing.JLabel jLabel5;
+    public javax.swing.JLabel jLabel6;
+    public javax.swing.JPanel jPanel1;
+    public javax.swing.JTextField idfield;
+    public javax.swing.JTextField namefield;
+    public javax.swing.JTextField numField;
+    public javax.swing.JTextField addressField;
+    public javax.swing.JTextField poiintField;
     // End of variables declaration                   
 }

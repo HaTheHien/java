@@ -1,9 +1,12 @@
 package Controller;
 
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+
 import java.awt.Image;
 import GUI.MainScreen.MainScreen;
 import GUI.MainScreen.ProductDetailPanel;
+import Model.Product.Product;
 import Model.Product.ProductType;
 import Model.Product.Warehouse;
 import java.awt.event.*;
@@ -14,50 +17,63 @@ public class ProductDetailPanel_controller implements KeyListener, ActionListene
     ProductDetailPanel productDetailPanel;
     MainScreen mainScreen;
 
-
-    public ProductDetailPanel_controller(ProductDetailPanel productDetailPanel, MainScreen mainScreen) {
+    public ProductDetailPanel_controller(ProductDetailPanel productDetailPanel, MainScreen mainScreen, boolean def) {
         // load product data
         this.productDetailPanel = productDetailPanel;
         this.mainScreen = mainScreen;
-        this.productDetailPanel.productLabel.setText(this.productDetailPanel.p.getProductInfo().getProductName());
+        if (def != true) {
+            this.productDetailPanel.productLabel.setText(this.productDetailPanel.p.getProductInfo().getProductName());
 
-        this.productDetailPanel.barcode_Field.setText(this.productDetailPanel.p.getProductInfo().getCodeBar());
+            this.productDetailPanel.barcode_Field.setText(this.productDetailPanel.p.getProductInfo().getCodeBar());
 
-        this.productDetailPanel.productname_Field.setText(this.productDetailPanel.p.getProductInfo().getProductName());
+            this.productDetailPanel.productname_Field
+                    .setText(this.productDetailPanel.p.getProductInfo().getProductName());
 
-        this.productDetailPanel.price_Field.setText(Long.toString(this.productDetailPanel.p.getProductInfo().getPrice()));
+            this.productDetailPanel.price_Field
+                    .setText(Long.toString(this.productDetailPanel.p.getProductInfo().getPrice()));
 
-        this.productDetailPanel.brand_Field.setText(this.productDetailPanel.p.getProductInfo().getBrand());
+            this.productDetailPanel.brand_Field.setText(this.productDetailPanel.p.getProductInfo().getBrand());
 
-        this.productDetailPanel.stock_Field
-                .setText(this.productDetailPanel.p.getProductStockInfo().getNumStock().toString());
+            this.productDetailPanel.stock_Field
+                    .setText(this.productDetailPanel.p.getProductStockInfo().getNumStock().toString());
 
-        this.productDetailPanel.lastestEXP_Field
-                .setText(this.productDetailPanel.p.getProductStockInfo().getLastestEXP().toString());
+            this.productDetailPanel.lastestEXP_Field
+                    .setText(this.productDetailPanel.p.getProductStockInfo().getLastestEXP().toString());
 
-        this.productDetailPanel.promo_Field
-                .setText(Long.toString(productDetailPanel.p.getPromotion().getPromoDiscount()));
+            this.productDetailPanel.promo_Field
+                    .setText(Long.toString(productDetailPanel.p.getPromotion().getPromoDiscount()));
 
-        this.productDetailPanel.urlImg_Field.setText(this.productDetailPanel.p.getUrlImgString());
+            this.productDetailPanel.urlImg_Field.setText(this.productDetailPanel.p.getUrlImgString());
 
-        ImageIcon productImg = new ImageIcon(this.productDetailPanel.p.getUrlImgString());
-        Image image = productImg.getImage().getScaledInstance(250,250,java.awt.Image.SCALE_SMOOTH); // scale it the smooth way // transform it
-        productImg = new ImageIcon(image); 
-        this.productDetailPanel.productImg_Label.setIcon(productImg);
+            ImageIcon productImg = new ImageIcon(this.productDetailPanel.p.getUrlImgString());
+            Image image = productImg.getImage().getScaledInstance(250, 250, java.awt.Image.SCALE_SMOOTH); // scale it
+                                                                                                          // the smooth
+                                                                                                          // way //
+                                                                                                          // transform
+                                                                                                          // it
+            productImg = new ImageIcon(image);
+            this.productDetailPanel.productImg_Label.setIcon(productImg);
+        }
 
-        //load product type
-        int index = 0;
-        for (ProductType pt :this.productDetailPanel.allType) {
-            this.productDetailPanel.typeProduct_ComboBox.addItem(pt.getTypeName());
-            if(pt.getTypeID().compareTo(this.productDetailPanel.p.getProducType().getTypeID()) == 0){
-                this.productDetailPanel.typeProduct_ComboBox.setSelectedIndex(index);
+        // load product type
+        if (def != true) {
+            int index = 0;
+            for (ProductType pt : this.productDetailPanel.allType) {
+                this.productDetailPanel.typeProduct_ComboBox.addItem(pt.getTypeName());
+                if (pt.getTypeID().compareTo(this.productDetailPanel.p.getProducType().getTypeID()) == 0) {
+                    this.productDetailPanel.typeProduct_ComboBox.setSelectedIndex(index);
+                }
+                index++;
             }
-            index ++;
+        }else{
+            for (ProductType pt : this.productDetailPanel.allType) {
+                this.productDetailPanel.typeProduct_ComboBox.addItem(pt.getTypeName());
+            }
         }
     }
 
     public boolean updateProduct() {
-        //update product in database
+        // update product in database
 
         this.productDetailPanel.p.getProductInfo().setCodeBar(this.productDetailPanel.barcode_Field.getText());
 
@@ -77,9 +93,9 @@ public class ProductDetailPanel_controller implements KeyListener, ActionListene
                 .setPromoDiscount(Integer.parseInt(this.productDetailPanel.promo_Field.getText()));
 
         this.productDetailPanel.p.setUrlImgString(this.productDetailPanel.urlImg_Field.getText());
-        
-        this.productDetailPanel.p.getProducType().setTypeID(
-                this.productDetailPanel.allType.get(this.productDetailPanel.typeProduct_ComboBox.getSelectedIndex()).getTypeID());
+
+        this.productDetailPanel.p.getProducType().setTypeID(this.productDetailPanel.allType
+                .get(this.productDetailPanel.typeProduct_ComboBox.getSelectedIndex()).getTypeID());
 
         return this.productDetailPanel.p.updateProduct();
     }
@@ -109,6 +125,13 @@ public class ProductDetailPanel_controller implements KeyListener, ActionListene
                 this.productDetailPanel.jLabel1.setText("Cập nhật thành công");
             } else {
                 this.productDetailPanel.jLabel1.setText("Cập nhật thất bại");
+            }
+        } 
+        if (e.getActionCommand().compareTo("delete") == 0) {
+            if (Product.removeProduct(productDetailPanel.p.getProductInfo().getCodeBar())  == true) {
+                JOptionPane.showMessageDialog(this.productDetailPanel, "Xoá thành công");
+            } else {
+                JOptionPane.showMessageDialog(this.productDetailPanel, "ERROR:<");
             }
         }
     }

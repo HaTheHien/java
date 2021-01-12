@@ -11,7 +11,7 @@ public class Login_screen{
     Connection conn = null;
     int size_x = 750;
     int size_y = 600;
-    JFrame mainFrame = new JFrame();
+    public JFrame mainFrame = new JFrame();
     JPanel mainPanel = new JPanel();
 
     JPanel loginImg_Panel = new JPanel();
