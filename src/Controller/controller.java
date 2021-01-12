@@ -319,14 +319,14 @@ public class controller
         ResultSet rs = null;
         ArrayList<Promotion> list = new ArrayList<Promotion>();
         try{
-            stmt = conn.prepareCall("{CALL GetAllPromos()}");
+            stmt = conn.prepareCall("CALL GetAllPromos();");
             rs = stmt.executeQuery();
             while (rs.next())
             {
                 int id = rs.getInt("ID");
                 int discount = rs.getInt("discount");
                 String productID = rs.getString("productID");
-                String productName = rs.getString("ProductName");
+                String productName = Warehouse.getAllProductByID(productID).get(0).getProductInfo().getProductName();
                 Promotion temp = new Promotion(id,productID,discount,productName);
                 list.add(temp);
             }
